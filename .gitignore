@@ -1,0 +1,9 @@
+*.class
+bin/
+.settings/
+.classpath
+.project
+libjoctomap.so
+target/
+src/main/resources/octomap/build
+src/main/resources/octomap/CmakeCache.txt
