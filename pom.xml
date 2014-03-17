@@ -23,14 +23,15 @@
 		</dependency>
 	</dependencies>
 
-	<!-- Run compile.sh to build *.cpp files and obtain *.so -->
 	<build>
 		<plugins>
+			
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.2.1</version>
 				<executions>
+					<!-- Run compile.sh to build Octomap, also build *.cpp files and obtain *.so -->
 					<execution>
 						<id>compile</id>
 						<phase>install</phase>
@@ -44,6 +45,7 @@
 							</arguments>
 						</configuration>
 					</execution>
+					<!-- Run clean.sh to remove binary compiled files in C/C++ -->
 					<execution>
 						<id>clean</id>
 						<phase>clean</phase>
@@ -58,6 +60,15 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<!-- Junit configuration to add the dynamic library to the path -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<forkMode>once</forkMode>
+					<argLine>-Djava.library.path=${project.basedir}</argLine>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
