@@ -5,7 +5,8 @@ echo -e "[exec] C/C++ build script begins"
 dir=`pwd`
 
 # enter in resource directory to compile the library
-cd src/main/resources/octomap
+echo -e "[exec] Entering Octomap directory..."
+cd src/main/resources/joctomap-natives
 
 # octomap compile
 echo -e "[exec] Building Octomap..."
@@ -18,11 +19,12 @@ make
 cd "$dir"
 
 # enter in native packages to compile .c and .cpp sources
-cd src/main/java/es/usc/citius/lab/joctomap/
+cd src/main/resources/joctomap-natives
 
 # compile
 echo "[exec] Building libjoctomap.so..."
-g++ -I"/usr/lib/jvm/java-7-openjdk-amd64/include/" -I"/usr/lib/jvm/java-7-openjdk-amd64/include/linux/" -o "$dir"/libjoctomap.so -fPIC -shared *.cpp
+make
+cp libjoctomap.so "$dir"/
 
 # go to beginning directory
 cd "$dir"

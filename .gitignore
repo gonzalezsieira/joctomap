@@ -1,9 +1,10 @@
 *.class
+*.log
 bin/
 .settings/
 .classpath
 .project
 libjoctomap.so
 target/
-src/main/resources/octomap/build
-src/main/resources/octomap/CmakeCache.txt
+src/main/resources/joctomap-natives/build
+src/main/resources/joctomap-natives/lib
