@@ -8,13 +8,13 @@ public class JOctree {
 	 * @param filename
 	 * @return
 	 */
-	public native boolean write(long octreePointer, String filename);
+	public static native boolean write(long octreePointer, String filename);
 	
 	/**
 	 * 
 	 * @param filename
 	 * @return
 	 */
-	public native long read(String filename);
+	public static native long read(String filename);
 	
 }
