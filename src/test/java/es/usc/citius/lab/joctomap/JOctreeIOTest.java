@@ -51,9 +51,10 @@ public class JOctreeIOTest {
 	 */
 	@Test
 	public void readFileOt() {
-		long octreeOt = JOctree.read(fileRead.getAbsolutePath());
-		assertTrue("Octree direction of memory is assigned: " + octreeOt,
-				octreeOt != 0);
+		JOctree.class.getMethods();
+		JOctree octree = JOctree.read(fileRead.getAbsolutePath());
+		assertTrue("Octree direction of memory not assigned",
+				octree.getOctreePointer() != 0);
 	}
 
 	/**
@@ -64,9 +65,9 @@ public class JOctreeIOTest {
 	@Test
 	public void writeFileOt() throws IOException {
 		//read ot
-		long octreeOt = JOctree.read(fileRead.getAbsolutePath());
+		JOctree octree = JOctree.read(fileRead.getAbsolutePath());
 		//write file to compare sizes
-		JOctree.write(octreeOt, fileWrite.getAbsolutePath());
+		octree.write(fileWrite.getAbsolutePath());
 		//compare by content both files
 		assertTrue("Input and output files with the same content",
 				FileUtils.contentEquals(fileRead, fileWrite));

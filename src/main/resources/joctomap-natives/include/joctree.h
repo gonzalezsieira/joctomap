@@ -10,18 +10,18 @@ extern "C" {
 /*
  * Class:     es_usc_citius_lab_joctomap_JOctree
  * Method:    write
- * Signature: (JLjava/lang/String;)Z
+ * Signature: (Ljava/lang/String;)Z
  */
 JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_JOctree_write
-  (JNIEnv *, jobject, jlong, jstring);
+  (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     es_usc_citius_lab_joctomap_JOctree
  * Method:    read
- * Signature: (Ljava/lang/String;)J
+ * Signature: (Ljava/lang/String;)Les/usc/citius/lab/joctomap/JOctree;
  */
-JNIEXPORT jlong JNICALL Java_es_usc_citius_lab_joctomap_JOctree_read
-  (JNIEnv *, jobject, jstring);
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_read
+  (JNIEnv *, jclass, jstring);
 
 #ifdef __cplusplus
 }

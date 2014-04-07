@@ -15,7 +15,12 @@ using namespace octomap;
  * filename.
  */
 JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_JOctree_write
-  (JNIEnv *env, jobject obj , jlong octreePointer, jstring filename){
+  (JNIEnv *env, jobject obj, jstring filename){
+	//find field to access the OcTree pointer
+	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/JOctree");
+	jfieldID field = env->GetFieldID(cls, "octreePointer", "J");
+	//retrieve value of field
+	jlong octreePointer = env->GetLongField(obj, field);
 	//convert jstring into native char*
 	jboolean iscopy = false;
 	const char *nativeFilename = env->GetStringUTFChars(filename, &iscopy);
@@ -32,8 +37,11 @@ JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_JOctree_write
  * Reads an octree from a ".bt" or ".ot" file and returns the pointer to the
  * created Octree object.
  */
-JNIEXPORT jlong JNICALL Java_es_usc_citius_lab_joctomap_JOctree_read
-  (JNIEnv *env, jobject obj, jstring filename){
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_read
+  (JNIEnv *env, jclass obj, jstring filename){
+	//find constructor to instantiate the result
+	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/JOctree");
+	jmethodID constructor = env->GetMethodID(cls, "<init>", "(J)V");
 	//convert jstring into native char*
 	jboolean iscopy = false;
 	/*
@@ -77,5 +85,5 @@ JNIEXPORT jlong JNICALL Java_es_usc_citius_lab_joctomap_JOctree_read
 	ot->readData(stream);
 	//close input stream
 	stream.close();
-	return (jlong) ot;
+	return env->NewObject(cls, constructor, ot);
 }
