@@ -11,11 +11,11 @@
 	<url>http://maven.apache.org</url>
 
 	<!-- Git configuration -->
-    <scm>
-        <connection>scm:git:https://forxa.citius.usc.es/adrian.gonzalez/joctomap.git</connection>
-        <developerConnection>scm:git:https://forxa.citius.usc.es/adrian.gonzalez/joctomap.git</developerConnection>
-        <url>scm:git:https://forxa.citius.usc.es/adrian.gonzalez/joctomap.git</url>
-    </scm>
+	<scm>
+		<connection>scm:git:https://forxa.citius.usc.es/adrian.gonzalez/joctomap.git</connection>
+		<developerConnection>scm:git:https://forxa.citius.usc.es/adrian.gonzalez/joctomap.git</developerConnection>
+		<url>scm:git:https://forxa.citius.usc.es/adrian.gonzalez/joctomap.git</url>
+	</scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -38,6 +38,17 @@
 
 	<build>
 		<plugins>
+			<!-- Configure to use JDK 1.7 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
