@@ -8,3 +8,6 @@ libjoctomap.so
 target/
 src/main/resources/joctomap-natives/build
 src/main/resources/joctomap-natives/lib
+.attach*
+src/main/resources/joctomap-natives/.cproject
+src/main/resources/joctomap-natives/.gdbinit
