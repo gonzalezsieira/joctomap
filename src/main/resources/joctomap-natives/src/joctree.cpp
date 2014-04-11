@@ -10,22 +10,50 @@
 using namespace std;
 using namespace octomap;
 
-/**
+/*
+ * Piece of code to retrieve OcTree pointer.
+ */
+OcTree* getOctree(JNIEnv *env, jobject obj){
+	//find field to access the OcTree pointer
+	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/JOctree");
+	jfieldID field = env->GetFieldID(cls, "pointer", "J");
+	//retrieve value of field
+	jlong octreePointer = env->GetLongField(obj, field);
+	return (OcTree*) octreePointer;
+}
+
+/*
+ * This method finds the position of a cell given a real position in the map (x, y, z)
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_JOctree_cellKeyAt__FFF
+  (JNIEnv *env, jobject obj, jfloat x, jfloat y, jfloat z){
+	OcTree *octree = getOctree(env, obj);
+	OcTreeKey key = octree->coordToKey(x, y, z);
+	cout << "Key: " << key.k[0] << " " << key.k[1] << " " << key.k[2] << "\n";
+}
+
+/*
+ * This method finds the position of a cell given a real position in the map (x, y, z) at
+ * a given depth.
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_JOctree_cellKeyAt__FFFI
+  (JNIEnv *env, jobject obj, jfloat x, jfloat y, jfloat z, jint depth){
+	OcTree *octree = getOctree(env, obj);
+	OcTreeKey key = octree->coordToKey(x, y, z, depth);
+	cout << key.k[0] << " " << key.k[1] << " " << key.k[2] << "\n";
+}
+
+/*
  * This method writes an octree, given the pointer to the object and the
  * filename.
  */
 JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_JOctree_write
   (JNIEnv *env, jobject obj, jstring filename){
-	//find field to access the OcTree pointer
-	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/JOctree");
-	jfieldID field = env->GetFieldID(cls, "octreePointer", "J");
-	//retrieve value of field
-	jlong octreePointer = env->GetLongField(obj, field);
+	OcTree *octree = getOctree(env, obj);
 	//convert jstring into native char*
 	jboolean iscopy = false;
 	const char *nativeFilename = env->GetStringUTFChars(filename, &iscopy);
 	//write octree in filename
-	OcTree *octree = (OcTree*) octreePointer;
 	bool value = octree->write(nativeFilename);
 	//release memory of native char*
 	env->ReleaseStringUTFChars(filename, nativeFilename);
@@ -33,7 +61,7 @@ JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_JOctree_write
 	return (jboolean) value;
 }
 
-/**
+/*
  * Reads an octree from a ".bt" or ".ot" file and returns the pointer to the
  * created Octree object.
  */

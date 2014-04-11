@@ -17,7 +17,7 @@ TARGET=libjoctomap.so
 JAVA=/usr/lib/jvm/java-7-oracle
 
 #Octomap library root
-OCTOMAP=/home/local/adrian.gonzalez/Dropbox/Trabajo/librerias/octomap-1.6.5
+OCTOMAP=../../../../../../Trabajo/librerias/octomap-1.6.5
 
 #Linking libraries
 LINK=-L"lib/" -loctomath -loctomap

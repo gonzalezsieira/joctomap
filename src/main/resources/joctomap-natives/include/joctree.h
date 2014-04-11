@@ -9,6 +9,22 @@ extern "C" {
 #endif
 /*
  * Class:     es_usc_citius_lab_joctomap_JOctree
+ * Method:    cellKeyAt
+ * Signature: (FFF)V
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_JOctree_cellKeyAt__FFF
+  (JNIEnv *, jobject, jfloat, jfloat, jfloat);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_JOctree
+ * Method:    cellKeyAt
+ * Signature: (FFFI)V
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_JOctree_cellKeyAt__FFFI
+  (JNIEnv *, jobject, jfloat, jfloat, jfloat, jint);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_JOctree
  * Method:    write
  * Signature: (Ljava/lang/String;)Z
  */

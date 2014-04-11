@@ -4,11 +4,12 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
+import org.junit.runner.RunWith;
 
+import ch.unibe.jexample.Given;
+import ch.unibe.jexample.JExample;
 import static org.junit.Assert.*;
 
 /**
@@ -17,7 +18,7 @@ import static org.junit.Assert.*;
  * avoiding errors due to the lack of ordering of the execution of the test
  * cases in previous JUnit versions.
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@RunWith(JExample.class)
 public class JOctreeIOTest {
 
 	/**
@@ -27,51 +28,59 @@ public class JOctreeIOTest {
 		System.loadLibrary("joctomap");
 	}
 
-	private File fileRead;
-	private File fileWrite;
 	private static final String testFilesDir = "src/test/resources/";
 	private static final String testFilesName = "fr_campus";
+	private File fileRead;
+	private File fileWrite;
 
 	/**
-	 * Initialize data for I/O tests.
-	 * 
-	 * @throws IOException 
+	 * Default constructor for this class
 	 */
-	@Before
-	public void initializeParams() throws IOException {
-		// get canonical files
-		this.fileRead = new File(testFilesDir.concat(testFilesName)
-				.concat(".ot")).getCanonicalFile();
+	public JOctreeIOTest() throws IOException{
+		this.fileRead = new File(testFilesDir.concat(testFilesName).concat(
+				".ot")).getCanonicalFile();
 		this.fileWrite = new File(testFilesName.concat("_test").concat(".ot"))
-				.getCanonicalFile();
+		.getCanonicalFile();
 	}
-
+	
 	/**
 	 * Unit test for reading a .ot file.
+	 * @throws IOException 
 	 */
 	@Test
-	public void readFileOt() {
-		JOctree.class.getMethods();
+	public JOctree readFileOtTest() throws IOException {
 		JOctree octree = JOctree.read(fileRead.getAbsolutePath());
 		assertTrue("Octree direction of memory not assigned",
 				octree.getOctreePointer() != 0);
+		return octree;
 	}
 
 	/**
 	 * Unit test for writing a .ot file.
 	 * 
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@Test
-	public void writeFileOt() throws IOException {
-		//read ot
-		JOctree octree = JOctree.read(fileRead.getAbsolutePath());
-		//write file to compare sizes
+	@Given("#readFileOtTest")
+	public void writeFileOtTest(JOctree octree) throws IOException {
+		// write file to compare sizes
 		octree.write(fileWrite.getAbsolutePath());
-		//compare by content both files
+		// compare by content both files
 		assertTrue("Input and output files with the same content",
 				FileUtils.contentEquals(fileRead, fileWrite));
-		//delete the generated file in this test case
+		// delete the generated file in this test case
 		fileWrite.delete();
+	}
+	
+	@Test
+	@Given("#readFileOtTest")
+	public void obtainCellKeyAtPosition(JOctree octree) {
+		octree.cellKeyAt(0f, 0f, 0f);
+	}
+
+	@Test
+	@Given("#readFileOtTest")
+	public void obtainCellKeyAtPositionWithDepth(JOctree octree) {
+		octree.cellKeyAt(0f, 0f, 0f, 1);
 	}
 }

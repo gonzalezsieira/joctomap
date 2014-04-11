@@ -3,7 +3,7 @@ package es.usc.citius.lab.joctomap;
 public class JOctree {
 	
 	//used by native methods
-	private long octreePointer;
+	private long pointer;
 	
 	/**
 	 * Initializes the JOctree with a pointer to the native OcTree object of
@@ -12,7 +12,7 @@ public class JOctree {
 	 * @param pointer pointer to the native OcTree object.
 	 */
 	public JOctree(long pointer){
-		this.octreePointer = pointer;
+		this.pointer = pointer;
 	}
 	
 	/**
@@ -21,17 +21,36 @@ public class JOctree {
 	 * @return pointer to the native OcTree
 	 */
 	public long getOctreePointer() {
-		return octreePointer;
+		return pointer;
 	}
 	
 	/**
-	 * Invokes the native method to read an OcTree from a file, and returns a new instance
-	 * of {@link JOctree}.
+	 * Retrieves the position of the cell at a current 
+	 * location.
 	 * 
-	 * @param filename name of the file to load the octree
-	 * @return
+	 * @param x
+	 * @param y
+	 * @param z
 	 */
+	public native void cellKeyAt(float x, float y, float z);
 	
+	/**
+	 * Retrieves the position of the cell at a current 
+	 * location, at a given depth.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param depth
+	 */
+	public native void cellKeyAt(float x, float y, float z, int depth);
+	
+	
+	/*
+	 * *******************************************************************************
+	 * *							I/O functions                                    *
+	 * *******************************************************************************
+	 */
 	/**
 	 * Native implementation of the native function "write to file", that stores the 
 	 * information contained in the pointer of the direction of memory of the native 
