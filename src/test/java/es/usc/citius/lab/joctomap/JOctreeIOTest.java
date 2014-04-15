@@ -12,8 +12,12 @@ import ch.unibe.jexample.JExample;
 import static org.junit.Assert.*;
 
 /**
- * Unit test for I/O over octree objects. Extending {@link NativeTest} ensures the dynamic
- * library to be loaded. Also, this class is run with {@link JExample} to define test dependencies.
+ * Unit test for I/O over octree objects. Extending {@link NativeTest} ensures 
+ * the dynamic library to be loaded. 
+ * 
+ * Also, this class is run with {@link JExample} to define test dependencies.
+ * 
+ * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  */
 @RunWith(JExample.class)
 public class JOctreeIOTest extends NativeTest{
