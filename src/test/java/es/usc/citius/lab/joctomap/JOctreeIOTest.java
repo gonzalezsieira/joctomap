@@ -72,6 +72,12 @@ public class JOctreeIOTest {
 		fileWrite.delete();
 	}
 	
+	/**
+	 * Unit test for retrieving a {@link JOctreeKey} from a position.
+	 * 
+	 * @param octree {@link JOctree} instance
+	 * @return key that identifies the node
+	 */
 	@Test
 	@Given("#readFileOtTest")
 	public JOctreeKey obtainCellKeyAtPositionTest(JOctree octree) {
@@ -80,6 +86,12 @@ public class JOctreeIOTest {
 		return key;
 	}
 
+	/**
+	 * Unit test for retrieving a {@link JOctreeKey} from a position and depth
+	 * 
+	 * @param octree {@link JOctree} instance
+	 * @return key that identifies the node
+	 */
 	@Test
 	@Given("#readFileOtTest")
 	public JOctreeKey obtainCellKeyAtPositionWithDepthTest(JOctree octree) {
@@ -88,6 +100,14 @@ public class JOctreeIOTest {
 		return key;
 	}
 	
+	/**
+	 * Unit test for testing the adjustement of {@link JOctreeKey} between different
+	 * depth levels.
+	 * 
+	 * @param octree {@link JOctree} instance
+	 * @param key {@link JOctreeKey} at the minimum depth
+	 * @param keyLevel1 {@link JOctreeKey} at depth 1
+	 */
 	@Test
 	@Given("#readFileOtTest, #obtainCellKeyAtPositionTest, #obtainCellKeyAtPositionWithDepthTest")
 	public void adjustDepthOfKey(JOctree octree, JOctreeKey key, JOctreeKey keyLevel1){
