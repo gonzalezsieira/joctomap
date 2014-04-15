@@ -1,6 +1,6 @@
 package es.usc.citius.lab.joctomap;
 
-public class JOctree {
+public class JOctree extends NativeObject{
 	
 	//used by native methods
 	private long pointer;
@@ -11,17 +11,8 @@ public class JOctree {
 	 * 
 	 * @param pointer pointer to the native OcTree object.
 	 */
-	public JOctree(long pointer){
-		this.pointer = pointer;
-	}
-	
-	/**
-	 * Retrieves the assigned octree pointer
-	 * 
-	 * @return pointer to the native OcTree
-	 */
-	public long getOctreePointer() {
-		return pointer;
+	public JOctree(long pointer) {
+		super(pointer);
 	}
 	
 	/**
@@ -31,8 +22,9 @@ public class JOctree {
 	 * @param x
 	 * @param y
 	 * @param z
+	 * @return key of the node at the given position
 	 */
-	public native void cellKeyAt(float x, float y, float z);
+	public native JOctreeKey cellKeyAt(float x, float y, float z);
 	
 	/**
 	 * Retrieves the position of the cell at a current 
@@ -42,8 +34,18 @@ public class JOctree {
 	 * @param y
 	 * @param z
 	 * @param depth
+	 * @return key of the node at the given position and depth
 	 */
-	public native void cellKeyAt(float x, float y, float z, int depth);
+	public native JOctreeKey cellKeyAt(float x, float y, float z, int depth);
+	
+	/**
+	 * Given an {@link JOctreeKey}, adjusts it to a given depth in the octree.
+	 * 
+	 * @param key to be adjusted
+	 * @param depth to obtain the adjusted {@link JOctreeKey}
+	 * @return adjusted {@link JOctreeKey} to the specified depth
+	 */
+	public native JOctreeKey adjustKeyAt(JOctreeKey key, int depth);
 	
 	
 	/*

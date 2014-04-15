@@ -51,7 +51,7 @@ public class JOctreeIOTest {
 	public JOctree readFileOtTest() throws IOException {
 		JOctree octree = JOctree.read(fileRead.getAbsolutePath());
 		assertTrue("Octree direction of memory not assigned",
-				octree.getOctreePointer() != 0);
+				octree.getPointer() != 0);
 		return octree;
 	}
 
@@ -74,13 +74,26 @@ public class JOctreeIOTest {
 	
 	@Test
 	@Given("#readFileOtTest")
-	public void obtainCellKeyAtPosition(JOctree octree) {
-		octree.cellKeyAt(0f, 0f, 0f);
+	public JOctreeKey obtainCellKeyAtPositionTest(JOctree octree) {
+		JOctreeKey key = octree.cellKeyAt(0f, 0f, 0f);
+		assertTrue("JOctreeKey must not have negative values", key.getX() >= 0 && key.getY() >= 0 && key.getZ() >= 0);
+		return key;
 	}
 
 	@Test
 	@Given("#readFileOtTest")
-	public void obtainCellKeyAtPositionWithDepth(JOctree octree) {
-		octree.cellKeyAt(0f, 0f, 0f, 1);
+	public JOctreeKey obtainCellKeyAtPositionWithDepthTest(JOctree octree) {
+		JOctreeKey key = octree.cellKeyAt(0f, 0f, 0f, 1);
+		assertTrue("JOctreeKey must not have negative values", key.getX() >= 0 && key.getY() >= 0 && key.getZ() >= 0);
+		return key;
+	}
+	
+	@Test
+	@Given("#readFileOtTest, #obtainCellKeyAtPositionTest, #obtainCellKeyAtPositionWithDepthTest")
+	public void adjustDepthOfKey(JOctree octree, JOctreeKey key, JOctreeKey keyLevel1){
+		JOctreeKey adjustement = octree.adjustKeyAt(key, 1);
+		assertTrue("JOctreeKey must not have negative values", adjustement.getX() >= 0 && adjustement.getY() >= 0 && adjustement.getZ() >= 0);
+		assertTrue("Adjusted key are not equal to the retrieved one at the same depth", keyLevel1.equals(adjustement));
+		assertTrue("Adjusted key has a different hash to the retrieved one at the same depth", keyLevel1.hashCode() == adjustement.hashCode());
 	}
 }

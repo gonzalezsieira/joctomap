@@ -10,18 +10,26 @@ extern "C" {
 /*
  * Class:     es_usc_citius_lab_joctomap_JOctree
  * Method:    cellKeyAt
- * Signature: (FFF)V
+ * Signature: (FFF)Les/usc/citius/lab/joctomap/JOctreeKey;
  */
-JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_JOctree_cellKeyAt__FFF
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_cellKeyAt__FFF
   (JNIEnv *, jobject, jfloat, jfloat, jfloat);
 
 /*
  * Class:     es_usc_citius_lab_joctomap_JOctree
  * Method:    cellKeyAt
- * Signature: (FFFI)V
+ * Signature: (FFFI)Les/usc/citius/lab/joctomap/JOctreeKey;
  */
-JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_JOctree_cellKeyAt__FFFI
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_cellKeyAt__FFFI
   (JNIEnv *, jobject, jfloat, jfloat, jfloat, jint);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_JOctree
+ * Method:    adjustKeyAt
+ * Signature: (Les/usc/citius/lab/joctomap/JOctreeKey;I)Les/usc/citius/lab/joctomap/JOctreeKey;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_adjustKeyAt
+  (JNIEnv *, jobject, jobject, jint);
 
 /*
  * Class:     es_usc_citius_lab_joctomap_JOctree
