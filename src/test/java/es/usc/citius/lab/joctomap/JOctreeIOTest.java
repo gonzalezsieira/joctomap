@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -13,20 +12,11 @@ import ch.unibe.jexample.JExample;
 import static org.junit.Assert.*;
 
 /**
- * Unit test for I/O over octree objects. The {@link FixMethodOrder} policy
- * ensures that the execution of the methods will be: read first, write last,
- * avoiding errors due to the lack of ordering of the execution of the test
- * cases in previous JUnit versions.
+ * Unit test for I/O over octree objects. Extending {@link NativeTest} ensures the dynamic
+ * library to be loaded. Also, this class is run with {@link JExample} to define test dependencies.
  */
 @RunWith(JExample.class)
-public class JOctreeIOTest {
-
-	/**
-	 * Load dynamic library to access the native I/O methods.
-	 */
-	static {
-		System.loadLibrary("joctomap");
-	}
+public class JOctreeIOTest extends NativeTest{
 
 	private static final String testFilesDir = "src/test/resources/";
 	private static final String testFilesName = "fr_campus";
