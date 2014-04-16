@@ -15,6 +15,12 @@ public class JOctree extends NativeObject{
 		super(pointer);
 	}
 	
+	
+	/*
+	 * *******************************************************************************
+	 * *					Position query functions	                             *
+	 * *******************************************************************************
+	 */
 	/**
 	 * Retrieves the position of the cell at a current 
 	 * location.
@@ -46,6 +52,34 @@ public class JOctree extends NativeObject{
 	 * @return adjusted {@link JOctreeKey} to the specified depth
 	 */
 	public native JOctreeKey adjustKeyAt(JOctreeKey key, int depth);
+	
+	
+	/*
+	 * *******************************************************************************
+	 * *				Octree information query functions                           *
+	 * *******************************************************************************
+	 */
+	/**
+	 * Retrieves the maximum depth of the octree.
+	 * 
+	 * @return maximum depth value
+	 */
+	public native int getTreeDepth();
+	
+	/**
+	 * Retrieves the minimum resolution of the octree nodes.
+	 * 
+	 * @return minimum node resolution
+	 */
+	public native double getResolution();
+	
+	/**
+	 * Retrieves the size of the nodes at a given depth (aka. resolution at a given depth).
+	 * 
+	 * @param depth object of the query
+	 * @return node resolution at the depth level
+	 */
+	public native double getNodeSize(int depth);
 	
 	
 	/*

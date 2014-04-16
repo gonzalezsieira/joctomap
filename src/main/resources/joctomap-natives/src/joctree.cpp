@@ -67,6 +67,39 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_adjustKeyAt
 }
 
 /**
+ * Method that obtains the octree maximum depth.
+ */
+JNIEXPORT jint JNICALL Java_es_usc_citius_lab_joctomap_JOctree_getTreeDepth
+  (JNIEnv *env, jobject jtree){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//return tree depth
+	return static_cast<int>(octree->getTreeDepth());
+}
+
+/**
+ * Method that obtains the octree minimum resolution.
+ */
+JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_JOctree_getResolution
+  (JNIEnv *env, jobject jtree){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//return resolution
+	return octree->getResolution();
+}
+
+/**
+ * Method that obtains the resolution at a current depth.
+ */
+JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_JOctree_getNodeSize
+  (JNIEnv *env, jobject jtree, jint depth){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//return node size ath the given depth
+	return octree->getNodeSize(static_cast<unsigned int>(depth));
+}
+
+/**
  * This method writes an octree, given the pointer to the object and the
  * filename.
  */

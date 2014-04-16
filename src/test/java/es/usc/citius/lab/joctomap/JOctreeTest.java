@@ -12,15 +12,15 @@ import ch.unibe.jexample.JExample;
 import static org.junit.Assert.*;
 
 /**
- * Unit test for I/O over octree objects. Extending {@link NativeTest} ensures 
- * the dynamic library to be loaded. 
+ * Unit test for octree objects. Ensures the dynamic library
+ * to be loaded before the execution of the test cases.
  * 
  * Also, this class is run with {@link JExample} to define test dependencies.
  * 
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  */
 @RunWith(JExample.class)
-public class JOctreeIOTest extends NativeTest{
+public class JOctreeTest{
 
 	private static final String testFilesDir = "src/test/resources/";
 	private static final String testFilesName = "fr_campus";
@@ -28,9 +28,16 @@ public class JOctreeIOTest extends NativeTest{
 	private File fileWrite;
 
 	/**
+	 * Load dynamic library to access the native methods.
+	 */
+	static {
+		System.loadLibrary("joctomap");
+	}
+	
+	/**
 	 * Default constructor for this class
 	 */
-	public JOctreeIOTest() throws IOException{
+	public JOctreeTest() throws IOException{
 		this.fileRead = new File(testFilesDir.concat(testFilesName).concat(
 				".ot")).getCanonicalFile();
 		this.fileWrite = new File(testFilesName.concat("_test").concat(".ot"))
@@ -109,5 +116,50 @@ public class JOctreeIOTest extends NativeTest{
 		assertTrue("JOctreeKey must not have negative values", adjustement.getX() >= 0 && adjustement.getY() >= 0 && adjustement.getZ() >= 0);
 		assertTrue("Adjusted key are not equal to the retrieved one at the same depth", keyLevel1.equals(adjustement));
 		assertTrue("Adjusted key has a different hash to the retrieved one at the same depth", keyLevel1.hashCode() == adjustement.hashCode());
+	}
+	
+	/**
+	 * Test case to recover the resolution of the octree.
+	 * 
+	 * @param octree {@link JOctree} instance
+	 * @return octree resolution
+	 */
+	@Test
+	@Given("#readFileOtTest")
+	public double getResolutionTest(JOctree octree){
+		double res = octree.getResolution();
+		assertTrue("Resolution must be > 0", res > 0);
+		return res;
+	}
+	
+	/**
+	 * Test case to recover the depth of the octree.
+	 * 
+	 * @param octree {@link JOctree} instance
+	 * @return octree maximum depth
+	 */
+	@Test
+	@Given("#readFileOtTest")
+	public int getTreeDepthTest(JOctree octree){
+		int depth = octree.getTreeDepth();
+		assertTrue("Tree depth must be > 0", depth > 0);
+		return depth;
+	}
+	
+	/**
+	 * Test case to recover the node size of the octree. 
+	 * Checks if the size at the maximum depth is equal to the
+	 * minimum resolution of the octree.
+	 * 
+	 * @param octree {@link JOctree} instance
+	 * @param res octree minimum resolution
+	 * @param depth octree maximum depth
+	 */
+	@Test
+	@Given("#readFileOtTest, #getResolutionTest, #getTreeDepthTest")
+	public void getNodeSizeTest(JOctree octree, double res, int depth){
+		double size = octree.getNodeSize(depth);
+		assertTrue("Node size must be > 0", size > 0);
+		assertTrue("Minimum node size must be equal to the octree resolution", Double.compare(res, size) == 0);
 	}
 }
