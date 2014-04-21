@@ -7,7 +7,7 @@ dir=`pwd`
 cd src/main/java/es/usc/citius/lab/joctomap
 
 # compile files
-javac NativeObject.java JOctree.java JOctreeKey.java
+javac NativeObject.java JOctree.java JOctreeKey.java JOctreeNode.java
 
 # go to root of src
 cd "$dir"/src/main/java

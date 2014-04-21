@@ -67,6 +67,64 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_adjustKeyAt
 }
 
 /**
+ * This method searches in the octree a node given by a key and a depth (depth = 0 means search
+ * in the whole octree).
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_search__Les_usc_citius_lab_joctomap_JOctreeKey_2I
+  (JNIEnv *env, jobject jtree, jobject jkey, jint depth){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//recover key field IDs
+	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/JOctreeKey");
+	jfieldID fieldX = env->GetFieldID(cls, "x", "I");
+	jfieldID fieldY = env->GetFieldID(cls, "y", "I");
+	jfieldID fieldZ = env->GetFieldID(cls, "z", "I");
+	//recover field values
+	int x = env->GetIntField(jkey, fieldX);
+	int y = env->GetIntField(jkey, fieldY);
+	int z = env->GetIntField(jkey, fieldZ);
+	//adjust key to the depth specified
+	OcTreeKey key = OcTreeKey(x, y, z);
+	//find node in the octree
+	OcTreeNode *node = octree->search(key, depth);
+	//return new node instance if the node is found in the octree
+	if(node != NULL){
+		//find class and constructor to instantiate joctreenode
+		cls = env->FindClass("es/usc/citius/lab/joctomap/JOctreeNode");
+		jmethodID constructor = env->GetMethodID(cls, "<init>", "(J)V");
+		//return new instance
+		return env->NewObject(cls, constructor, node);
+	}
+	//return null if the node is not found
+	else{
+		return NULL;
+	}
+}
+
+/**
+ * This method searches in the octree a node given by a 3D position and a depth ()
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_search__DDDI
+  (JNIEnv *env, jobject jtree, jdouble x, jdouble y, jdouble z, jint depth){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//search node in the octree
+	OcTreeNode *node = octree->search(x, y, z, depth);
+	//return new node instance if the node is found in the octree
+	if(node != NULL){
+		//find class and constructor to instantiate joctreenode
+		jclass cls = env->FindClass("es/usc/citius/lab/joctomap/JOctreeNode");
+		jmethodID constructor = env->GetMethodID(cls, "<init>", "(J)V");
+		//return new instance
+		return env->NewObject(cls, constructor, node);
+	}
+	//return null if the node is not found
+	else{
+		return NULL;
+	}
+}
+
+/**
  * Method that obtains the octree maximum depth.
  */
 JNIEXPORT jint JNICALL Java_es_usc_citius_lab_joctomap_JOctree_getTreeDepth

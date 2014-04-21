@@ -33,6 +33,22 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_adjustKeyAt
 
 /*
  * Class:     es_usc_citius_lab_joctomap_JOctree
+ * Method:    search
+ * Signature: (Les/usc/citius/lab/joctomap/JOctreeKey;I)Les/usc/citius/lab/joctomap/JOctreeNode;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_search__Les_usc_citius_lab_joctomap_JOctreeKey_2I
+  (JNIEnv *, jobject, jobject, jint);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_JOctree
+ * Method:    search
+ * Signature: (DDDI)Les/usc/citius/lab/joctomap/JOctreeNode;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_search__DDDI
+  (JNIEnv *, jobject, jdouble, jdouble, jdouble, jint);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_JOctree
  * Method:    getTreeDepth
  * Signature: ()I
  */

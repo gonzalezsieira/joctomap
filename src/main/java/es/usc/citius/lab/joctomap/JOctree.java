@@ -53,6 +53,33 @@ public class JOctree extends NativeObject{
 	 */
 	public native JOctreeKey adjustKeyAt(JOctreeKey key, int depth);
 	
+	/*
+	 * *******************************************************************************
+	 * *					Node query functions	                             	 *
+	 * *******************************************************************************
+	 */
+	/**
+	 * Retrieves a node of the octree given the identifier of the node ({@link JOctreeKey}) and
+	 * the depth to search in the {@link JOctree}.
+	 * 
+	 * @param key identifier of the node
+	 * @param depth level to search (depth=0 means search in the full octree)
+	 * @return node of the octree, if found, null otherwhise
+	 */
+	public native JOctreeNode search(JOctreeKey key, int depth);
+	
+	/**
+	 * Retrieves a node of the {@link JOctree} in a given position of the 3D space and a depth level
+	 * of the octree.
+	 * 
+	 * @param x 
+	 * @param y
+	 * @param z
+	 * @param depth level to search (depth=0 means search in the full octree)
+	 * @return node of the octree, if found, null otherwhise
+	 */
+	public native JOctreeNode search(double x, double y, double z, int depth);
+	
 	
 	/*
 	 * *******************************************************************************
