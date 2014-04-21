@@ -14,7 +14,9 @@ import static org.junit.Assert.*;
  * Unit test for octree objects. Ensures the dynamic library
  * to be loaded before the execution of the test cases.
  * 
- * Also, this class is run with {@link JExample} to define test dependencies.
+ * The methods in this class are executed in an ascending ordered way to ensure
+ * that the static parameters of the class (that store values used in 
+ * later tests) are filled properly.
  * 
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  */
@@ -40,6 +42,8 @@ public class JOctreeTest{
 	
 	/**
 	 * Default constructor for this class
+	 * 
+	 * @throws IOException when an I/O error occurs
 	 */
 	public JOctreeTest() throws IOException{
 		this.fileRead = new File(testFilesDir.concat(testFilesName).concat(
@@ -50,7 +54,7 @@ public class JOctreeTest{
 	
 	/**
 	 * Unit test for reading a .ot file.
-	 * @throws IOException 
+	 * @throws IOException when an I/O error occurs 
 	 */
 	@Test
 	public void test01_readFileOt() throws IOException {
@@ -77,9 +81,6 @@ public class JOctreeTest{
 	
 	/**
 	 * Unit test for retrieving a {@link JOctreeKey} from a position.
-	 * 
-	 * @param octree {@link JOctree} instance
-	 * @return key that identifies the node
 	 */
 	@Test
 	public void test03_obtainCellKeyAtPositionTest() {
@@ -102,10 +103,6 @@ public class JOctreeTest{
 	/**
 	 * Unit test for testing the adjustement of {@link JOctreeKey} between different
 	 * depth levels.
-	 * 
-	 * @param octree {@link JOctree} instance
-	 * @param key {@link JOctreeKey} at the minimum depth
-	 * @param keyLevel1 {@link JOctreeKey} at depth 1
 	 */
 	@Test
 	public void test05_adjustDepthOfKey(){
@@ -117,9 +114,6 @@ public class JOctreeTest{
 	
 	/**
 	 * Test case to recover the resolution of the octree.
-	 * 
-	 * @param octree {@link JOctree} instance
-	 * @return octree resolution
 	 */
 	@Test
 	public void test06_getResolutionTest(){
@@ -143,10 +137,6 @@ public class JOctreeTest{
 	 * Test case to recover the node size of the octree. 
 	 * Checks if the size at the maximum depth is equal to the
 	 * minimum resolution of the octree.
-	 * 
-	 * @param octree {@link JOctree} instance
-	 * @param res octree minimum resolution
-	 * @param depth octree maximum depth
 	 */
 	@Test
 	public void test08_getNodeSizeTest(){
@@ -171,9 +161,6 @@ public class JOctreeTest{
 	/**
 	 * Test case to search a node in the octree, given a 3D position (search
 	 * with depth = 0)
-	 * 
-	 * @param octree {@link JOctree} instance
-	 * @param key {@link JOctreeKey} instance
 	 */
 	@Test
 	public void test10_searchWith3DPositionTest(){
