@@ -15,6 +15,7 @@ cd "$dir"/src/main/java
 # generate JNI headers
 javah -jni es.usc.citius.lab.joctomap.JOctree
 javah -jni es.usc.citius.lab.joctomap.JOctreeKey
+javah -jni es.usc.citius.lab.joctomap.JOctreeNode
 
 # remove current compiled files
 cd es/usc/citius/lab/joctomap
@@ -29,6 +30,7 @@ rm joctreekey.h
 cd "$dir/src/main/java"
 mv *JOctree.h ../resources/joctomap-natives/include/joctree.h
 mv *JOctreeKey.h ../resources/joctomap-natives/include/joctreekey.h
+mv *JOctreeNode.h ../resources/joctomap-natives/include/joctreenode.h
 
 # go to initial directory
 cd "$dir"

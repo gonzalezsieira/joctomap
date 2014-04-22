@@ -21,5 +21,19 @@ public class JOctreeNode extends NativeObject{
 	public JOctreeNode(long pointer) {
 		super(pointer);
 	}
+	
+	/**
+	 * Retrieves the probability of occupancy of the node.
+	 * 
+	 * @return [0, 1] probability of occupancy
+	 */
+	public native double getOccupancy();
+	
+	/**
+	 * Retrieves the value stored in the node.
+	 * 
+	 * @return current node value
+	 */
+	public native float getValue();
 
 }

@@ -33,7 +33,7 @@ INCLUDE=-I"$(JAVA)/include/" -I"$(JAVA)/include/linux/" -I"$(OCTOMAP)/octomap/in
 ######################################################################################################	
 all: libjoctomap.so
 
-libjoctomap.so: octomap joctree.o
+libjoctomap.so: octomap joctree.o joctreenode.o
 	$(CC) $(DEBUG) build/*.o $(SHARED) $(INCLUDE)  $(LINK) -o $(TARGET)  
 
 ######################################################################################################
@@ -41,6 +41,9 @@ libjoctomap.so: octomap joctree.o
 ######################################################################################################	
 joctree.o: nativeobject.o
 	$(CC) $(DEBUG) $(FILE) src/joctree.cpp $(INCLUDE) $(LINK) -o build/joctree.o 
+	
+joctreenode.o: nativeobject.o
+	$(CC) $(DEBUG) $(FILE) src/joctreenode.cpp $(INCLUDE) $(LINK) -o build/joctreenode.o 
 
 ######################################################################################################
 # 									NATIVE OBJECTS DEPENDENT FILES 		 							 #

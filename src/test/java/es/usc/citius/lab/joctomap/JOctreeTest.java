@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -23,33 +25,41 @@ import static org.junit.Assert.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class JOctreeTest{
 
-	private static final String testFilesDir = "src/test/resources/";
-	private static final String testFilesName = "fr_campus";
 	private static JOctree octree; //used in tests
 	private static JOctreeKey key1; //used in tests
 	private static JOctreeKey key2; //used in tests
 	private static Double res; //used in tests
 	private static Integer depth; //used in tests
-	private File fileRead;
-	private File fileWrite;
-
-	/**
-	 * Load dynamic library to access the native methods.
-	 */
-	static {
-		System.loadLibrary("joctomap");
-	}
+	private static File fileRead;
+	private static File fileWrite;
+	
 	
 	/**
-	 * Default constructor for this class
+	 * Initialize files to use with the tests in this class
 	 * 
 	 * @throws IOException when an I/O error occurs
 	 */
-	public JOctreeTest() throws IOException{
-		this.fileRead = new File(testFilesDir.concat(testFilesName).concat(
+	@BeforeClass
+	public static void initialize() throws IOException{
+		fileRead = new File("src/test/resources/".concat("fr_campus").concat(
 				".ot")).getCanonicalFile();
-		this.fileWrite = new File(testFilesName.concat("_test").concat(".ot"))
+		fileWrite = new File("fr_campus".concat("_test").concat(".ot"))
 		.getCanonicalFile();
+	}
+	
+	@AfterClass
+	public static void down() throws IOException{
+		// delete the generated file in this test case
+		fileWrite.delete();
+	}
+	
+	/**
+	 * Accessing {@link JOctree} element of this class after tests are executed.
+	 * 
+	 * @return readed {@link JOctree}
+	 */
+	public static JOctree getOctree(){
+		return octree;
 	}
 	
 	/**
@@ -75,8 +85,6 @@ public class JOctreeTest{
 		// compare by content both files
 		assertTrue("Input and output files with the same content",
 				FileUtils.contentEquals(fileRead, fileWrite));
-		// delete the generated file in this test case
-		fileWrite.delete();
 	}
 	
 	/**
