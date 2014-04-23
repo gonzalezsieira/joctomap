@@ -20,17 +20,20 @@ TARGET=libjoctomap.so
 JAVA=/usr/lib/jvm/java-7-oracle
 
 #Octomap library root
-OCTOMAP=../../../../../../Trabajo/librerias/octomap-1.6.5
+OCTOMAP=octomap
 
 #Linking libraries
 LINK=-L"lib/" -loctomath -loctomap
 
 # Includes to use with the compiler
-INCLUDE=-I"$(JAVA)/include/" -I"$(JAVA)/include/linux/" -I"$(OCTOMAP)/octomap/include/" -I"include/"
+INCLUDE=-I"$(JAVA)/include/" -I"$(JAVA)/include/linux/" -I"$(OCTOMAP)/include/" -I"include/"
 
 ######################################################################################################
 # 									SHARED LIBRARY BUILD											 #
 ######################################################################################################	
+.PHONY : octomap
+.PHONY : clean
+
 all: libjoctomap.so
 
 libjoctomap.so: octomap joctree.o joctreenode.o
@@ -55,18 +58,20 @@ nativeobject.o: src/nativeobject.cpp include/nativeobject.h
 # 									OCTOMAP BUILD													 #
 ######################################################################################################	
 octomap:
-	cd $(OCTOMAP)/octomap/; \
+	mkdir lib; \
 	mkdir build; \
-	cd build; \
-	cmake ..; \
-	make;
-	cp $(OCTOMAP)/octomap/lib/*.a lib/
+	mkdir build/octomap; \
+	cd build/octomap; \
+	cmake ../../$(OCTOMAP); \
+	make; \
+	cp ../../$(OCTOMAP)/lib/*.a ../../lib/
 	
 ######################################################################################################
 # 									CLEAN RULE														 #
 ######################################################################################################	
 clean:
-	rm -rf *.o 
 	rm -rf $(TARGET)
-	rm -rf lib/*
-	rm -rf build/*
+	rm -rf lib
+	rm -rf build
+	rm -rf $(OCTOMAP)/lib
+	rm -rf $(OCTOMAP)/bin
