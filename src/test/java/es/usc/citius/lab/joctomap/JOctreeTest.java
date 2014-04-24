@@ -25,6 +25,7 @@ import static org.junit.Assert.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class JOctreeTest{
 
+	private static JOctree emptyOctree; //used in tests
 	private static JOctree octree; //used in tests
 	private static JOctreeKey key1; //used in tests
 	private static JOctreeKey key2; //used in tests
@@ -63,11 +64,19 @@ public class JOctreeTest{
 	}
 	
 	/**
+	 * Instantiate new empty octree with 0.5 resolution
+	 */
+	@Test
+	public void test01_createOctree(){
+		emptyOctree = JOctree.create(0.5);
+	}
+	
+	/**
 	 * Unit test for reading a .ot file.
 	 * @throws IOException when an I/O error occurs 
 	 */
 	@Test
-	public void test01_readFileOt() throws IOException {
+	public void test02_readFileOt() throws IOException {
 		octree = JOctree.read(fileRead.getAbsolutePath());
 		assertTrue("Octree direction of memory not assigned",
 				octree.getPointer() != 0);
@@ -79,7 +88,7 @@ public class JOctreeTest{
 	 * @throws IOException
 	 */
 	@Test
-	public void test02_writeFileOtTest() throws IOException {
+	public void test03_writeFileOtTest() throws IOException {
 		// write file to compare sizes
 		octree.write(fileWrite.getAbsolutePath());
 		// compare by content both files
@@ -91,7 +100,7 @@ public class JOctreeTest{
 	 * Unit test for retrieving a {@link JOctreeKey} from a position.
 	 */
 	@Test
-	public void test03_obtainCellKeyAtPositionTest() {
+	public void test04_obtainCellKeyAtPositionTest() {
 		key1 = octree.cellKeyAt(0f, 0f, 0f);
 		assertTrue("JOctreeKey must not have negative values", key1.getX() >= 0 && key1.getY() >= 0 && key1.getZ() >= 0);
 	}
@@ -103,7 +112,7 @@ public class JOctreeTest{
 	 * @return key that identifies the node
 	 */
 	@Test
-	public void test04_obtainCellKeyAtPositionWithDepthTest() {
+	public void test05_obtainCellKeyAtPositionWithDepthTest() {
 		key2 = octree.cellKeyAt(0f, 0f, 0f, 1);
 		assertTrue("JOctreeKey must not have negative values", key2.getX() >= 0 && key2.getY() >= 0 && key2.getZ() >= 0);
 	}
@@ -113,7 +122,7 @@ public class JOctreeTest{
 	 * depth levels.
 	 */
 	@Test
-	public void test05_adjustDepthOfKey(){
+	public void test06_adjustDepthOfKey(){
 		JOctreeKey adjustement = octree.adjustKeyAt(key2, 1);
 		assertTrue("JOctreeKey must not have negative values", adjustement.getX() >= 0 && adjustement.getY() >= 0 && adjustement.getZ() >= 0);
 		assertTrue("Adjusted key are not equal to the retrieved one at the same depth", key2.equals(adjustement));
@@ -124,9 +133,11 @@ public class JOctreeTest{
 	 * Test case to recover the resolution of the octree.
 	 */
 	@Test
-	public void test06_getResolutionTest(){
+	public void test07_getResolutionTest(){
 		res = octree.getResolution();
+		double res2 = emptyOctree.getResolution();
 		assertTrue("Resolution must be > 0", res > 0);
+		assertTrue("Resolution different to the created with the empty octree", Double.compare(0.5, res2) == 0); 
 	}
 	
 	/**
@@ -136,7 +147,7 @@ public class JOctreeTest{
 	 * @return octree maximum depth
 	 */
 	@Test
-	public void test07_getTreeDepthTest(){
+	public void test08_getTreeDepthTest(){
 		depth = octree.getTreeDepth();
 		assertTrue("Tree depth must be > 0", depth > 0);
 	}
@@ -147,7 +158,7 @@ public class JOctreeTest{
 	 * minimum resolution of the octree.
 	 */
 	@Test
-	public void test08_getNodeSizeTest(){
+	public void test09_getNodeSizeTest(){
 		double size = octree.getNodeSize(depth);
 		assertTrue("Node size must be > 0", size > 0);
 		assertTrue("Minimum node size must be equal to the octree resolution", Double.compare(res, size) == 0);
@@ -161,7 +172,7 @@ public class JOctreeTest{
 	 * @param key {@link JOctreeKey} instance
 	 */
 	@Test
-	public void test09_searchWithKeyTest(){
+	public void test10_searchWithKeyTest(){
 		JOctreeNode node = octree.search(key1, 0);
 		assertTrue("Native pointer of node is not assigned", node.getPointer() != 0);
 	}
@@ -171,7 +182,7 @@ public class JOctreeTest{
 	 * with depth = 0)
 	 */
 	@Test
-	public void test10_searchWith3DPositionTest(){
+	public void test11_searchWith3DPositionTest(){
 		JOctreeNode node = octree.search(0f, 0f, 0f, 0);
 		assertTrue("Native pointer of node is not assigned", node.getPointer() != 0);
 	}

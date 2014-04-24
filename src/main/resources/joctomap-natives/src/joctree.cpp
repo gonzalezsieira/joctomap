@@ -180,9 +180,8 @@ JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_JOctree_write
  * created Octree object.
  */
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_read
-  (JNIEnv *env, jclass obj, jstring filename){
+  (JNIEnv *env, jclass cls, jstring filename){
 	//find constructor to instantiate the result
-	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/JOctree");
 	jmethodID constructor = env->GetMethodID(cls, "<init>", "(J)V");
 	//convert jstring into native char*
 	jboolean iscopy = false;
@@ -228,4 +227,17 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_read
 	//close input stream
 	stream.close();
 	return env->NewObject(cls, constructor, ot);
+}
+
+/**
+ * Instantiates a new empty octree with the given resolution.
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_create
+  (JNIEnv *env, jclass cls, jdouble res){
+	//find constructor to instantiate the result
+	jmethodID constructor = env->GetMethodID(cls, "<init>", "(J)V");
+	//instantiate new empty octree
+	OcTree *octree = new OcTree(res);
+	//return new java instance of the octree
+	return env->NewObject(cls, constructor, octree);
 }

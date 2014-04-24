@@ -11,7 +11,7 @@ public class JOctree extends NativeObject{
 	 * 
 	 * @param pointer pointer to the native OcTree object.
 	 */
-	public JOctree(long pointer) {
+	private JOctree(long pointer) {
 		super(pointer);
 	}
 	
@@ -133,5 +133,13 @@ public class JOctree extends NativeObject{
 	 * @return pointer of the direction of memory of the loaded native OcTree object
 	 */
 	public static native JOctree read(String filename);
+	
+	/**
+	 * Creates a new {@link JOctree} with a minimum resolution.
+	 * 
+	 * @param res minimum node resolution
+	 * @return octree with the given resolution
+	 */
+	public static native JOctree create(double res);
 	
 }

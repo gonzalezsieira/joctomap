@@ -87,6 +87,14 @@ JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_JOctree_write
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_read
   (JNIEnv *, jclass, jstring);
 
+/*
+ * Class:     es_usc_citius_lab_joctomap_JOctree
+ * Method:    create
+ * Signature: (D)Les/usc/citius/lab/joctomap/JOctree;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_create
+  (JNIEnv *, jclass, jdouble);
+
 #ifdef __cplusplus
 }
 #endif
