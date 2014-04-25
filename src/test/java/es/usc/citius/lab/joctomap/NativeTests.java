@@ -5,6 +5,11 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+/**
+ * Order the execution of all native tests in the library.
+ * 
+ * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ */
 @RunWith(Suite.class)
 @SuiteClasses({ 
 	JOctreeTest.class, 

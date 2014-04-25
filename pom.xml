@@ -106,6 +106,7 @@
 					<!-- Suite tests to be included -->
 					<includes>
 						<include>**/NativeTests.java</include>
+						<include>**/JavaTests.java</include>
 					</includes>
 				</configuration>
 			</plugin>
