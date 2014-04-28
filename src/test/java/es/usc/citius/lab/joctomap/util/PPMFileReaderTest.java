@@ -1,4 +1,4 @@
-package es.usc.citius.lab.joctomap;
+package es.usc.citius.lab.joctomap.util;
 
 import static org.junit.Assert.*;
 
