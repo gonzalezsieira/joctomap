@@ -1,4 +1,4 @@
-package es.usc.citius.lab.joctomap;
+package es.usc.citius.lab.joctomap.util;
 
 /**
  * Represents an object that supports native calls.

@@ -1,5 +1,7 @@
 package es.usc.citius.lab.joctomap;
 
+import es.usc.citius.lab.joctomap.util.NativeObject;
+
 public class JOctree extends NativeObject{
 	
 	//used by native methods

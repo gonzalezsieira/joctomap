@@ -2,6 +2,8 @@ package es.usc.citius.lab.joctomap;
 
 import java.util.List;
 
+import es.usc.citius.lab.joctomap.util.NativeObject;
+
 
 /**
  * Represents a node of the {@link JOctree}, which is identified
