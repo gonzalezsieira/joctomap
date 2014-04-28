@@ -39,7 +39,7 @@ public class JOctree extends NativeObject{
 	 * @param x
 	 * @param y
 	 * @param z
-	 * @param depth
+	 * @param depth level to search (depth=0 means search in the full octree)
 	 * @return key of the node at the given position and depth
 	 */
 	public native JOctreeKey cellKeyAt(float x, float y, float z, int depth);
@@ -80,6 +80,23 @@ public class JOctree extends NativeObject{
 	 */
 	public native JOctreeNode search(double x, double y, double z, int depth);
 	
+	
+	/*
+	 * *******************************************************************************
+	 * *					Update functions		                             	 *
+	 * *******************************************************************************
+	 */
+	/**
+	 * Updates the occupancy information of a {@link JOctreeNode}, retrieving the node 
+	 * instance affected.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param occupied
+	 * @return {@link JOctreeNode} affected
+	 */
+	public native JOctreeNode updateNode(double x, double y, double z, boolean occupied);
 	
 	/*
 	 * *******************************************************************************

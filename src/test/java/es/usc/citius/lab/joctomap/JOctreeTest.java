@@ -186,4 +186,48 @@ public class JOctreeTest{
 		JOctreeNode node = octree.search(0f, 0f, 0f, 0);
 		assertTrue("Native pointer of node is not assigned", node.getPointer() != 0);
 	}
+	
+	/**
+	 * Tests if the node retrieved is the same in the update step and
+	 * the search step.
+	 */
+	@Test
+	public void test12_updateNodeTest(){
+		JOctreeNode node1 = emptyOctree.updateNode(0d, 0d, 0d, true);
+		JOctreeNode node2 = emptyOctree.search(0d, 0d, 0d, 0);
+		assertEquals("Updated and retrieved node are not equals ", node1.getPointer(), node2.getPointer());
+		assertTrue("Updated node must be occupancy probability > 0", node1.getOccupancy() > 0);
+	}
+	
+	/**
+	 * Inserts an "occupied node" update several times, checking
+	 * that the probability of occupation must increase with each update.
+	 */
+	@Test
+	public void test13_recursiveUpdateOccupiedNodeTest(){
+		JOctreeNode node = emptyOctree.search(0d, 0d, 0d, 0);
+		//continue updating the node
+		for(int i = 0; i < 10; i++){
+			double occ = node.getOccupancy();
+			node = emptyOctree.updateNode(0d, 0d, 0d, true);
+			double occNew = node.getOccupancy();
+			assertTrue("Occupancy must increase with each update", occNew >= occ);
+		}
+	}
+	
+	/**
+	 * Inserts a "free node" update several times, checking that 
+	 * the probability of occupation must decrease with each update.
+	 */
+	@Test
+	public void test13_recursiveUpdateFreeNodeTest(){
+		JOctreeNode node = emptyOctree.search(0d, 0d, 0d, 0);
+		//continue updating the node
+		for(int i = 0; i < 10; i++){
+			double occ = node.getOccupancy();
+			node = emptyOctree.updateNode(0d, 0d, 0d, false);
+			double occNew = node.getOccupancy();
+			assertTrue("Occupancy must decrease with each update", occNew <= occ);
+		}
+	}
 }

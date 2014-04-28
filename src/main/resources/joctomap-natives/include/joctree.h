@@ -49,6 +49,14 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_search__DDDI
 
 /*
  * Class:     es_usc_citius_lab_joctomap_JOctree
+ * Method:    updateNode
+ * Signature: (DDDZ)Les/usc/citius/lab/joctomap/JOctreeNode;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_updateNode
+  (JNIEnv *, jobject, jdouble, jdouble, jdouble, jboolean);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_JOctree
  * Method:    getTreeDepth
  * Signature: ()I
  */

@@ -125,6 +125,22 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_search__DDDI
 }
 
 /**
+ * This method updates the occupancy information of a node in the position (x, y, z).
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_updateNode
+  (JNIEnv *env, jobject jtree, jdouble x, jdouble y, jdouble z, jboolean occupied){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//update information of the node
+	OcTreeNode *node = octree->updateNode(x, y, z, (bool) occupied, false);
+	//find class and constructor to instantiate joctreenode
+	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/JOctreeNode");
+	jmethodID constructor = env->GetMethodID(cls, "<init>", "(J)V");
+	//return new instance
+	return env->NewObject(cls, constructor, node);
+}
+
+/**
  * Method that obtains the octree maximum depth.
  */
 JNIEXPORT jint JNICALL Java_es_usc_citius_lab_joctomap_JOctree_getTreeDepth
