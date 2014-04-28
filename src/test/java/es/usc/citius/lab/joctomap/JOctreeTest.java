@@ -10,6 +10,9 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import es.usc.citius.lab.joctomap.octree.JOctree;
+import es.usc.citius.lab.joctomap.octree.JOctreeKey;
+import es.usc.citius.lab.joctomap.octree.JOctreeNode;
 import static org.junit.Assert.*;
 
 /**

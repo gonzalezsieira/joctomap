@@ -10,7 +10,7 @@ using namespace octomap;
 /**
  * Retrieves the occupancy probability of the node.
  */
-JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_JOctreeNode_getOccupancy
+JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctreeNode_getOccupancy
   (JNIEnv * env, jobject jnode){
 	//retrieve native pointer
 	OcTreeNode *node = (OcTreeNode*) getPointer(env, jnode);
@@ -21,7 +21,7 @@ JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_JOctreeNode_getOccupan
 /**
  * Retrieves the value stored in the node.
  */
-JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_JOctreeNode_getValue
+JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctreeNode_getValue
   (JNIEnv *env, jobject jnode){
 	//retrieve native pointer
 	OcTreeNode *node = (OcTreeNode*) getPointer(env, jnode);
@@ -32,7 +32,7 @@ JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_JOctreeNode_getValue
 /**
  * Retrieves the list of children of the node. Not implemented yet.
  */
-JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctreeNode_getChildren
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctreeNode_getChildren
   (JNIEnv *env, jobject jnode){
 	//retrieve native pointer
 	OcTreeNode *node = (OcTreeNode*) getPointer(env, jnode);
@@ -43,7 +43,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctreeNode_getChildre
 	//retrieve ArrayList add method
 	jmethodID addArrayList = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
 	//retrieve JOctreeNode class
-	jclass nodeClass = env->FindClass("es/usc/citius/lab/joctomap/JOctreeNode");
+	jclass nodeClass = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeNode");
 	//retrieve JOctreeNode constructor
 	jmethodID nodeConstructor = env->GetMethodID(nodeClass, "<init>", "(J)V");
 	//new arraylist()
@@ -68,7 +68,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctreeNode_getChildre
 /**
  * Retrieves the number of children of this node. Not implemented yet.
  */
-JNIEXPORT jint JNICALL Java_es_usc_citius_lab_joctomap_JOctreeNode_getNumChildren
+JNIEXPORT jint JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctreeNode_getNumChildren
   (JNIEnv *env, jobject jnode){
 	//retrieve native pointer
 	OcTreeNode *node = (OcTreeNode*) getPointer(env, jnode);
@@ -88,7 +88,7 @@ JNIEXPORT jint JNICALL Java_es_usc_citius_lab_joctomap_JOctreeNode_getNumChildre
 /**
  * Retrieves the i-th child of the current node, if exists. NULL otherwise.
  */
-JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctreeNode_getChild
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctreeNode_getChild
   (JNIEnv *env, jobject jnode, jint i){
 	//retrieve native pointer
 	OcTreeNode *node = (OcTreeNode*) getPointer(env, jnode);
@@ -96,7 +96,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctreeNode_getChild
 	if(node->childExists(i)){
 		OcTreeNode *child = node->getChild(i);
 			//find class and constructor to instantiate joctreenode
-			jclass cls = env->FindClass("es/usc/citius/lab/joctomap/JOctreeNode");
+			jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeNode");
 			jmethodID constructor = env->GetMethodID(cls, "<init>", "(J)V");
 			//return new instance
 			return env->NewObject(cls, constructor, child);
@@ -110,7 +110,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctreeNode_getChild
 /**
  * Retrieves if the i-th child of this node exists.
  */
-JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_JOctreeNode_childExists
+JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctreeNode_childExists
   (JNIEnv *env, jobject jnode, jint i){
 	//retrieve native pointer
 	OcTreeNode *node = (OcTreeNode*) getPointer(env, jnode);
@@ -121,7 +121,7 @@ JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_JOctreeNode_childExis
 /**
  * Queries if the node has children.
  */
-JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_JOctreeNode_hasChildren
+JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctreeNode_hasChildren
   (JNIEnv *env, jobject jnode){
 	//retrieve native pointer
 	OcTreeNode *node = (OcTreeNode*) getPointer(env, jnode);
@@ -132,7 +132,7 @@ JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_JOctreeNode_hasChildr
 /**
  * Queries if this node is collapsible.
  */
-JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_JOctreeNode_collapsible
+JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctreeNode_collapsible
   (JNIEnv *env, jobject jnode){
 	//retrieve native pointer
 	OcTreeNode *node = (OcTreeNode*) getPointer(env, jnode);

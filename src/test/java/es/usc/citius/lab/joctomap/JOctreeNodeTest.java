@@ -9,6 +9,8 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import es.usc.citius.lab.joctomap.octree.JOctreeNode;
+
 /**
  * Test case over the methods in {@link JOctreeNode}. The tests are executing in
  * ascending order to guarantee dependencies between them, if exist.

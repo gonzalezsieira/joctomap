@@ -14,13 +14,13 @@ using namespace octomap;
 /*
  * This method finds the position of a cell given a real position in the map (x, y, z)
  */
-JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_cellKeyAt__FFF
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_cellKeyAt__FFF
   (JNIEnv *env, jobject jtree, jfloat x, jfloat y, jfloat z){
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	OcTreeKey key = octree->coordToKey(x, y, z);
 	//find class and constructor to instantiate JOCtreekey
-	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/JOctreeKey");
+	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeKey");
 	jmethodID constructor = env->GetMethodID(cls, "<init>", "(III)V");
 	//new JOctreeKey(x, y, z)
 	return env->NewObject(cls, constructor, static_cast<int>(key.k[0]), static_cast<int>(key.k[1]), static_cast<int>(key.k[2]));
@@ -30,13 +30,13 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_cellKeyAt__FFF
  * This method finds the position of a cell given a real position in the map (x, y, z) at
  * a given depth.
  */
-JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_cellKeyAt__FFFI
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_cellKeyAt__FFFI
   (JNIEnv *env, jobject jtree, jfloat x, jfloat y, jfloat z, jint depth){
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	OcTreeKey key = octree->coordToKey(x, y, z, depth);
 	//find class and constructor to instantiate JOCtreekey
-	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/JOctreeKey");
+	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeKey");
 	jmethodID constructor = env->GetMethodID(cls, "<init>", "(III)V");
 	//new JOctreeKey(x, y, z)
 	return env->NewObject(cls, constructor, static_cast<int>(key.k[0]), static_cast<int>(key.k[1]), static_cast<int>(key.k[2]));
@@ -45,12 +45,12 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_cellKeyAt__FFF
 /**
  * This method adjusts the key of a node at a givn depth.
  */
-JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_adjustKeyAt
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_adjustKeyAt
   (JNIEnv *env, jobject jtree, jobject jkey, jint depth){
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	//recover field IDs
-	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/JOctreeKey");
+	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeKey");
 	jfieldID fieldX = env->GetFieldID(cls, "x", "I");
 	jfieldID fieldY = env->GetFieldID(cls, "y", "I");
 	jfieldID fieldZ = env->GetFieldID(cls, "z", "I");
@@ -70,12 +70,12 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_adjustKeyAt
  * This method searches in the octree a node given by a key and a depth (depth = 0 means search
  * in the whole octree).
  */
-JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_search__Les_usc_citius_lab_joctomap_JOctreeKey_2I
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_search__Les_usc_citius_lab_joctomap_octree_JOctreeKey_2I
   (JNIEnv *env, jobject jtree, jobject jkey, jint depth){
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	//recover key field IDs
-	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/JOctreeKey");
+	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeKey");
 	jfieldID fieldX = env->GetFieldID(cls, "x", "I");
 	jfieldID fieldY = env->GetFieldID(cls, "y", "I");
 	jfieldID fieldZ = env->GetFieldID(cls, "z", "I");
@@ -90,7 +90,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_search__Les_us
 	//return new node instance if the node is found in the octree
 	if(node != NULL){
 		//find class and constructor to instantiate joctreenode
-		cls = env->FindClass("es/usc/citius/lab/joctomap/JOctreeNode");
+		cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeNode");
 		jmethodID constructor = env->GetMethodID(cls, "<init>", "(J)V");
 		//return new instance
 		return env->NewObject(cls, constructor, node);
@@ -104,7 +104,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_search__Les_us
 /**
  * This method searches in the octree a node given by a 3D position and a depth ()
  */
-JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_search__DDDI
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_search__DDDI
   (JNIEnv *env, jobject jtree, jdouble x, jdouble y, jdouble z, jint depth){
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
@@ -113,7 +113,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_search__DDDI
 	//return new node instance if the node is found in the octree
 	if(node != NULL){
 		//find class and constructor to instantiate joctreenode
-		jclass cls = env->FindClass("es/usc/citius/lab/joctomap/JOctreeNode");
+		jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeNode");
 		jmethodID constructor = env->GetMethodID(cls, "<init>", "(J)V");
 		//return new instance
 		return env->NewObject(cls, constructor, node);
@@ -127,14 +127,14 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_search__DDDI
 /**
  * This method updates the occupancy information of a node in the position (x, y, z).
  */
-JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_updateNode
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_updateNode
   (JNIEnv *env, jobject jtree, jdouble x, jdouble y, jdouble z, jboolean occupied){
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	//update information of the node
 	OcTreeNode *node = octree->updateNode(x, y, z, (bool) occupied, false);
 	//find class and constructor to instantiate joctreenode
-	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/JOctreeNode");
+	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeNode");
 	jmethodID constructor = env->GetMethodID(cls, "<init>", "(J)V");
 	//return new instance
 	return env->NewObject(cls, constructor, node);
@@ -143,7 +143,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_updateNode
 /**
  * Method that obtains the octree maximum depth.
  */
-JNIEXPORT jint JNICALL Java_es_usc_citius_lab_joctomap_JOctree_getTreeDepth
+JNIEXPORT jint JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getTreeDepth
   (JNIEnv *env, jobject jtree){
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
@@ -154,7 +154,7 @@ JNIEXPORT jint JNICALL Java_es_usc_citius_lab_joctomap_JOctree_getTreeDepth
 /**
  * Method that obtains the octree minimum resolution.
  */
-JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_JOctree_getResolution
+JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getResolution
   (JNIEnv *env, jobject jtree){
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
@@ -165,7 +165,7 @@ JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_JOctree_getResolution
 /**
  * Method that obtains the resolution at a current depth.
  */
-JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_JOctree_getNodeSize
+JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getNodeSize
   (JNIEnv *env, jobject jtree, jint depth){
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
@@ -177,7 +177,7 @@ JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_JOctree_getNodeSize
  * This method writes an octree, given the pointer to the object and the
  * filename.
  */
-JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_JOctree_write
+JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_write
   (JNIEnv *env, jobject obj, jstring filename){
 	OcTree *octree = (OcTree*) getPointer(env, obj);
 	//convert jstring into native char*
@@ -195,7 +195,7 @@ JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_JOctree_write
  * Reads an octree from a ".bt" or ".ot" file and returns the pointer to the
  * created Octree object.
  */
-JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_read
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_read
   (JNIEnv *env, jclass cls, jstring filename){
 	//find constructor to instantiate the result
 	jmethodID constructor = env->GetMethodID(cls, "<init>", "(J)V");
@@ -248,7 +248,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_read
 /**
  * Instantiates a new empty octree with the given resolution.
  */
-JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_JOctree_create
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_create
   (JNIEnv *env, jclass cls, jdouble res){
 	//find constructor to instantiate the result
 	jmethodID constructor = env->GetMethodID(cls, "<init>", "(J)V");

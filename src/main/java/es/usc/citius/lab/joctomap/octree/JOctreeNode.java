@@ -1,4 +1,4 @@
-package es.usc.citius.lab.joctomap;
+package es.usc.citius.lab.joctomap.octree;
 
 import java.util.List;
 

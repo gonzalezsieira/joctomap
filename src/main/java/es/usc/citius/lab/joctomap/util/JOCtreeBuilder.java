@@ -3,7 +3,7 @@ package es.usc.citius.lab.joctomap.util;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import es.usc.citius.lab.joctomap.JOctree;
+import es.usc.citius.lab.joctomap.octree.JOctree;
 
 /**
  * Builder for {@link JOctree}. Main functionality of this class is to instantiate 
