@@ -3,6 +3,8 @@ package es.usc.citius.lab.joctomap.util;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import org.apache.commons.cli.CommandLine;
+
 import es.usc.citius.lab.joctomap.octree.JOctree;
 
 /**
@@ -14,28 +16,44 @@ import es.usc.citius.lab.joctomap.octree.JOctree;
  * 
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  */
-public abstract class JOCtreeBuilder {
+public class JOCtreeBuilder extends Module{
 
-	/**
-	 * Instantiates a new {@link JOctree} and puts the information contained in 
-	 * @param input route of the PPM file (this will add the extension if necessary)
-	 * @param output route of the output .ot file (this will add the extension if necessary)
-	 * @param sizeX max. size of the X dimension of the map
-	 * @param sizeY max. size of the Y dimension of the map
-	 * @return
-	 */
-	public static JOctree octreeFromPPM(String input, String output, double sizeX, double sizeY){
-		//instantiate new octree
-		JOctree octree = JOctree.create(0.125);
+	public String getName() {
+		return "ppmot";
+	}
+
+	public void execute(CommandLine args) {
+		//retrieve input args of the command line
+		String inputArgs[] = args.getOptionValues("i");
+		//read the ppm file 
 		PPMFileReader reader = null;
 		//open file and read data from
 		try{
-			reader = new PPMFileReader(input);
+			reader = new PPMFileReader(inputArgs[0]);
 		} catch(FileNotFoundException ex){
 			JOctomapLogger.severe("Could not open the file specified: " + ex);
 		} catch (IOException ex) {
 			JOctomapLogger.severe("An I/O error occured processing the file: " + ex);
 		}
+		//process the ppm to generate an octree
+
+		JOctree octree = octreeFromPPM(reader, Double.parseDouble(inputArgs[1]), Double.parseDouble(inputArgs[2]));
+		//write octree to file (.ot extension mandatory)
+		String outputPath = args.getOptionValue("o");
+		if(!outputPath.endsWith(".ot")) { outputPath = outputPath.concat(".ot"); }
+		octree.write(outputPath);
+	}
+	
+	/**
+	 * Instantiates a new {@link JOctree} and puts the information contained in a {@link PPMFileReader}.
+	 * @param reader reader that processed the PPM file
+	 * @param sizeX max. size of the X dimension of the map
+	 * @param sizeY max. size of the Y dimension of the map
+	 * @return
+	 */
+	private JOctree octreeFromPPM(PPMFileReader reader, double sizeX, double sizeY){
+		//instantiate new octree
+		JOctree octree = JOctree.create(0.125);
 		double resX = sizeX/(double) (reader.getPixels().length - 1);
 		double resY = sizeY/(double) (reader.getPixels()[0].length - 1);
 		//iterate over the read pixels to update the information of the nodes
@@ -48,11 +66,6 @@ public abstract class JOCtreeBuilder {
 				octree.updateNode(resX * x, resY * y, 0d, occupied);
 			}
 		}
-		String outputPath = output;
-		//modify output 
-		if(!outputPath.endsWith(".ot")) { outputPath = outputPath.concat(".ot"); }
-		//write octree
-		octree.write(outputPath);
 		return octree;
 	}
 	
