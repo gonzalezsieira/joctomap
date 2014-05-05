@@ -125,6 +125,19 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_search_
 }
 
 /**
+ * Retrieves if a node is occupied according to its probability of occupancy.
+ */
+JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_isNodeOccupied
+  (JNIEnv *env, jobject jtree, jobject jnode){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//recover node
+	OcTreeNode *node = (OcTreeNode*) getPointer(env, jnode);
+	//return query
+	return octree->isNodeOccupied(node);
+}
+
+/**
  * This method updates the occupancy information of a node in the position (x, y, z).
  */
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_updateNode

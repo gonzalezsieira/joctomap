@@ -49,6 +49,14 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_search_
 
 /*
  * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    isNodeOccupied
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctreeNode;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_isNodeOccupied
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
  * Method:    updateNode
  * Signature: (DDDZ)Les/usc/citius/lab/joctomap/octree/JOctreeNode;
  */

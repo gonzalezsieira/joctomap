@@ -23,22 +23,10 @@ public class JOCtreeBuilder extends Module{
 	}
 
 	public void execute(CommandLine args) {
-		//retrieve input args of the command line
-		String inputArgs[] = args.getOptionValues("i");
-		//read the ppm file 
-		PPMFileReader reader = null;
-		//open file and read data from
-		try{
-			JOctomapLogger.info("Reading file " + inputArgs[0] + "...");
-			reader = new PPMFileReader(inputArgs[0]);
-		} catch(FileNotFoundException ex){
-			JOctomapLogger.severe("Could not open the file specified: " + ex);
-		} catch (IOException ex) {
-			JOctomapLogger.severe("An I/O error occured processing the file: " + ex);
-		}
-		JOctomapLogger.info("Reading PPM file " + inputArgs[0]);
+		//retrieve input args
+		String[] inputArgs = args.getOptionValues("i");
 		//process the ppm to generate an octree
-		JOctree octree = octreeFromPPM(reader, Double.parseDouble(inputArgs[1]), Double.parseDouble(inputArgs[2]));
+		JOctree octree = octreeFromPPM(inputArgs[0], Double.parseDouble(inputArgs[1]), Double.parseDouble(inputArgs[2]));
 		//write octree to file (.ot extension mandatory)
 		String outputPath = args.getOptionValue("o");
 		if(!outputPath.endsWith(".ot")) { outputPath = outputPath.concat(".ot"); }
@@ -47,12 +35,24 @@ public class JOCtreeBuilder extends Module{
 	
 	/**
 	 * Instantiates a new {@link JOctree} and puts the information contained in a {@link PPMFileReader}.
-	 * @param reader reader that processed the PPM file
+	 * @param input where the PPM file is located
 	 * @param sizeX max. size of the X dimension of the map
 	 * @param sizeY max. size of the Y dimension of the map
 	 * @return
 	 */
-	private JOctree octreeFromPPM(PPMFileReader reader, double sizeX, double sizeY){
+	public static JOctree octreeFromPPM(String input, double sizeX, double sizeY){
+		//read the ppm file 
+		PPMFileReader reader = null;
+		//open file and read data from
+		try{
+			JOctomapLogger.info("Reading file " + input + "...");
+			reader = new PPMFileReader(input);
+		} catch(FileNotFoundException ex){
+			JOctomapLogger.severe("Could not open the file specified: " + ex);
+		} catch (IOException ex) {
+			JOctomapLogger.severe("An I/O error occured processing the file: " + ex);
+		}
+		JOctomapLogger.info("Reading PPM file " + input);
 		//instantiate new octree
 		JOctree octree = JOctree.create(0.125);
 		double resX = sizeX/(double) (reader.getPixels().length - 1);

@@ -219,11 +219,20 @@ public class JOctreeTest{
 	}
 	
 	/**
+	 * Queries if the node is occupied.
+	 */
+	@Test
+	public void test14_isNodeOccupiedTest(){
+		JOctreeNode node = emptyOctree.search(0d, 0d, 0d, 0);
+		assertTrue("Occupied node does not retrieve occupied", emptyOctree.isNodeOccupied(node));
+	}
+	
+	/**
 	 * Inserts a "free node" update several times, checking that 
 	 * the probability of occupation must decrease with each update.
 	 */
 	@Test
-	public void test13_recursiveUpdateFreeNodeTest(){
+	public void test15_recursiveUpdateFreeNodeTest(){
 		JOctreeNode node = emptyOctree.search(0d, 0d, 0d, 0);
 		//continue updating the node
 		for(int i = 0; i < 10; i++){
@@ -232,5 +241,14 @@ public class JOctreeTest{
 			double occNew = node.getOccupancy();
 			assertTrue("Occupancy must decrease with each update", occNew <= occ);
 		}
+	}
+	
+	/**
+	 * Queries if the node is not occupied.
+	 */
+	@Test
+	public void test16_isNodeOccupiedTest(){
+		JOctreeNode node = emptyOctree.search(0d, 0d, 0d, 0);
+		assertTrue("Occupied node does not retrieve occupied", !emptyOctree.isNodeOccupied(node));
 	}
 }

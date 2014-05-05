@@ -82,6 +82,14 @@ public class JOctree extends NativeObject{
 	 */
 	public native JOctreeNode search(double x, double y, double z, int depth);
 	
+	/**
+	 * Queries if a node is occupied, according to its occupancy probability.
+	 * 
+	 * @param node node to query if is occupied
+	 * @return result of the query
+	 */
+	public native boolean isNodeOccupied(JOctreeNode node);
+	
 	
 	/*
 	 * *******************************************************************************
