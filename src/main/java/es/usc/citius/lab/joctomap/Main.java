@@ -51,6 +51,7 @@ public class Main {
 				OptionBuilder
 				.withDescription("Tool to execute")
 				.hasArg()
+				.isRequired()
 				.withArgName("tool_name")
 				.create("t")
 				);
