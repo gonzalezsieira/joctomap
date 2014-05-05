@@ -29,14 +29,15 @@ public class JOCtreeBuilder extends Module{
 		PPMFileReader reader = null;
 		//open file and read data from
 		try{
+			JOctomapLogger.info("Reading file " + inputArgs[0] + "...");
 			reader = new PPMFileReader(inputArgs[0]);
 		} catch(FileNotFoundException ex){
 			JOctomapLogger.severe("Could not open the file specified: " + ex);
 		} catch (IOException ex) {
 			JOctomapLogger.severe("An I/O error occured processing the file: " + ex);
 		}
+		JOctomapLogger.info("Reading PPM file " + inputArgs[0]);
 		//process the ppm to generate an octree
-
 		JOctree octree = octreeFromPPM(reader, Double.parseDouble(inputArgs[1]), Double.parseDouble(inputArgs[2]));
 		//write octree to file (.ot extension mandatory)
 		String outputPath = args.getOptionValue("o");
@@ -61,7 +62,7 @@ public class JOCtreeBuilder extends Module{
 			for(int y = 0; y < reader.getPixels()[x].length; y++){
 				int[] rgb = reader.getPixels()[x][y];
 				//occupied case: one of the color components reaches the maximum value of the file
-				boolean occupied = rgb[0] == reader.getMaxValue() || rgb[1] == reader.getMaxValue() || rgb[2] == reader.getMaxValue();
+				boolean occupied = rgb[0] == 0 && rgb[1] == 0 && rgb[2] == 0;
 				//update occupancy information
 				octree.updateNode(resX * x, resY * y, 0d, occupied);
 			}

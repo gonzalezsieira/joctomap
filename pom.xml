@@ -19,6 +19,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<main.class>es.usc.citius.lab.joctomap.Main</main.class>
 	</properties>
 
 
@@ -64,6 +65,20 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
+			<!-- Put main class in MANIFEST -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>${main.class}</mainClass>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
@@ -99,6 +114,9 @@
 						</configuration>
 					</execution>
 				</executions>
+				<configuration>
+					<mainClass>${main.class}</mainClass>
+				</configuration>
 			</plugin>
 			<!-- Junit configuration to add the dynamic library to the path -->
 			<plugin>

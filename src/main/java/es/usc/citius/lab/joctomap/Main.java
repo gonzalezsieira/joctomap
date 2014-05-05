@@ -24,6 +24,10 @@ import es.usc.citius.lab.joctomap.util.Module;
  */
 public class Main {
 	
+	static{
+		System.loadLibrary("joctomap");		
+	}
+	
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) {
 		Options op = new Options();
