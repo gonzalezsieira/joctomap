@@ -9,6 +9,14 @@ extern "C" {
 #endif
 /*
  * Class:     es_usc_citius_lab_joctomap_distance_JOctreeDistanceMap
+ * Method:    update
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_distance_JOctreeDistanceMap_update
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_distance_JOctreeDistanceMap
  * Method:    create
  * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;D)Les/usc/citius/lab/joctomap/distance/JOctreeDistanceMap;
  */

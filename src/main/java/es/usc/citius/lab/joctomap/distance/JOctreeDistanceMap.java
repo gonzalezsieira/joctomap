@@ -22,6 +22,11 @@ public class JOctreeDistanceMap extends NativeObject{
 	}
 	
 	/**
+	 * Executes the update operation of the distance map.
+	 */
+	public native void update();
+	
+	/**
 	 * Obtains a new instance of {@link JOctreeDistanceMap} from a {@link JOctree}
 	 * instance with all distances calculated.
 	 * 
