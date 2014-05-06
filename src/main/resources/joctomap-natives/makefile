@@ -26,10 +26,10 @@ OCTOMAP=octomap
 DYNAMIC=dynamicEDT3D
 
 #Linking libraries
-LINK=-L"lib/" -loctomath -loctomap
+LINK=-L"lib/" -loctomath -loctomap -ldynamicedt3d
 
 # Includes to use with the compiler
-INCLUDE=-I"$(JAVA)/include/" -I"$(JAVA)/include/linux/" -I"$(OCTOMAP)/include/" -I"include/"
+INCLUDE=-I"$(JAVA)/include/" -I"$(JAVA)/include/linux/" -I"$(OCTOMAP)/include/" -I"$(DYNAMIC)/include/" -I"include/"
 
 ######################################################################################################
 # 									SHARED LIBRARY BUILD											 #
@@ -39,7 +39,7 @@ INCLUDE=-I"$(JAVA)/include/" -I"$(JAVA)/include/linux/" -I"$(OCTOMAP)/include/" 
 
 all: libjoctomap.so
 
-libjoctomap.so: octomap dynamic joctree.o joctreenode.o
+libjoctomap.so: octomap dynamic joctree.o joctreenode.o joctreedistancemap.o
 	$(CC) $(DEBUG) build/*.o $(SHARED) $(INCLUDE)  $(LINK) -o $(TARGET)  
 
 ######################################################################################################
@@ -50,6 +50,9 @@ joctree.o: nativeobject.o
 	
 joctreenode.o: nativeobject.o
 	$(CC) $(DEBUG) $(FILE) src/joctreenode.cpp $(INCLUDE) $(LINK) -o build/joctreenode.o 
+	
+joctreedistancemap.o: nativeobject.o
+	$(CC) $(DEBUG) $(FILE) src/joctreedistancemap.cpp $(INCLUDE) $(LINK) -o build/joctreedistancemap.o
 
 ######################################################################################################
 # 									NATIVE OBJECTS DEPENDENT FILES 		 							 #
