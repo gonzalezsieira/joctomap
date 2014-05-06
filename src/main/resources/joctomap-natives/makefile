@@ -22,6 +22,9 @@ JAVA=/usr/lib/jvm/java-7-oracle
 #Octomap library root
 OCTOMAP=octomap
 
+#dynamicEDT3D library root
+DYNAMIC=dynamicEDT3D
+
 #Linking libraries
 LINK=-L"lib/" -loctomath -loctomap
 
@@ -36,7 +39,7 @@ INCLUDE=-I"$(JAVA)/include/" -I"$(JAVA)/include/linux/" -I"$(OCTOMAP)/include/" 
 
 all: libjoctomap.so
 
-libjoctomap.so: octomap joctree.o joctreenode.o
+libjoctomap.so: octomap dynamic joctree.o joctreenode.o
 	$(CC) $(DEBUG) build/*.o $(SHARED) $(INCLUDE)  $(LINK) -o $(TARGET)  
 
 ######################################################################################################
@@ -66,6 +69,15 @@ octomap:
 	make; \
 	cp ../../$(OCTOMAP)/lib/*.a ../../lib/
 	
+dynamic:
+	mkdir lib; \
+	mkdir build; \
+	mkdir build/dynamicEDT3D; \
+	cd build/dynamicEDT3D; \
+	cmake ../../$(DYNAMIC); \
+	make; \
+	cp ../../$(DYNAMIC)/lib/*.a ../../lib/
+	
 ######################################################################################################
 # 									CLEAN RULE														 #
 ######################################################################################################	
@@ -75,3 +87,5 @@ clean:
 	rm -rf build
 	rm -rf $(OCTOMAP)/lib
 	rm -rf $(OCTOMAP)/bin
+	rm -rf $(DYNAMIC)/lib
+	rm -rf $(DYNAMIC)/bin

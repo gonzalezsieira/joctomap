@@ -12,6 +12,8 @@ target/
 src/main/resources/joctomap-natives/build
 src/main/resources/joctomap-natives/octomap/lib
 src/main/resources/joctomap-natives/octomap/bin
+src/main/resources/joctomap-natives/dynamicEDT3D/lib
+src/main/resources/joctomap-natives/dynamicEDT3D/bin
 src/main/resources/joctomap-natives/lib
 .attach*
 src/main/resources/joctomap-natives/.cproject
