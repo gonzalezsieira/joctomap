@@ -28,7 +28,8 @@ public class JOctreeDistanceMap extends NativeObject{
 	
 	/**
 	 * Obtains a new instance of {@link JOctreeDistanceMap} from a {@link JOctree}
-	 * instance with all distances calculated.
+	 * instance. Note that this method only creates the distance map, but not really calculates
+	 * the distances in all points of the space. To do this, execute the method {@link #update()}.
 	 * 
 	 * @param octree {@link JOctree} instance
 	 * @param maxDistance max distance to calculate the map

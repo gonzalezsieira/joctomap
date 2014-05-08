@@ -34,9 +34,6 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_distance_JOctreeDistan
 	bool unknownAsOccupied = true;
 	//obtain JOctree distance map
 	DynamicEDTOctomap *distanceMap = new DynamicEDTOctomap(maxDistance, octree, min, max, unknownAsOccupied);
-	//method before does not really calculate the map distances, this is done by the following command
-	//update({default = true}) is slower because it computes squared roots of the distances, this is, the real ones
-	distanceMap->update();
 	//instantiate java object JOctreeDistanceMap
 	jmethodID constructor = env->GetMethodID(cls, "<init>", "(J)V");
 	return env->NewObject(cls, constructor, distanceMap);
