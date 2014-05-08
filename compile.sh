@@ -1,6 +1,5 @@
 #!bin/sh
 echo -e "[exec] C/C++ build script begins"
-
 # save current directory
 dir=`pwd`
 
@@ -9,7 +8,7 @@ cd src/main/resources/joctomap-natives
 
 # compile
 echo "[exec] Building libjoctomap.so..."
-make
+make JAVA=`echo $JAVA_JDK`
 cp libjoctomap.so "$dir"/
 
 # go to beginning directory

@@ -16,9 +16,6 @@ FILE=-c -fPIC
 # Output file
 TARGET=libjoctomap.so
 
-# Java HOME
-JAVA=/usr/lib/jvm/java-7-oracle
-
 #Octomap library root
 OCTOMAP=octomap
 
