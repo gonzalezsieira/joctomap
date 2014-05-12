@@ -17,6 +17,30 @@ JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_distance_JOctreeDistanceM
 
 /*
  * Class:     es_usc_citius_lab_joctomap_distance_JOctreeDistanceMap
+ * Method:    getDistance
+ * Signature: (DDD)D
+ */
+JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_distance_JOctreeDistanceMap_getDistance__DDD
+  (JNIEnv *, jobject, jdouble, jdouble, jdouble);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_distance_JOctreeDistanceMap
+ * Method:    getDistance
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctreeKey;)D
+ */
+JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_distance_JOctreeDistanceMap_getDistance__Les_usc_citius_lab_joctomap_octree_JOctreeKey_2
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_distance_JOctreeDistanceMap
+ * Method:    getDistanceAndClosestObstacle
+ * Signature: (DDD)Les/usc/citius/lab/joctomap/util/Obstacle;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_distance_JOctreeDistanceMap_getDistanceAndClosestObstacle
+  (JNIEnv *, jobject, jdouble, jdouble, jdouble);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_distance_JOctreeDistanceMap
  * Method:    create
  * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;D)Les/usc/citius/lab/joctomap/distance/JOctreeDistanceMap;
  */

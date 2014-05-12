@@ -39,7 +39,7 @@ public class JOctreeDistanceMapTest {
 	}
 	
 	/**
-	 * Executes the update of the distance map.
+	 * Executes the update of the distance map. Consumes too much memory (about 4.7gb)
 	 */
 	@Test
 	public void test01_Update() {

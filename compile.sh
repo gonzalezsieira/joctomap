@@ -7,8 +7,8 @@ dir=`pwd`
 cd src/main/resources/joctomap-natives
 
 # compile
-echo "[exec] Building libjoctomap.so..."
-make JAVA=`echo $JAVA_JDK`
+echo "[exec] Building libjoctomap.so... (JAVA_JDK="$1")"
+make JAVA=`echo $1`
 cp libjoctomap.so "$dir"/
 
 # go to beginning directory

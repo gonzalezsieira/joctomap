@@ -16,7 +16,8 @@ import es.usc.citius.lab.joctomap.distance.JOctreeDistanceMapTest;
 @SuiteClasses({ 
 	JOctreeTest.class, 
 	JOctreeNodeTest.class,
-	JOctreeDistanceMapTest.class
+	//disabled due to high memory consumption
+	//JOctreeDistanceMapTest.class 
 })
 public class NativeTests {
 	
