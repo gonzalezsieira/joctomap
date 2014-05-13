@@ -7,7 +7,7 @@ dir=`pwd`
 cd src/main/java/es/usc/citius/lab/joctomap/octree
 
 # compile files
-javac ../util/Point3D.java ../util/Vector3D.java ../util/Obstacle.java ../util/NativeObject.java JOctree.java JOctreeKey.java JOctreeNode.java ../distance/JOctreeDistanceMap.java
+javac ../util/Point3D.java ../util/Vector3D.java ../util/Obstacle.java ../util/NativeObject.java ../iterators/LeafBBXIterator.java JOctree.java JOctreeKey.java JOctreeNode.java ../distance/JOctreeDistanceMap.java
 
 # go to root of src
 cd "$dir"/src/main/java

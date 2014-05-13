@@ -187,6 +187,52 @@ JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getNode
 }
 
 /**
+ * Method that reatrieves a leaf_bbx_iterator for this octree (given a min and max position and depth)
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_leafBBXIterator__Les_usc_citius_lab_joctomap_util_Point3D_2Les_usc_citius_lab_joctomap_util_Point3D_2I
+  (JNIEnv *env, jobject jtree, jobject minPoint, jobject maxPoint, jint maxDepth){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//recover field information of the class
+	jclass clsPoint = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
+	jfieldID fieldx = env->GetFieldID(clsPoint, "x", "D");
+	jfieldID fieldy = env->GetFieldID(clsPoint, "y", "D");
+	jfieldID fieldz = env->GetFieldID(clsPoint, "z", "D");
+	//recover information of point3d: min
+	double minx = env->GetDoubleField(minPoint, fieldx);
+	double miny = env->GetDoubleField(minPoint, fieldy);
+	double minz = env->GetDoubleField(minPoint, fieldz);
+	//recover information of point3d: max
+	double maxx = env->GetDoubleField(maxPoint, fieldx);
+	double maxy = env->GetDoubleField(maxPoint, fieldy);
+	double maxz = env->GetDoubleField(maxPoint, fieldz);
+	//recover iterator from the octree
+	OcTree::leaf_bbx_iterator *it = new OcTree::leaf_bbx_iterator(octree, point3d(minx, miny, minz), point3d(maxx, maxy, maxz), maxDepth);
+	//instantiate iterator
+	jclass clsIterator = env->FindClass("es/usc/citius/lab/joctomap/iterators/LeafBBXIterator");
+	jmethodID constructorID = env->GetMethodID(clsIterator, "<init>", "(J)V");
+	return env->NewObject(clsIterator, constructorID, it);
+}
+
+/**
+ * Method that reatrieves a leaf_bbx_iterator for this octree (given a min and max node key and depth)
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_leafBBXIterator__Les_usc_citius_lab_joctomap_octree_JOctreeKey_2Les_usc_citius_lab_joctomap_octree_JOctreeKey_2I
+  (JNIEnv *env, jobject jtree, jobject jminKey, jobject jmaxKey, jint maxDepth){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//recover octree keys
+	OcTreeKey *minKey = (OcTreeKey*) getPointer(env, jminKey);
+	OcTreeKey *maxKey = (OcTreeKey*) getPointer(env, jmaxKey);
+	//recover iterator from the octree
+	OcTree::leaf_bbx_iterator *it = new OcTree::leaf_bbx_iterator(octree, *minKey, *maxKey, maxDepth);
+	//instantiate iterator
+	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/iterators/LeafBBXIterator");
+	jmethodID constructorID = env->GetMethodID(cls, "<init>", "(J)V");
+	return env->NewObject(cls, constructorID, it);
+}
+
+/**
  * This method writes an octree, given the pointer to the object and the
  * filename.
  */

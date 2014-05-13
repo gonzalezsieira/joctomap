@@ -89,6 +89,22 @@ JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getNode
 
 /*
  * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    leafBBXIterator
+ * Signature: (Les/usc/citius/lab/joctomap/util/Point3D;Les/usc/citius/lab/joctomap/util/Point3D;I)Les/usc/citius/lab/joctomap/iterators/LeafBBXIterator;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_leafBBXIterator__Les_usc_citius_lab_joctomap_util_Point3D_2Les_usc_citius_lab_joctomap_util_Point3D_2I
+  (JNIEnv *, jobject, jobject, jobject, jint);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    leafBBXIterator
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctreeKey;Les/usc/citius/lab/joctomap/octree/JOctreeKey;I)Les/usc/citius/lab/joctomap/iterators/LeafBBXIterator;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_leafBBXIterator__Les_usc_citius_lab_joctomap_octree_JOctreeKey_2Les_usc_citius_lab_joctomap_octree_JOctreeKey_2I
+  (JNIEnv *, jobject, jobject, jobject, jint);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
  * Method:    write
  * Signature: (Ljava/lang/String;)Z
  */
