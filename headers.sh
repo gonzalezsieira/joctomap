@@ -16,6 +16,7 @@ cd "$dir"/src/main/java
 javah -jni es.usc.citius.lab.joctomap.octree.JOctree
 javah -jni es.usc.citius.lab.joctomap.octree.JOctreeNode
 javah -jni es.usc.citius.lab.joctomap.distance.JOctreeDistanceMap
+javah -jni es.usc.citius.lab.joctomap.iterators.LeafBBXIterator
 
 # remove current compiled files
 cd "$dir"/src/main/java/es/usc/citius/lab/joctomap/octree
@@ -24,12 +25,15 @@ cd "$dir"/src/main/java/es/usc/citius/lab/joctomap/util
 rm *.class
 cd "$dir"/src/main/java/es/usc/citius/lab/joctomap/distance
 rm *.class
+cd "$dir"/src/main/java/es/usc/citius/lab/joctomap/iterators
+rm *.class
 
 # move headers
 cd "$dir/src/main/java"
 mv *JOctree.h ../resources/joctomap-natives/include/joctree.h
 mv *JOctreeNode.h ../resources/joctomap-natives/include/joctreenode.h
 mv *JOctreeDistanceMap.h ../resources/joctomap-natives/include/joctreedistancemap.h
+mv *LeafBBXIterator.h ../resources/joctomap-natives/include/leafbbxiterator.h
 
 # go to initial directory
 cd "$dir"
