@@ -36,7 +36,7 @@ INCLUDE=-I"$(JAVA)/include/" -I"$(JAVA)/include/linux/" -I"$(OCTOMAP)/include/" 
 
 all: libjoctomap.so
 
-libjoctomap.so: octomap dynamic joctree.o joctreenode.o joctreedistancemap.o
+libjoctomap.so: octomap dynamic joctree.o joctreenode.o joctreedistancemap.o leafbbxiterator.o
 	$(CC) $(DEBUG) build/*.o $(SHARED) $(INCLUDE)  $(LINK) -o $(TARGET)  
 
 ######################################################################################################
@@ -50,6 +50,9 @@ joctreenode.o: nativeobject.o
 	
 joctreedistancemap.o: nativeobject.o
 	$(CC) $(DEBUG) $(FILE) src/joctreedistancemap.cpp $(INCLUDE) $(LINK) -o build/joctreedistancemap.o
+	
+leafbbxiterator.o:
+	$(CC) $(DEBUG) $(FILE) src/leafbbxiterator.cpp $(INCLUDE) $(LINK) -o build/leafbbxiterator.o
 
 ######################################################################################################
 # 									NATIVE OBJECTS DEPENDENT FILES 		 							 #

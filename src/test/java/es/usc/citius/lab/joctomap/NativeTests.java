@@ -5,8 +5,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import es.usc.citius.lab.joctomap.distance.JOctreeDistanceMapTest;
-
 /**
  * Order the execution of all native tests in the library.
  * 

@@ -1,7 +1,5 @@
 package es.usc.citius.lab.joctomap.distance;
 
-import static org.junit.Assert.*;
-
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;

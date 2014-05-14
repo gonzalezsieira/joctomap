@@ -16,7 +16,14 @@ public class LeafBBXIterator extends NativeObject implements Iterator<JOctreeKey
 
 	private long pointerEndLeafIterator;
 	
-	public LeafBBXIterator(long pointer, long pointerEndLeafIterator) {
+	/**
+	 * Default constructor for this class, that takes the native pointer to the iterator and
+	 * the native pointer to the end point of the created iterator.
+	 * 
+	 * @param pointer
+	 * @param pointerEndLeafIterator
+	 */
+	private LeafBBXIterator(long pointer, long pointerEndLeafIterator) {
 		super(pointer);
 		this.pointerEndLeafIterator = pointerEndLeafIterator;
 	}
