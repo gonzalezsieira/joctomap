@@ -192,7 +192,10 @@ public class JOctree extends NativeObject{
 	public static native JOctree read(String filename);
 	
 	/**
-	 * Creates a new {@link JOctree} with a minimum resolution.
+	 * Creates a new {@link JOctree} with a minimum resolution. An empty octree is not fully
+	 * usable (you cannot query information about the bounds of the octree, or query the 
+	 * {@link JOctreeKey} corresponding to a posiition) until the first occupancy information 
+	 * is added using the modification methods like {@link #updateNode(double, double, double, boolean)}.
 	 * 
 	 * @param res minimum node resolution
 	 * @return octree with the given resolution
