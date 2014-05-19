@@ -13,8 +13,6 @@ import es.usc.citius.lab.joctomap.util.NativeObject;
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  */
 public class LeafBBXIterator extends NativeObject implements Iterator<JOctreeKey>{
-
-	private long pointerEndLeafIterator;
 	
 	/**
 	 * Default constructor for this class, that takes the native pointer to the iterator and
@@ -23,9 +21,8 @@ public class LeafBBXIterator extends NativeObject implements Iterator<JOctreeKey
 	 * @param pointer
 	 * @param pointerEndLeafIterator
 	 */
-	private LeafBBXIterator(long pointer, long pointerEndLeafIterator) {
+	private LeafBBXIterator(long pointer) {
 		super(pointer);
-		this.pointerEndLeafIterator = pointerEndLeafIterator;
 	}
 
 	@Override

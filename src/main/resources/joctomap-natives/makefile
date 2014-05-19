@@ -42,7 +42,7 @@ libjoctomap.so: octomap dynamic joctree.o joctreenode.o joctreedistancemap.o lea
 ######################################################################################################
 # 									NATIVE IMPLEMENTATIONS BUILD									 #
 ######################################################################################################	
-joctree.o: nativeobject.o
+joctree.o: nativeobject.o iteratorinformation.o
 	$(CC) $(DEBUG) $(FILE) src/joctree.cpp $(INCLUDE) $(LINK) -o build/joctree.o 
 	
 joctreenode.o: nativeobject.o
@@ -51,7 +51,7 @@ joctreenode.o: nativeobject.o
 joctreedistancemap.o: nativeobject.o
 	$(CC) $(DEBUG) $(FILE) src/joctreedistancemap.cpp $(INCLUDE) $(LINK) -o build/joctreedistancemap.o
 	
-leafbbxiterator.o:
+leafbbxiterator.o: iteratorinformation.o
 	$(CC) $(DEBUG) $(FILE) src/leafbbxiterator.cpp $(INCLUDE) $(LINK) -o build/leafbbxiterator.o
 
 ######################################################################################################
@@ -59,6 +59,9 @@ leafbbxiterator.o:
 ######################################################################################################	
 nativeobject.o: src/nativeobject.cpp include/nativeobject.h
 	$(CC) $(DEBUG) $(FILE) src/nativeobject.cpp $(INCLUDE) $(LINK) -o build/nativeobject.o
+	
+iteratorinformation.o: src/iteratorinformation.cpp include/iteratorinformation.h
+	$(CC) $(DEBUG) $(FILE) src/iteratorinformation.cpp $(INCLUDE) $(LINK) -o build/iteratorinformation.o
 
 ######################################################################################################
 # 									OCTOMAP BUILD													 #

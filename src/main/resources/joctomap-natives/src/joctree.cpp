@@ -7,6 +7,8 @@
 #include <octomap/OccupancyOcTreeBase.h>
 #include "joctree.h"
 #include "nativeobject.h"
+#include "leafbbxiterator.h"
+#include "iteratorinformation.h"
 
 using namespace std;
 using namespace octomap;
@@ -206,13 +208,16 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_leafBBX
 	double maxx = env->GetDoubleField(maxPoint, fieldx);
 	double maxy = env->GetDoubleField(maxPoint, fieldy);
 	double maxz = env->GetDoubleField(maxPoint, fieldz);
+
+	//--------------------------------->
 	//recover iterator from the octree
-	OcTree::leaf_bbx_iterator *it = new OcTree::leaf_bbx_iterator(octree, point3d(minx, miny, minz), point3d(maxx, maxy, maxz), maxDepth);
-	OcTree::leaf_bbx_iterator *it2 = new OcTree::leaf_bbx_iterator(octree->end_leafs_bbx());
+	OcTree::leaf_bbx_iterator it = octree->begin_leafs_bbx(point3d(minx, miny, minz), point3d(maxx, maxy, maxz), maxDepth);
+	OcTree::leaf_bbx_iterator it2 = octree->end_leafs_bbx();
+	IteratorInformation *info = new IteratorInformation(it, it2);
 	//instantiate iterator
 	jclass clsIterator = env->FindClass("es/usc/citius/lab/joctomap/iterators/LeafBBXIterator");
-	jmethodID constructorID = env->GetMethodID(clsIterator, "<init>", "(JJ)V");
-	return env->NewObject(clsIterator, constructorID, it, it2);
+	jmethodID constructorID = env->GetMethodID(clsIterator, "<init>", "(J)V");
+	return env->NewObject(clsIterator, constructorID, info);
 }
 
 /**
