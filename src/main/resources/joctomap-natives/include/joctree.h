@@ -9,26 +9,58 @@ extern "C" {
 #endif
 /*
  * Class:     es_usc_citius_lab_joctomap_octree_JOctree
- * Method:    cellKeyAt
+ * Method:    coordToKey
  * Signature: (FFF)Les/usc/citius/lab/joctomap/octree/JOctreeKey;
  */
-JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_cellKeyAt__FFF
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_coordToKey__FFF
   (JNIEnv *, jobject, jfloat, jfloat, jfloat);
 
 /*
  * Class:     es_usc_citius_lab_joctomap_octree_JOctree
- * Method:    cellKeyAt
+ * Method:    coordToKey
  * Signature: (FFFI)Les/usc/citius/lab/joctomap/octree/JOctreeKey;
  */
-JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_cellKeyAt__FFFI
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_coordToKey__FFFI
   (JNIEnv *, jobject, jfloat, jfloat, jfloat, jint);
 
 /*
  * Class:     es_usc_citius_lab_joctomap_octree_JOctree
- * Method:    adjustKeyAt
+ * Method:    adjustKeyAtDepth
  * Signature: (Les/usc/citius/lab/joctomap/octree/JOctreeKey;I)Les/usc/citius/lab/joctomap/octree/JOctreeKey;
  */
-JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_adjustKeyAt
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_adjustKeyAtDepth
+  (JNIEnv *, jobject, jobject, jint);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    coordToKey
+ * Signature: (Les/usc/citius/lab/joctomap/util/Point3D;)Les/usc/citius/lab/joctomap/octree/JOctreeKey;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_coordToKey__Les_usc_citius_lab_joctomap_util_Point3D_2
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    coordToKey
+ * Signature: (Les/usc/citius/lab/joctomap/util/Point3D;I)Les/usc/citius/lab/joctomap/octree/JOctreeKey;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_coordToKey__Les_usc_citius_lab_joctomap_util_Point3D_2I
+  (JNIEnv *, jobject, jobject, jint);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    keyToCoord
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctreeKey;)Les/usc/citius/lab/joctomap/util/Point3D;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_keyToCoord__Les_usc_citius_lab_joctomap_octree_JOctreeKey_2
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    keyToCoord
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctreeKey;I)Les/usc/citius/lab/joctomap/util/Point3D;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_keyToCoord__Les_usc_citius_lab_joctomap_octree_JOctreeKey_2I
   (JNIEnv *, jobject, jobject, jint);
 
 /*

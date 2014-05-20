@@ -16,7 +16,7 @@ using namespace octomap;
 /*
  * This method finds the position of a cell given a real position in the map (x, y, z)
  */
-JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_cellKeyAt__FFF
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_coordToKey__FFF
   (JNIEnv *env, jobject jtree, jfloat x, jfloat y, jfloat z){
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
@@ -32,7 +32,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_cellKey
  * This method finds the position of a cell given a real position in the map (x, y, z) at
  * a given depth.
  */
-JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_cellKeyAt__FFFI
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_coordToKey__FFFI
   (JNIEnv *env, jobject jtree, jfloat x, jfloat y, jfloat z, jint depth){
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
@@ -40,14 +40,13 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_cellKey
 	//find class and constructor to instantiate JOCtreekey
 	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeKey");
 	jmethodID constructor = env->GetMethodID(cls, "<init>", "(III)V");
-	//new JOctreeKey(x, y, z)
 	return env->NewObject(cls, constructor, static_cast<int>(key.k[0]), static_cast<int>(key.k[1]), static_cast<int>(key.k[2]));
 }
 
 /**
  * This method adjusts the key of a node at a givn depth.
  */
-JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_adjustKeyAt
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_adjustKeyAtDepth
   (JNIEnv *env, jobject jtree, jobject jkey, jint depth){
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
@@ -66,6 +65,104 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_adjustK
 	jmethodID constructor = env->GetMethodID(cls, "<init>", "(III)V");
 	//new JOctreeKey(x, y, z)
 	return env->NewObject(cls, constructor, static_cast<int>(key.k[0]), static_cast<int>(key.k[1]), static_cast<int>(key.k[2]));
+}
+
+/**
+ * Retrieves the key of a given coordinate.
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_coordToKey__Les_usc_citius_lab_joctomap_util_Point3D_2
+  (JNIEnv *env, jobject jtree, jobject jcoord){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//find class and constructor to instantiate JOCtreekey
+	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeKey");
+	jmethodID constructor = env->GetMethodID(cls, "<init>", "(III)V");
+	//find class and fields of point3d
+	jclass clspoint = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
+	jfieldID fieldX = env->GetFieldID(clspoint, "x", "D");
+	jfieldID fieldY = env->GetFieldID(clspoint, "y", "D");
+	jfieldID fieldZ = env->GetFieldID(clspoint, "z", "D");
+	//retrieve values of the fields
+	double x = env->GetDoubleField(jcoord, fieldX);
+	double y = env->GetDoubleField(jcoord, fieldY);
+	double z = env->GetDoubleField(jcoord, fieldZ);
+	OcTreeKey key = octree->coordToKey(point3d(x, y, z));
+	//new JOctreeKey(x, y, z)
+	return env->NewObject(cls, constructor, static_cast<int>(key.k[0]), static_cast<int>(key.k[1]), static_cast<int>(key.k[2]));
+}
+
+/**
+ * Retrieves the key at a given depth, given a coordinate.
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_coordToKey__Les_usc_citius_lab_joctomap_util_Point3D_2I
+  (JNIEnv *env, jobject jtree, jobject jcoord, jint depth){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//find class and constructor to instantiate JOCtreekey
+	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeKey");
+	jmethodID constructor = env->GetMethodID(cls, "<init>", "(III)V");
+	//find class and fields of point3d
+	jclass clspoint = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
+	jfieldID fieldX = env->GetFieldID(clspoint, "x", "D");
+	jfieldID fieldY = env->GetFieldID(clspoint, "y", "D");
+	jfieldID fieldZ = env->GetFieldID(clspoint, "z", "D");
+	//retrieve values of the fields
+	double x = env->GetDoubleField(jcoord, fieldX);
+	double y = env->GetDoubleField(jcoord, fieldY);
+	double z = env->GetDoubleField(jcoord, fieldZ);
+	OcTreeKey key = octree->coordToKey(point3d(x, y, z), depth);
+	//new JOctreeKey(x, y, z)
+	return env->NewObject(cls, constructor, static_cast<int>(key.k[0]), static_cast<int>(key.k[1]), static_cast<int>(key.k[2]));
+}
+
+/**
+ * Retrieves the coordinate of a given key.
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_keyToCoord__Les_usc_citius_lab_joctomap_octree_JOctreeKey_2
+  (JNIEnv *env, jobject jtree, jobject jkey){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//recover key field IDs
+	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeKey");
+	jfieldID fieldX = env->GetFieldID(cls, "x", "I");
+	jfieldID fieldY = env->GetFieldID(cls, "y", "I");
+	jfieldID fieldZ = env->GetFieldID(cls, "z", "I");
+	//recover key field values
+	int kx = env->GetIntField(jkey, fieldX);
+	int ky = env->GetIntField(jkey, fieldY);
+	int kz = env->GetIntField(jkey, fieldZ);
+	//recover class of the point3d and its constructor, to return the instance
+	jclass clspoint = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
+	jmethodID constructor = env->GetMethodID(clspoint, "<init>", "(DDD)V");
+	//recover coordinate of the key
+	point3d coord = octree->keyToCoord(OcTreeKey(kx, ky, kz));
+	//return new object
+	return env->NewObject(clspoint, constructor, coord.x(), coord.y(), coord.z());
+}
+
+/**
+ * Retrieves the coordinate of a given key and depth.
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_keyToCoord__Les_usc_citius_lab_joctomap_octree_JOctreeKey_2I
+  (JNIEnv *env, jobject jtree, jobject jkey, jint depth){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//recover key field IDs
+	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeKey");
+	jfieldID fieldX = env->GetFieldID(cls, "x", "I");
+	jfieldID fieldY = env->GetFieldID(cls, "y", "I");
+	jfieldID fieldZ = env->GetFieldID(cls, "z", "I");
+	//recover key field values
+	int kx = env->GetIntField(jkey, fieldX);
+	int ky = env->GetIntField(jkey, fieldY);
+	int kz = env->GetIntField(jkey, fieldZ);
+	//recover class of the point3d and its constructor, to return the instance
+	jclass clspoint = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
+	jmethodID constructor = env->GetMethodID(clspoint, "<init>", "(DDD)V");
+	//recover coordinate of the key
+	point3d coord = octree->keyToCoord(OcTreeKey(kx, ky, kz), depth);
+	//return new object
+	return env->NewObject(clspoint, constructor, coord.x(), coord.y(), coord.z());
 }
 
 /**

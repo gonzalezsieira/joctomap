@@ -13,6 +13,7 @@ import org.junit.runners.MethodSorters;
 import es.usc.citius.lab.joctomap.octree.JOctree;
 import es.usc.citius.lab.joctomap.octree.JOctreeKey;
 import es.usc.citius.lab.joctomap.octree.JOctreeNode;
+import es.usc.citius.lab.joctomap.util.Point3D;
 import static org.junit.Assert.*;
 
 /**
@@ -104,7 +105,7 @@ public class JOctreeTest{
 	 */
 	@Test
 	public void test04_obtainCellKeyAtPositionTest() {
-		key1 = octree.cellKeyAt(0f, 0f, 0f);
+		key1 = octree.coordToKey(0f, 0f, 0f);
 		assertTrue("JOctreeKey must not have negative values", key1.getX() >= 0 && key1.getY() >= 0 && key1.getZ() >= 0);
 	}
 
@@ -116,7 +117,7 @@ public class JOctreeTest{
 	 */
 	@Test
 	public void test05_obtainCellKeyAtPositionWithDepthTest() {
-		key2 = octree.cellKeyAt(0f, 0f, 0f, 1);
+		key2 = octree.coordToKey(0f, 0f, 0f, 1);
 		assertTrue("JOctreeKey must not have negative values", key2.getX() >= 0 && key2.getY() >= 0 && key2.getZ() >= 0);
 	}
 	
@@ -126,10 +127,10 @@ public class JOctreeTest{
 	 */
 	@Test
 	public void test06_adjustDepthOfKey(){
-		JOctreeKey adjustement = octree.adjustKeyAt(key2, 1);
+		JOctreeKey adjustement = octree.adjustKeyAtDepth(key1, 1);
 		assertTrue("JOctreeKey must not have negative values", adjustement.getX() >= 0 && adjustement.getY() >= 0 && adjustement.getZ() >= 0);
 		assertTrue("Adjusted key are not equal to the retrieved one at the same depth", key2.equals(adjustement));
-		assertTrue("Adjusted key has a different hash to the retrieved one at the same depth", key2.hashCode() == adjustement.hashCode());
+		assertTrue("Adjusted key has a different hash to the retrieved one at the same depth", key2.hashCode() == adjustement.hashCode());	
 	}
 	
 	/**
@@ -250,5 +251,29 @@ public class JOctreeTest{
 	public void test16_isNodeOccupiedTest(){
 		JOctreeNode node = emptyOctree.search(0d, 0d, 0d, 0);
 		assertTrue("Occupied node does not retrieve occupied", !emptyOctree.isNodeOccupied(node));
+	}
+	
+	/**
+	 * Queries the position of a {@link JOctreeKey}.
+	 */
+	@Test
+	public void test17_keyToCoord(){
+		Point3D coord = octree.keyToCoord(key1);
+		double res = octree.getResolution();
+		assertTrue("Coord out of bounds", Math.abs(coord.getX()) < res && Math.abs(coord.getY()) < res && Math.abs(coord.getZ()) < res);
+	}
+	
+	/**
+	 * Queries the position of a {@link JOctreeKey} at a depth.
+	 */
+	@Test
+	public void test18_keyToCoordAtDepth(){
+		Point3D original = new Point3D(100f, -50f, 0.05f);
+		JOctreeKey key = octree.coordToKey(original);
+		for(int i = 1; i <= depth; i++){
+			Point3D coord = octree.keyToCoord(key, i);
+			double size = octree.getNodeSize(i);
+			assertTrue("Coord out of bounds", Math.abs(coord.getX() - original.getX()) < size && Math.abs(coord.getY() - original.getY()) < size && Math.abs(coord.getZ() - original.getZ()) < size);
+		}
 	}
 }

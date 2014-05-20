@@ -34,7 +34,7 @@ public class JOctree extends NativeObject{
 	 * @param z
 	 * @return key of the node at the given position
 	 */
-	public native JOctreeKey cellKeyAt(float x, float y, float z);
+	public native JOctreeKey coordToKey(float x, float y, float z);
 	
 	/**
 	 * Retrieves the position of the cell at a current 
@@ -46,7 +46,7 @@ public class JOctree extends NativeObject{
 	 * @param depth level to search (depth=0 means search in the full octree)
 	 * @return key of the node at the given position and depth
 	 */
-	public native JOctreeKey cellKeyAt(float x, float y, float z, int depth);
+	public native JOctreeKey coordToKey(float x, float y, float z, int depth);
 	
 	/**
 	 * Given an {@link JOctreeKey}, adjusts it to a given depth in the octree.
@@ -55,7 +55,46 @@ public class JOctree extends NativeObject{
 	 * @param depth to obtain the adjusted {@link JOctreeKey}
 	 * @return adjusted {@link JOctreeKey} to the specified depth
 	 */
-	public native JOctreeKey adjustKeyAt(JOctreeKey key, int depth);
+	public native JOctreeKey adjustKeyAtDepth(JOctreeKey key, int depth);
+	
+	/**
+	 * Given a {@link Point3D}, retrieves the {@link JOctreeKey} of the node
+	 * that occupies that position.
+	 * 
+	 * @param point coordinates to retrieve the corresponding key
+	 * @return {@link JOctreeKey} of the node that occupies the queried position
+	 */
+	public native JOctreeKey coordToKey(Point3D point);
+	
+	/**
+	 * Given a {@link Point3D}, retrieves the {@link JOctreeKey} of the node
+	 * that occupies that position at a current depth level.
+	 * 
+	 * @param point coordinate to query the key of the node at that position
+	 * @param depth of the {@link JOctreeKey} in the octree
+	 * @return
+	 */
+	public native JOctreeKey coordToKey(Point3D point, int depth);
+	
+	/**
+	 * Retrieves the {@link Point3D} that corresponds to the coordinates of the
+	 * center of the node identified by the given its {@link JOctreeKey}.
+	 * 
+	 * @param key identifier of the node
+	 * @return coordinates of the center of the node
+	 */
+	public native Point3D keyToCoord(JOctreeKey key);
+	
+	/**
+	 * Retrieves the {@link Point3D} that corresponds to the coordinates of the
+	 * center of the node identified by the given its {@link JOctreeKey} and the
+	 * depth of the node.
+	 * 
+	 * @param key identifier of the node
+	 * @param depth of the {@link JOctreeKey} in the octree
+	 * @return coordinates of the center of the node
+	 */
+	public native Point3D keyToCoord(JOctreeKey key, int depth);
 	
 	/*
 	 * *******************************************************************************
