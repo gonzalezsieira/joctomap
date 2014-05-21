@@ -149,6 +149,36 @@ public class JOctree extends NativeObject{
 	 */
 	public native JOctreeNode updateNode(double x, double y, double z, boolean occupied);
 	
+	/**
+	 * Enables or disables the usage of the bounding box to limit the octree 
+	 * update region.
+	 * 
+	 * @param value true/false
+	 */
+	public native void useBBXLimit(boolean value);
+	
+	/**
+	 * Updates the bounding box limits.
+	 * 
+	 * @param min minimum {@link Point3D} of the bounding box
+	 * @param max maximum {@link Point3D} of the bounding box
+	 */
+	public native void setBBX(Point3D min, Point3D max);
+	
+	/**
+	 * Updates the minimum bounding box limit.
+	 * 
+	 * @param min {@link Point3D} of the bounding box
+	 */
+	public native void setBBXMin(Point3D min);
+	
+	/**
+	 * Updates the maximum bounding box limit.
+	 * 
+	 * @param max {@link Point3D} of the bounding box
+	 */
+	public native void setBBXMax(Point3D max);
+	
 	/*
 	 * *******************************************************************************
 	 * *				Octree information query functions                           *
@@ -175,6 +205,66 @@ public class JOctree extends NativeObject{
 	 * @return node resolution at the depth level
 	 */
 	public native double getNodeSize(int depth);
+	
+	/**
+	 * Returns the central point of the BBX queries, if set.
+	 * 
+	 * @return {@link Point3D} instance with the center of the BBX, null if not set
+	 */
+	public native Point3D getBBXCenter();
+	
+	/**
+	 * Returns the min point of the BBX queries, if set.
+	 * 
+	 * @return {@link Point3D} instance with the min of the BBX, null if not set
+	 */
+	public native Point3D getBBXMin();
+	
+	/**
+	 * Returns the max point of the BBX queries, if set.
+	 * 
+	 * @return {@link Point3D} instance with the max of the BBX, null if not set
+	 */
+	public native Point3D getBBXMax();
+	
+	/**
+	 * Minimum point of the bounding box of the known space in the octree.
+	 * 
+	 * @return the minimum {@link Point3D} of the known space
+	 */
+	public native Point3D getMetricMin();
+	
+	/**
+	 * Maximum point of the bounding box of the known space in the octree.
+	 * 
+	 * @return the maximum {@link Point3D} of the known space
+	 */
+	public native Point3D getMetricMax();
+	
+	/**
+	 * Dimensions of the bounding box that contains the known space of the octree.
+	 * 
+	 * @return a double[3] array with the dimensions x, y and z of the known space
+	 */
+	public native double[] getMetricSize();
+	
+	/**
+	 * Queries if the bounding box is set. Returns true if {@link #getBBXMin()} and {@link #getBBXMax()}
+	 * return the same value, as the BBX with the same beginning and ending point does not exist.
+	 * 
+	 * @return true if {@link #getBBXMin()} != {@link #getBBXMax()}
+	 * @see #setBBX(Point3D, Point3D)
+	 */
+	public native boolean isBBXSet();
+	
+	/**
+	 * Queries if the bounding box is being applied to the octree. When it is, 
+	 * the octree only applies updates for the region within the bounding box.
+	 * 
+	 * @return true if a BBX being applied in the octree, false otherwise
+	 * @see #useBBXLimit(boolean)
+	 */
+	public native boolean isBBXApplied();
 	
 	/*
 	 * *******************************************************************************

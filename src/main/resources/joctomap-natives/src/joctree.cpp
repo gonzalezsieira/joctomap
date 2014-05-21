@@ -253,6 +253,83 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_updateN
 }
 
 /**
+ * Enables/disables the usage of the BBX to limit the octree updates.
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_useBBXLimit
+  (JNIEnv *env, jobject jtree, jboolean value){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//set value
+	octree->useBBXLimit(value);
+}
+
+/**
+ * Updates the min/max points of the BBX.
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_setBBX
+  (JNIEnv *env, jobject jtree, jobject minPoint, jobject maxPoint){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//recover field information of the class
+	jclass clsPoint = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
+	jfieldID fieldx = env->GetFieldID(clsPoint, "x", "D");
+	jfieldID fieldy = env->GetFieldID(clsPoint, "y", "D");
+	jfieldID fieldz = env->GetFieldID(clsPoint, "z", "D");
+	//recover information of point3d: min
+	double minx = env->GetDoubleField(minPoint, fieldx);
+	double miny = env->GetDoubleField(minPoint, fieldy);
+	double minz = env->GetDoubleField(minPoint, fieldz);
+	//recover information of point3d: max
+	double maxx = env->GetDoubleField(maxPoint, fieldx);
+	double maxy = env->GetDoubleField(maxPoint, fieldy);
+	double maxz = env->GetDoubleField(maxPoint, fieldz);
+	point3d min = point3d(minx, miny, minz);
+	point3d max = point3d(maxx, maxy, maxz);
+	octree->setBBXMin(min);
+	octree->setBBXMax(max);
+}
+
+/**
+ * Updates the min point of the BBX.
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_setBBXMin
+  (JNIEnv *env, jobject jtree, jobject minPoint){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//recover field information of the class
+	jclass clsPoint = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
+	jfieldID fieldx = env->GetFieldID(clsPoint, "x", "D");
+	jfieldID fieldy = env->GetFieldID(clsPoint, "y", "D");
+	jfieldID fieldz = env->GetFieldID(clsPoint, "z", "D");
+	//recover information of point3d: min
+	double minx = env->GetDoubleField(minPoint, fieldx);
+	double miny = env->GetDoubleField(minPoint, fieldy);
+	double minz = env->GetDoubleField(minPoint, fieldz);
+	point3d min = point3d(minx, miny, minz);
+	octree->setBBXMin(min);
+}
+
+/**
+ * Updates the max point of the BBX.
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_setBBXMax
+  (JNIEnv *env, jobject jtree, jobject maxPoint){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//recover field information of the class
+	jclass clsPoint = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
+	jfieldID fieldx = env->GetFieldID(clsPoint, "x", "D");
+	jfieldID fieldy = env->GetFieldID(clsPoint, "y", "D");
+	jfieldID fieldz = env->GetFieldID(clsPoint, "z", "D");
+	//recover information of point3d: max
+	double maxx = env->GetDoubleField(maxPoint, fieldx);
+	double maxy = env->GetDoubleField(maxPoint, fieldy);
+	double maxz = env->GetDoubleField(maxPoint, fieldz);
+	point3d max = point3d(maxx, maxy, maxz);
+	octree->setBBXMax(max);
+}
+
+/**
  * Method that obtains the octree maximum depth.
  */
 JNIEXPORT jint JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getTreeDepth
@@ -286,6 +363,139 @@ JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getNode
 }
 
 /**
+ * Method that obtains the center of the BBX, if set. NULL otherwise.
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getBBXCenter
+  (JNIEnv *env, jobject jtree){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	if(octree->getBBXMin() == octree->getBBXMax()){
+		return NULL;
+	}
+	else{
+		//get value
+		point3d point = octree->getBBXCenter();
+		jclass clspoint = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
+		jmethodID constructor = env->GetMethodID(clspoint, "<init>", "(DDD)V");
+		//new Point3D
+		return env->NewObject(clspoint, constructor, point.x(), point.y(), point.z());
+	}
+}
+
+/**
+ * Method that obtains the min position of the BBX, if set. NULL otherwise.
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getBBXMin
+  (JNIEnv *env, jobject jtree){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//get value
+	point3d min = octree->getBBXMin();
+	if(min == octree->getBBXMax()){
+		return NULL;
+	}
+	else{
+		jclass clspoint = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
+		jmethodID constructor = env->GetMethodID(clspoint, "<init>", "(DDD)V");
+		//new Point3D
+		return env->NewObject(clspoint, constructor, min.x(), min.y(), min.z());
+	}
+}
+
+/**
+ * Method that obtains the max position of the BBX, if set. NULL otherwise.
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getBBXMax
+  (JNIEnv *env, jobject jtree){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//get value
+	point3d max = octree->getBBXMax();
+	if(max == octree->getBBXMin()){
+		return NULL;
+	}
+	else{
+		jclass clspoint = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
+		jmethodID constructor = env->GetMethodID(clspoint, "<init>", "(DDD)V");
+		//new Point3D
+		return env->NewObject(clspoint, constructor, max.x(), max.y(), max.z());
+	}
+}
+
+/**
+ * Method that retrieves the min position of the known space.
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getMetricMin
+  (JNIEnv *env, jobject jtree){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	double x, y, z;
+	//get value
+	octree->getMetricMin(x, y, z);
+	jclass clspoint = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
+	jmethodID constructor = env->GetMethodID(clspoint, "<init>", "(DDD)V");
+	//new Point3D
+	return env->NewObject(clspoint, constructor, x, y, z);
+}
+
+/**
+ * Method that retrieves the max position of the known space.
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getMetricMax
+  (JNIEnv *env, jobject jtree){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	double x, y, z;
+	//get value
+	octree->getMetricMax(x, y, z);
+	jclass clspoint = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
+	jmethodID constructor = env->GetMethodID(clspoint, "<init>", "(DDD)V");
+	//new Point3D
+	return env->NewObject(clspoint, constructor, x, y, z);
+}
+
+/**
+ * Method that retrieves the size of the known space in each of the 3 dimensions.
+ */
+JNIEXPORT jdoubleArray JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getMetricSize
+  (JNIEnv *env, jobject jtree){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	double x, y, z;
+	octree->getMetricSize(x, y, z);
+	//create double[3]
+	jdoubleArray array = env->NewDoubleArray(3);
+	//set double[i]
+	env->SetDoubleArrayRegion(array, 0, 1, &x);
+	env->SetDoubleArrayRegion(array, 1, 1, &y);
+	env->SetDoubleArrayRegion(array, 2, 1, &z);
+	//return values
+	return array;
+}
+
+/**
+ * Returns if a BBX is being applied to the octree.
+ */
+JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_isBBXSet
+  (JNIEnv *env, jobject jtree){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//return if min != max
+	return !(octree->getBBXMin() == octree->getBBXMax());
+}
+
+/**
+ * Retuns if the BBX is set, that is: getBBXMax() != getBBXMin()
+ */
+JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_isBBXApplied
+  (JNIEnv *env, jobject jtree){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//return if the BBX is being applied to update the octree
+	return octree->bbxSet();
+}
+
+/**
  * Method that reatrieves a leaf_bbx_iterator for this octree (given a min and max position and depth)
  */
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_leafBBXIterator__Les_usc_citius_lab_joctomap_util_Point3D_2Les_usc_citius_lab_joctomap_util_Point3D_2I
@@ -305,8 +515,6 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_leafBBX
 	double maxx = env->GetDoubleField(maxPoint, fieldx);
 	double maxy = env->GetDoubleField(maxPoint, fieldy);
 	double maxz = env->GetDoubleField(maxPoint, fieldz);
-
-	//--------------------------------->
 	//recover iterator from the octree
 	OcTree::leaf_bbx_iterator it = octree->begin_leafs_bbx(point3d(minx, miny, minz), point3d(maxx, maxy, maxz), maxDepth);
 	OcTree::leaf_bbx_iterator it2 = octree->end_leafs_bbx();

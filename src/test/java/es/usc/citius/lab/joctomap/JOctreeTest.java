@@ -35,6 +35,8 @@ public class JOctreeTest{
 	private static JOctreeKey key2; //used in tests
 	private static Double res; //used in tests
 	private static Integer depth; //used in tests
+	private static Point3D metricMin; //used in tests
+	private static Point3D metricMax; //used in tests
 	private static File fileRead;
 	private static File fileWrite;
 	
@@ -275,5 +277,69 @@ public class JOctreeTest{
 			double size = octree.getNodeSize(i);
 			assertTrue("Coord out of bounds", Math.abs(coord.getX() - original.getX()) < size && Math.abs(coord.getY() - original.getY()) < size && Math.abs(coord.getZ() - original.getZ()) < size);
 		}
+	}
+	
+	/**
+	 * Tests if the min and max metric coordinates are equals to the metric size
+	 */
+	@Test
+	public void test19_metricCoordinates(){
+		metricMin = octree.getMetricMin();
+		metricMax = octree.getMetricMax();
+		double[] metricSize = octree.getMetricSize();
+		assertTrue("Metric size array must be 3", metricSize.length == 3);
+		assertTrue("X size does not match min.x - max.x", Double.compare(Math.abs(metricMin.getX() - metricMax.getX()), metricSize[0]) == 0);
+		assertTrue("Y size does not match min.y - max.y", Double.compare(Math.abs(metricMin.getY() - metricMax.getY()), metricSize[1]) == 0);
+		assertTrue("Z size does not match min.z - max.z", Double.compare(Math.abs(metricMin.getZ() - metricMax.getZ()), metricSize[2]) == 0);
+	}
+	
+	/**
+	 * Tests the return value of the BBX retrieval methods.
+	 */
+	@Test
+	public void test20_applyBBX(){
+		//checks behavior of the bbx set method
+		assertTrue("bbx is disabled by default", !octree.isBBXApplied());
+		//change value
+		octree.useBBXLimit(true);
+		//checks if the value is changed
+		assertTrue("bbx changed to enabled, but returns disabled", octree.isBBXApplied());
+		//restore the value to its original
+		octree.useBBXLimit(false);
+	}
+	
+	/**
+	 * Tests the values of the bbx retrieval methods
+	 */
+	@Test
+	public void test21_coordinatesBBX(){
+		//check default values
+		assertTrue("BBX min must be NULL by default", octree.getBBXMin() == null);
+		assertTrue("BBX max must be NULL by default", octree.getBBXMax() == null);
+		assertTrue("BBX center must be NULL by default", octree.getBBXCenter() == null);
+		assertTrue("BBX is not set by default", !octree.isBBXSet());
+		//set a bbx
+		Point3D min = new Point3D(-1, -2, -3);
+		Point3D max = new Point3D(1, 2, 3);
+		octree.setBBX(min, max);
+		//check new bbx
+		assertTrue("BBX min updated to " + min + " but returned " + octree.getBBXMin(), octree.getBBXMin() != null && octree.getBBXMin().equals(min));
+		assertTrue("BBX max updated to " + max + " but returned " + octree.getBBXMax(), octree.getBBXMax() != null && octree.getBBXMax().equals(max));
+		assertTrue("BBX center not updated properly", octree.getBBXCenter() != null && octree.getBBXCenter().equals(new Point3D((max.getX() - min.getX())/2 + min.getX(), (max.getY() - min.getY())/2 + min.getY(), (max.getZ() - min.getZ())/2 + min.getZ())));
+		assertTrue("BBX must be set after specifying min or max point", octree.isBBXSet());
+	}
+	
+	/**
+	 * Tests the values retrieved by the metric coordinates and size.
+	 */
+	@Test
+	public void test22_metricCoordinates(){
+		//retrieve metric coordinates
+		Point3D min = octree.getMetricMin();
+		Point3D max = octree.getMetricMax();
+		double[] size = octree.getMetricSize();
+		assertTrue("size X does not match with min and max metric points", Double.compare(size[0], Math.abs(max.getX() - min.getX())) == 0);
+		assertTrue("size Y does not match with min and max metric points", Double.compare(size[1], Math.abs(max.getY() - min.getY())) == 0);
+		assertTrue("size Z does not match with min and max metric points", Double.compare(size[2], Math.abs(max.getZ() - min.getZ())) == 0);
 	}
 }

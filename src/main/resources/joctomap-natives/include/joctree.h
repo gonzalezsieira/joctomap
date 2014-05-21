@@ -97,6 +97,38 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_updateN
 
 /*
  * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    useBBXLimit
+ * Signature: (Z)V
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_useBBXLimit
+  (JNIEnv *, jobject, jboolean);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    setBBX
+ * Signature: (Les/usc/citius/lab/joctomap/util/Point3D;Les/usc/citius/lab/joctomap/util/Point3D;)V
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_setBBX
+  (JNIEnv *, jobject, jobject, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    setBBXMin
+ * Signature: (Les/usc/citius/lab/joctomap/util/Point3D;)V
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_setBBXMin
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    setBBXMax
+ * Signature: (Les/usc/citius/lab/joctomap/util/Point3D;)V
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_setBBXMax
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
  * Method:    getTreeDepth
  * Signature: ()I
  */
@@ -118,6 +150,70 @@ JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getReso
  */
 JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getNodeSize
   (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    getBBXCenter
+ * Signature: ()Les/usc/citius/lab/joctomap/util/Point3D;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getBBXCenter
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    getBBXMin
+ * Signature: ()Les/usc/citius/lab/joctomap/util/Point3D;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getBBXMin
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    getBBXMax
+ * Signature: ()Les/usc/citius/lab/joctomap/util/Point3D;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getBBXMax
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    getMetricMin
+ * Signature: ()Les/usc/citius/lab/joctomap/util/Point3D;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getMetricMin
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    getMetricMax
+ * Signature: ()Les/usc/citius/lab/joctomap/util/Point3D;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getMetricMax
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    getMetricSize
+ * Signature: ()[D
+ */
+JNIEXPORT jdoubleArray JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getMetricSize
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    isBBXSet
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_isBBXSet
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    isBBXApplied
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_isBBXApplied
+  (JNIEnv *, jobject);
 
 /*
  * Class:     es_usc_citius_lab_joctomap_octree_JOctree
