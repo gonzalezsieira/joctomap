@@ -369,17 +369,12 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getBBXC
   (JNIEnv *env, jobject jtree){
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
-	if(octree->getBBXMin() == octree->getBBXMax()){
-		return NULL;
-	}
-	else{
-		//get value
-		point3d point = octree->getBBXCenter();
-		jclass clspoint = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
-		jmethodID constructor = env->GetMethodID(clspoint, "<init>", "(DDD)V");
-		//new Point3D
-		return env->NewObject(clspoint, constructor, point.x(), point.y(), point.z());
-	}
+	//get value
+	point3d point = octree->getBBXCenter();
+	jclass clspoint = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
+	jmethodID constructor = env->GetMethodID(clspoint, "<init>", "(DDD)V");
+	//new Point3D
+	return env->NewObject(clspoint, constructor, point.x(), point.y(), point.z());
 }
 
 /**
@@ -391,15 +386,10 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getBBXM
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	//get value
 	point3d min = octree->getBBXMin();
-	if(min == octree->getBBXMax()){
-		return NULL;
-	}
-	else{
-		jclass clspoint = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
-		jmethodID constructor = env->GetMethodID(clspoint, "<init>", "(DDD)V");
-		//new Point3D
-		return env->NewObject(clspoint, constructor, min.x(), min.y(), min.z());
-	}
+	jclass clspoint = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
+	jmethodID constructor = env->GetMethodID(clspoint, "<init>", "(DDD)V");
+	//new Point3D
+	return env->NewObject(clspoint, constructor, min.x(), min.y(), min.z());
 }
 
 /**
@@ -411,15 +401,10 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getBBXM
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	//get value
 	point3d max = octree->getBBXMax();
-	if(max == octree->getBBXMin()){
-		return NULL;
-	}
-	else{
-		jclass clspoint = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
-		jmethodID constructor = env->GetMethodID(clspoint, "<init>", "(DDD)V");
-		//new Point3D
-		return env->NewObject(clspoint, constructor, max.x(), max.y(), max.z());
-	}
+	jclass clspoint = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
+	jmethodID constructor = env->GetMethodID(clspoint, "<init>", "(DDD)V");
+	//new Point3D
+	return env->NewObject(clspoint, constructor, max.x(), max.y(), max.z());
 }
 
 /**

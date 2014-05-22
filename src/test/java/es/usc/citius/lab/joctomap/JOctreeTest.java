@@ -314,18 +314,18 @@ public class JOctreeTest{
 	@Test
 	public void test21_coordinatesBBX(){
 		//check default values
-		assertTrue("BBX min must be NULL by default", octree.getBBXMin() == null);
-		assertTrue("BBX max must be NULL by default", octree.getBBXMax() == null);
-		assertTrue("BBX center must be NULL by default", octree.getBBXCenter() == null);
+		assertTrue("BBX min must be (0, 0, 0) by default", octree.getBBXMin().equals(new Point3D(0, 0, 0)));
+		assertTrue("BBX max must be (0, 0, 0) by default", octree.getBBXMax().equals(new Point3D(0, 0, 0)));
+		assertTrue("BBX center must be (0, 0, 0) by default", octree.getBBXCenter().equals(new Point3D(0, 0, 0)));
 		assertTrue("BBX is not set by default", !octree.isBBXSet());
 		//set a bbx
 		Point3D min = new Point3D(-1, -2, -3);
 		Point3D max = new Point3D(1, 2, 3);
 		octree.setBBX(min, max);
 		//check new bbx
-		assertTrue("BBX min updated to " + min + " but returned " + octree.getBBXMin(), octree.getBBXMin() != null && octree.getBBXMin().equals(min));
-		assertTrue("BBX max updated to " + max + " but returned " + octree.getBBXMax(), octree.getBBXMax() != null && octree.getBBXMax().equals(max));
-		assertTrue("BBX center not updated properly", octree.getBBXCenter() != null && octree.getBBXCenter().equals(new Point3D((max.getX() - min.getX())/2 + min.getX(), (max.getY() - min.getY())/2 + min.getY(), (max.getZ() - min.getZ())/2 + min.getZ())));
+		assertTrue("BBX min updated to " + min + " but returned " + octree.getBBXMin(), octree.getBBXMin().equals(min));
+		assertTrue("BBX max updated to " + max + " but returned " + octree.getBBXMax(), octree.getBBXMax().equals(max));
+		assertTrue("BBX center not updated properly", octree.getBBXCenter().equals(new Point3D((max.getX() - min.getX())/2 + min.getX(), (max.getY() - min.getY())/2 + min.getY(), (max.getZ() - min.getZ())/2 + min.getZ())));
 		assertTrue("BBX must be set after specifying min or max point", octree.isBBXSet());
 	}
 	
@@ -341,5 +341,25 @@ public class JOctreeTest{
 		assertTrue("size X does not match with min and max metric points", Double.compare(size[0], Math.abs(max.getX() - min.getX())) == 0);
 		assertTrue("size Y does not match with min and max metric points", Double.compare(size[1], Math.abs(max.getY() - min.getY())) == 0);
 		assertTrue("size Z does not match with min and max metric points", Double.compare(size[2], Math.abs(max.getZ() - min.getZ())) == 0);
+	}
+	
+	/**
+	 * Manipulates the bounds of the BBX to test the queries of that elements.
+	 */
+	@Test
+	public void test23_manipulateBBX(){
+		//manipulate max bound
+		Point3D currentMax = octree.getBBXMax();
+		Point3D currentMin = octree.getBBXMin();
+		//manipulate max
+		octree.setBBXMax(currentMin);
+		assertTrue("BBX max == BBX min but method appears to be set", !octree.isBBXSet());
+		assertTrue("BBX max == BBX min but methods to retrieve them offer bad information", octree.getBBXMax().equals(octree.getBBXMin()));
+		//manipulate min
+		octree.setBBXMin(new Point3D(0, 0, 0));
+		octree.setBBXMax(currentMax);
+		assertTrue("BBX max != BBX min but method appears to be not set", octree.isBBXSet());
+		assertTrue("BBX max offer bad information", octree.getBBXMax().equals(currentMax));
+		assertTrue("BBX min offer bad information", octree.getBBXMin().equals(new Point3D(0, 0, 0)));
 	}
 }
