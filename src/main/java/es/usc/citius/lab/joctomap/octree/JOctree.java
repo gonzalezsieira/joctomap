@@ -112,6 +112,19 @@ public class JOctree extends NativeObject{
 	public native JOctreeNode search(JOctreeKey key, int depth);
 	
 	/**
+	 * Calls the method {@link #search(JOctreeKey, int)} with the 
+	 * default value depth=0. Default values in argument methods are 
+	 * not supported by Java, so this method overload tries to emulate 
+	 * the call with the default value depth = 0;
+	 * 
+	 * @param key identifier of the node
+	 * @return node of the octree, if found, null otherwhise
+	 */
+	public JOctreeNode search(JOctreeKey key){
+		return search(key, 0);
+	}
+	
+	/**
 	 * Retrieves a node of the {@link JOctree} in a given position of the 3D space and a depth level
 	 * of the octree.
 	 * 
@@ -122,6 +135,19 @@ public class JOctree extends NativeObject{
 	 * @return node of the octree, if found, null otherwhise
 	 */
 	public native JOctreeNode search(double x, double y, double z, int depth);
+	
+	/**
+	 * Calls the method {@link #search(double, double, double, int)} with the default value of 
+	 * depth=0. Default values in argument methods are not supported by Java, so this method overload
+	 * tries to emulate the call with the default value depth = 0;
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return node of the octree, if found, null otherwise
+	 */
+	public JOctreeNode search(double x, double y, double z){
+		return search(x, y, z, 0);
+	}
 	
 	/**
 	 * Queries if a node is occupied, according to its occupancy probability.
