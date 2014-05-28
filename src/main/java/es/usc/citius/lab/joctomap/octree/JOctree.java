@@ -1,6 +1,6 @@
 package es.usc.citius.lab.joctomap.octree;
 
-import es.usc.citius.lab.joctomap.iterators.LeafBBXIterator;
+import es.usc.citius.lab.joctomap.iterators.OctreeIterator;
 import es.usc.citius.lab.joctomap.util.NativeObject;
 import es.usc.citius.lab.joctomap.util.Point3D;
 
@@ -307,7 +307,7 @@ public class JOctree extends NativeObject{
 	 * @param maxDepth max depth of the leaf nodes
 	 * @return {@link JOctreeKey} iterator
 	 */
-	public native LeafBBXIterator leafBBXIterator(Point3D min, Point3D max, int maxDepth);
+	public native OctreeIterator leafBBXIterator(Point3D min, Point3D max, int maxDepth);
 	
 	/**
 	 * Retrieve bounding box iterator over {@link JOctreeKey} of the leaf nodes of an octree.
@@ -319,7 +319,7 @@ public class JOctree extends NativeObject{
 	 * @param maxDepth max depth of the leaf nodes
 	 * @return {@link JOctreeKey} iterator
 	 */
-	public native LeafBBXIterator leafBBXIterator(JOctreeKey min, JOctreeKey max, int maxDepth);
+	public native OctreeIterator leafBBXIterator(JOctreeKey min, JOctreeKey max, int maxDepth);
 	
 	/*
 	 * *******************************************************************************

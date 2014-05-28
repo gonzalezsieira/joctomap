@@ -23,6 +23,70 @@ JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIter
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_next
   (JNIEnv *, jobject);
 
+/*
+ * Class:     es_usc_citius_lab_joctomap_iterators_LeafBBXIterator
+ * Method:    key
+ * Signature: ()Les/usc/citius/lab/joctomap/octree/JOctreeKey;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_key
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_iterators_LeafBBXIterator
+ * Method:    depth
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_depth
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_iterators_LeafBBXIterator
+ * Method:    coordinate
+ * Signature: ()Les/usc/citius/lab/joctomap/util/Point3D;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_coordinate
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_iterators_LeafBBXIterator
+ * Method:    x
+ * Signature: ()D
+ */
+JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_x
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_iterators_LeafBBXIterator
+ * Method:    y
+ * Signature: ()D
+ */
+JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_y
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_iterators_LeafBBXIterator
+ * Method:    z
+ * Signature: ()D
+ */
+JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_z
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_iterators_LeafBBXIterator
+ * Method:    size
+ * Signature: ()D
+ */
+JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_size
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_iterators_LeafBBXIterator
+ * Method:    node
+ * Signature: ()Les/usc/citius/lab/joctomap/octree/JOctreeNode;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_node
+  (JNIEnv *, jobject);
+
 #ifdef __cplusplus
 }
 #endif

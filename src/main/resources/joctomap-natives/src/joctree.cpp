@@ -503,7 +503,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_leafBBX
 	//recover iterator from the octree
 	OcTree::leaf_bbx_iterator it = octree->begin_leafs_bbx(point3d(minx, miny, minz), point3d(maxx, maxy, maxz), maxDepth);
 	OcTree::leaf_bbx_iterator it2 = octree->end_leafs_bbx();
-	IteratorInformation *info = new IteratorInformation(it, it2);
+	LeafBBXIteratorInformation *info = new LeafBBXIteratorInformation(it, it2);
 	//instantiate iterator
 	jclass clsIterator = env->FindClass("es/usc/citius/lab/joctomap/iterators/LeafBBXIterator");
 	jmethodID constructorID = env->GetMethodID(clsIterator, "<init>", "(J)V");
