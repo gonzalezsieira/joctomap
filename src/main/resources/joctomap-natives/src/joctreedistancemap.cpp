@@ -55,8 +55,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_distance_JOctreeDistan
 	distancemap->getDistanceAndClosestObstacle(position, distance, obstacle);
 	//find constructor method IDs
 	jclass clsObstacle = env->FindClass("es/usc/citius/lab/joctomap/util/Obstacle");
-	jclass clsPoint3d = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
-	jmethodID constructorObstacle = env->GetMethodID(clsObstacle, "<init>", "(Les/usc/citius/lab/joctomap/util/Point3D;Les/usc/citius/lab/joctomap/util/Point3D;)V");
+	jclass clsPoint3d = env->FindClass("es/usc/citius/lab/motionplanner/core/Point3D");
+	jmethodID constructorObstacle = env->GetMethodID(clsObstacle, "<init>", "(Les/usc/citius/lab/motionplanner/core/Point3D;Les/usc/citius/lab/motionplanner/core/Point3D;)V");
 	jmethodID constructorPoint3D = env->GetMethodID(clsPoint3d, "<init>", "(DDD)V");
 	//instantiate points
 	jobject pointPosition = env->NewObject(clsPoint3d, constructorPoint3D, x, y, z);

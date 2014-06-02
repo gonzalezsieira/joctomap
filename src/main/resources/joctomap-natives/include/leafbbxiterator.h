@@ -42,7 +42,7 @@ JNIEXPORT jint JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator
 /*
  * Class:     es_usc_citius_lab_joctomap_iterators_LeafBBXIterator
  * Method:    coordinate
- * Signature: ()Les/usc/citius/lab/joctomap/util/Point3D;
+ * Signature: ()Les/usc/citius/lab/motionplanner/core/Point3D;
  */
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_coordinate
   (JNIEnv *, jobject);

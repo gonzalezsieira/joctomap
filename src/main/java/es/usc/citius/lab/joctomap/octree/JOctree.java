@@ -2,7 +2,7 @@ package es.usc.citius.lab.joctomap.octree;
 
 import es.usc.citius.lab.joctomap.iterators.OctreeIterator;
 import es.usc.citius.lab.joctomap.util.NativeObject;
-import es.usc.citius.lab.joctomap.util.Point3D;
+import es.usc.citius.lab.motionplanner.core.Point3D;
 
 public class JOctree extends NativeObject{
 	

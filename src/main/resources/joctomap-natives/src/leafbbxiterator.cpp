@@ -70,7 +70,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXItera
 	//get native object
 	LeafBBXIteratorInformation *information = (LeafBBXIteratorInformation*) getPointer(env, jiterator);
 	point3d coordinate = information->current().getCoordinate();
-	jclass clsPoint = env->FindClass("es/usc/citius/lab/joctomap/util/Point3D");
+	jclass clsPoint = env->FindClass("es/usc/citius/lab/motionplanner/core/Point3D");
 	jmethodID constructor = env->GetMethodID(clsPoint, "<init>", "(DDD)V");
 	//new Point3D(x, y, z)
 	return env->NewObject(clsPoint, constructor, coordinate.x(), coordinate.y(), coordinate.z());

@@ -2,21 +2,23 @@
 
 # save current directory
 dir=`pwd`
+classpath=~/.m2/repository/es/usc/citius/lab/motionplanner-core/1.0/motionplanner-core-1.0.jar:.
 
 # enter in directory where the native methods are
 cd src/main/java/es/usc/citius/lab/joctomap/octree
 
 # compile files
-javac ../util/Point3D.java ../util/Vector3D.java ../util/Obstacle.java ../util/NativeObject.java ../iterators/OctreeIterator.java ../iterators/LeafBBXIterator.java JOctree.java JOctreeKey.java JOctreeNode.java ../distance/JOctreeDistanceMap.java
+javac -cp "$classpath" ../util/Obstacle.java ../util/NativeObject.java ../iterators/OctreeIterator.java ../iterators/LeafBBXIterator.java JOctree.java JOctreeKey.java JOctreeNode.java ../distance/JOctreeDistanceMap.java
+
 
 # go to root of src
 cd "$dir"/src/main/java
 
 # generate JNI headers
-javah -jni es.usc.citius.lab.joctomap.octree.JOctree
-javah -jni es.usc.citius.lab.joctomap.octree.JOctreeNode
-javah -jni es.usc.citius.lab.joctomap.distance.JOctreeDistanceMap
-javah -jni es.usc.citius.lab.joctomap.iterators.LeafBBXIterator
+javah -classpath "$classpath" -jni es.usc.citius.lab.joctomap.octree.JOctree
+javah -classpath "$classpath" -jni es.usc.citius.lab.joctomap.octree.JOctreeNode
+javah -classpath "$classpath" -jni es.usc.citius.lab.joctomap.distance.JOctreeDistanceMap
+javah -classpath "$classpath" -jni es.usc.citius.lab.joctomap.iterators.LeafBBXIterator
 
 # remove current compiled files
 cd "$dir"/src/main/java/es/usc/citius/lab/joctomap/octree

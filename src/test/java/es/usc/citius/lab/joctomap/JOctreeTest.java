@@ -13,7 +13,7 @@ import org.junit.runners.MethodSorters;
 import es.usc.citius.lab.joctomap.octree.JOctree;
 import es.usc.citius.lab.joctomap.octree.JOctreeKey;
 import es.usc.citius.lab.joctomap.octree.JOctreeNode;
-import es.usc.citius.lab.joctomap.util.Point3D;
+import es.usc.citius.lab.motionplanner.core.Point3D;
 import static org.junit.Assert.*;
 
 /**
