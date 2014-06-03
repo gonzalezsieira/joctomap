@@ -26,7 +26,7 @@ public class JOCtreeBuilder extends Module{
 		//retrieve input args
 		String[] inputArgs = args.getOptionValues("i");
 		//process the ppm to generate an octree
-		JOctree octree = octreeFromPPM(inputArgs[0], Double.parseDouble(inputArgs[1]), Double.parseDouble(inputArgs[2]));
+		JOctree octree = octreeFromPPM(inputArgs[0], Float.parseFloat(inputArgs[1]), Float.parseFloat(inputArgs[2]));
 		//write octree to file (.ot extension mandatory)
 		String outputPath = args.getOptionValue("o");
 		if(!outputPath.endsWith(".ot")) { outputPath = outputPath.concat(".ot"); }
@@ -40,7 +40,7 @@ public class JOCtreeBuilder extends Module{
 	 * @param sizeY max. size of the Y dimension of the map
 	 * @return
 	 */
-	public static JOctree octreeFromPPM(String input, double sizeX, double sizeY){
+	public static JOctree octreeFromPPM(String input, float sizeX, float sizeY){
 		//read the ppm file 
 		PPMFileReader reader = null;
 		//open file and read data from
@@ -54,9 +54,9 @@ public class JOCtreeBuilder extends Module{
 		}
 		JOctomapLogger.info("Reading PPM file " + input);
 		//instantiate new octree
-		JOctree octree = JOctree.create(0.125);
-		double resX = sizeX/(double) (reader.getPixels().length - 1);
-		double resY = sizeY/(double) (reader.getPixels()[0].length - 1);
+		JOctree octree = JOctree.create(0.125f);
+		float resX = sizeX/(reader.getPixels().length - 1);
+		float resY = sizeY/(reader.getPixels()[0].length - 1);
 		//iterate over the read pixels to update the information of the nodes
 		for(int x = 0; x < reader.getPixels().length; x++) {
 			for(int y = 0; y < reader.getPixels()[x].length; y++){
@@ -64,7 +64,7 @@ public class JOCtreeBuilder extends Module{
 				//occupied case: one of the color components reaches the maximum value of the file
 				boolean occupied = rgb[0] == 0 && rgb[1] == 0 && rgb[2] == 0;
 				//update occupancy information
-				octree.updateNode(resX * x, resY * y, 0d, occupied);
+				octree.updateNode(resX * x, resY * y, 0, occupied);
 			}
 		}
 		return octree;

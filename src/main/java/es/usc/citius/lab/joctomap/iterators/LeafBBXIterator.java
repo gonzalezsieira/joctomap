@@ -3,7 +3,7 @@ package es.usc.citius.lab.joctomap.iterators;
 import es.usc.citius.lab.joctomap.octree.JOctree;
 import es.usc.citius.lab.joctomap.octree.JOctreeKey;
 import es.usc.citius.lab.joctomap.octree.JOctreeNode;
-import es.usc.citius.lab.motionplanner.core.Point3D;
+import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
 
 /**
  * Implements an iterator for the {@link JOctreeNode} of a
@@ -39,16 +39,16 @@ public class LeafBBXIterator extends OctreeIterator{
 	public native Point3D coordinate();
 
 	@Override
-	public native double x();
+	public native float x();
 
 	@Override
-	public native double y();
+	public native float y();
 
 	@Override
-	public native double z();
+	public native float z();
 
 	@Override
-	public native double size();
+	public native float size();
 
 	@Override
 	public native JOctreeNode node();

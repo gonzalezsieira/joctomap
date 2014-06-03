@@ -6,7 +6,7 @@ import es.usc.citius.lab.joctomap.octree.JOctree;
 import es.usc.citius.lab.joctomap.octree.JOctreeKey;
 import es.usc.citius.lab.joctomap.octree.JOctreeNode;
 import es.usc.citius.lab.joctomap.util.NativeObject;
-import es.usc.citius.lab.motionplanner.core.Point3D;
+import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
 
 /**
  * Class that manages iterators based in {@link JOctree} objects. These iterators manage
@@ -45,22 +45,22 @@ public abstract class OctreeIterator extends NativeObject implements Iterator<JO
 	/**
 	 * @return x coordinate of the current node
 	 */
-	public abstract double x();
+	public abstract float x();
 	
 	/**
 	 * @return y coordinate of the current node
 	 */
-	public abstract double y();
+	public abstract float y();
 	
 	/**
 	 * @return z coordinate of the current node
 	 */
-	public abstract double z();
+	public abstract float z();
 	
 	/**
 	 * @return size of the current node
 	 */
-	public abstract double size();
+	public abstract float size();
 	
 	/**
 	 * @return current {@link JOctreeNode}

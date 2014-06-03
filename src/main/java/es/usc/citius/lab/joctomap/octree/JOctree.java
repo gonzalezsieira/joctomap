@@ -2,7 +2,7 @@ package es.usc.citius.lab.joctomap.octree;
 
 import es.usc.citius.lab.joctomap.iterators.OctreeIterator;
 import es.usc.citius.lab.joctomap.util.NativeObject;
-import es.usc.citius.lab.motionplanner.core.Point3D;
+import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
 
 public class JOctree extends NativeObject{
 	
@@ -134,10 +134,10 @@ public class JOctree extends NativeObject{
 	 * @param depth level to search (depth=0 means search in the full octree)
 	 * @return node of the octree, if found, null otherwhise
 	 */
-	public native JOctreeNode search(double x, double y, double z, int depth);
+	public native JOctreeNode search(float x, float y, float z, int depth);
 	
 	/**
-	 * Calls the method {@link #search(double, double, double, int)} with the default value of 
+	 * Calls the method {@link #search(float, float, float, int)} with the default value of 
 	 * depth=0. Default values in argument methods are not supported by Java, so this method overload
 	 * tries to emulate the call with the default value depth = 0;
 	 * @param x
@@ -145,7 +145,7 @@ public class JOctree extends NativeObject{
 	 * @param z
 	 * @return node of the octree, if found, null otherwise
 	 */
-	public JOctreeNode search(double x, double y, double z){
+	public JOctreeNode search(float x, float y, float z){
 		return search(x, y, z, 0);
 	}
 	
@@ -173,7 +173,7 @@ public class JOctree extends NativeObject{
 	 * @param occupied
 	 * @return {@link JOctreeNode} affected
 	 */
-	public native JOctreeNode updateNode(double x, double y, double z, boolean occupied);
+	public native JOctreeNode updateNode(float x, float y, float z, boolean occupied);
 	
 	/**
 	 * Enables or disables the usage of the bounding box to limit the octree 
@@ -222,7 +222,7 @@ public class JOctree extends NativeObject{
 	 * 
 	 * @return minimum node resolution
 	 */
-	public native double getResolution();
+	public native float getResolution();
 	
 	/**
 	 * Retrieves the size of the nodes at a given depth (aka. resolution at a given depth).
@@ -230,7 +230,7 @@ public class JOctree extends NativeObject{
 	 * @param depth object of the query
 	 * @return node resolution at the depth level
 	 */
-	public native double getNodeSize(int depth);
+	public native float getNodeSize(int depth);
 	
 	/**
 	 * Returns the central point of the BBX queries, if set.
@@ -270,9 +270,9 @@ public class JOctree extends NativeObject{
 	/**
 	 * Dimensions of the bounding box that contains the known space of the octree.
 	 * 
-	 * @return a double[3] array with the dimensions x, y and z of the known space
+	 * @return a float[3] array with the dimensions x, y and z of the known space
 	 */
-	public native double[] getMetricSize();
+	public native float[] getMetricSize();
 	
 	/**
 	 * Queries if the bounding box is set. Returns true if {@link #getBBXMin()} and {@link #getBBXMax()}
@@ -350,11 +350,11 @@ public class JOctree extends NativeObject{
 	 * Creates a new {@link JOctree} with a minimum resolution. An empty octree is not fully
 	 * usable (you cannot query information about the bounds of the octree, or query the 
 	 * {@link JOctreeKey} corresponding to a posiition) until the first occupancy information 
-	 * is added using the modification methods like {@link #updateNode(double, double, double, boolean)}.
+	 * is added using the modification methods like {@link #updateNode(float, float, float, boolean)}.
 	 * 
 	 * @param res minimum node resolution
 	 * @return octree with the given resolution
 	 */
-	public static native JOctree create(double res);
+	public static native JOctree create(float res);
 	
 }

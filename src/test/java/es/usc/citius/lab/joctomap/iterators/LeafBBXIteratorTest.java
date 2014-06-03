@@ -9,7 +9,7 @@ import es.usc.citius.lab.joctomap.JOctreeTest;
 import es.usc.citius.lab.joctomap.octree.JOctree;
 import es.usc.citius.lab.joctomap.octree.JOctreeKey;
 import es.usc.citius.lab.joctomap.octree.JOctreeNode;
-import es.usc.citius.lab.motionplanner.core.Point3D;
+import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
 
 public class LeafBBXIteratorTest {
 

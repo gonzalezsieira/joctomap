@@ -1,7 +1,7 @@
 package es.usc.citius.lab.joctomap.util;
 
-import es.usc.citius.lab.motionplanner.core.Point3D;
-import es.usc.citius.lab.motionplanner.core.Vector3D;
+import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
+import es.usc.citius.lab.motionplanner.core.spatial.Vector3D;
 
 /**
  * Class defining an obstacle, formed by a 3D point and the distance

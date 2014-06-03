@@ -34,7 +34,7 @@ public class JOctreeNodeTest {
 	@BeforeClass
 	public static void initialize(){
 		//store node of the readed octree
-		octreeNode = JOctreeTest.getOctree().search(0d, 0d, 0d, 0);
+		octreeNode = JOctreeTest.getOctree().search(0, 0, 0, 0);
 	}
 	
 	/**

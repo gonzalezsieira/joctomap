@@ -13,7 +13,7 @@ import org.junit.runners.MethodSorters;
 import es.usc.citius.lab.joctomap.octree.JOctree;
 import es.usc.citius.lab.joctomap.octree.JOctreeKey;
 import es.usc.citius.lab.joctomap.octree.JOctreeNode;
-import es.usc.citius.lab.motionplanner.core.Point3D;
+import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
 import static org.junit.Assert.*;
 
 /**
@@ -33,7 +33,7 @@ public class JOctreeTest{
 	private static JOctree octree; //used in tests
 	private static JOctreeKey key1; //used in tests
 	private static JOctreeKey key2; //used in tests
-	private static Double res; //used in tests
+	private static Float res; //used in tests
 	private static Integer depth; //used in tests
 	private static Point3D metricMin; //used in tests
 	private static Point3D metricMax; //used in tests
@@ -74,7 +74,7 @@ public class JOctreeTest{
 	 */
 	@Test
 	public void test01_createOctree(){
-		emptyOctree = JOctree.create(0.5);
+		emptyOctree = JOctree.create(0.5f);
 	}
 	
 	/**
@@ -199,8 +199,8 @@ public class JOctreeTest{
 	 */
 	@Test
 	public void test12_updateNodeTest(){
-		JOctreeNode node1 = emptyOctree.updateNode(0d, 0d, 0d, true);
-		JOctreeNode node2 = emptyOctree.search(0d, 0d, 0d, 0);
+		JOctreeNode node1 = emptyOctree.updateNode(0, 0, 0, true);
+		JOctreeNode node2 = emptyOctree.search(0, 0, 0, 0);
 		assertEquals("Updated and retrieved node are not equals ", node1.getPointer(), node2.getPointer());
 		assertTrue("Updated node must be occupancy probability > 0", node1.getOccupancy() > 0);
 	}
@@ -211,11 +211,11 @@ public class JOctreeTest{
 	 */
 	@Test
 	public void test13_recursiveUpdateOccupiedNodeTest(){
-		JOctreeNode node = emptyOctree.search(0d, 0d, 0d, 0);
+		JOctreeNode node = emptyOctree.search(0, 0, 0, 0);
 		//continue updating the node
 		for(int i = 0; i < 10; i++){
 			double occ = node.getOccupancy();
-			node = emptyOctree.updateNode(0d, 0d, 0d, true);
+			node = emptyOctree.updateNode(0, 0, 0, true);
 			double occNew = node.getOccupancy();
 			assertTrue("Occupancy must increase with each update", occNew >= occ);
 		}
@@ -226,7 +226,7 @@ public class JOctreeTest{
 	 */
 	@Test
 	public void test14_isNodeOccupiedTest(){
-		JOctreeNode node = emptyOctree.search(0d, 0d, 0d, 0);
+		JOctreeNode node = emptyOctree.search(0, 0, 0, 0);
 		assertTrue("Occupied node does not retrieve occupied", emptyOctree.isNodeOccupied(node));
 	}
 	
@@ -236,11 +236,11 @@ public class JOctreeTest{
 	 */
 	@Test
 	public void test15_recursiveUpdateFreeNodeTest(){
-		JOctreeNode node = emptyOctree.search(0d, 0d, 0d, 0);
+		JOctreeNode node = emptyOctree.search(0, 0, 0, 0);
 		//continue updating the node
 		for(int i = 0; i < 10; i++){
 			double occ = node.getOccupancy();
-			node = emptyOctree.updateNode(0d, 0d, 0d, false);
+			node = emptyOctree.updateNode(0, 0, 0, false);
 			double occNew = node.getOccupancy();
 			assertTrue("Occupancy must decrease with each update", occNew <= occ);
 		}
@@ -251,7 +251,7 @@ public class JOctreeTest{
 	 */
 	@Test
 	public void test16_isNodeOccupiedTest(){
-		JOctreeNode node = emptyOctree.search(0d, 0d, 0d, 0);
+		JOctreeNode node = emptyOctree.search(0, 0, 0, 0);
 		assertTrue("Occupied node does not retrieve occupied", !emptyOctree.isNodeOccupied(node));
 	}
 	
@@ -286,11 +286,11 @@ public class JOctreeTest{
 	public void test19_metricCoordinates(){
 		metricMin = octree.getMetricMin();
 		metricMax = octree.getMetricMax();
-		double[] metricSize = octree.getMetricSize();
+		float[] metricSize = octree.getMetricSize();
 		assertTrue("Metric size array must be 3", metricSize.length == 3);
-		assertTrue("X size does not match min.x - max.x", Double.compare(Math.abs(metricMin.getX() - metricMax.getX()), metricSize[0]) == 0);
-		assertTrue("Y size does not match min.y - max.y", Double.compare(Math.abs(metricMin.getY() - metricMax.getY()), metricSize[1]) == 0);
-		assertTrue("Z size does not match min.z - max.z", Double.compare(Math.abs(metricMin.getZ() - metricMax.getZ()), metricSize[2]) == 0);
+		assertTrue("X size does not match min.x - max.x", Float.compare(Math.abs(metricMin.getX() - metricMax.getX()), metricSize[0]) == 0);
+		assertTrue("Y size does not match min.y - max.y", Float.compare(Math.abs(metricMin.getY() - metricMax.getY()), metricSize[1]) == 0);
+		assertTrue("Z size does not match min.z - max.z", Float.compare(Math.abs(metricMin.getZ() - metricMax.getZ()), metricSize[2]) == 0);
 	}
 	
 	/**
@@ -337,10 +337,10 @@ public class JOctreeTest{
 		//retrieve metric coordinates
 		Point3D min = octree.getMetricMin();
 		Point3D max = octree.getMetricMax();
-		double[] size = octree.getMetricSize();
-		assertTrue("size X does not match with min and max metric points", Double.compare(size[0], Math.abs(max.getX() - min.getX())) == 0);
-		assertTrue("size Y does not match with min and max metric points", Double.compare(size[1], Math.abs(max.getY() - min.getY())) == 0);
-		assertTrue("size Z does not match with min and max metric points", Double.compare(size[2], Math.abs(max.getZ() - min.getZ())) == 0);
+		float[] size = octree.getMetricSize();
+		assertTrue("size X does not match with min and max metric points", Float.compare(size[0], Math.abs(max.getX() - min.getX())) == 0);
+		assertTrue("size Y does not match with min and max metric points", Float.compare(size[1], Math.abs(max.getY() - min.getY())) == 0);
+		assertTrue("size Z does not match with min and max metric points", Float.compare(size[2], Math.abs(max.getZ() - min.getZ())) == 0);
 	}
 	
 	/**

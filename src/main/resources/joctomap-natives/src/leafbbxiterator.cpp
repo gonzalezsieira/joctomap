@@ -70,50 +70,50 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXItera
 	//get native object
 	LeafBBXIteratorInformation *information = (LeafBBXIteratorInformation*) getPointer(env, jiterator);
 	point3d coordinate = information->current().getCoordinate();
-	jclass clsPoint = env->FindClass("es/usc/citius/lab/motionplanner/core/Point3D");
-	jmethodID constructor = env->GetMethodID(clsPoint, "<init>", "(DDD)V");
+	jclass clsPoint = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point3D");
+	jmethodID constructor = env->GetMethodID(clsPoint, "<init>", "(FFF)V");
 	//new Point3D(x, y, z)
-	return env->NewObject(clsPoint, constructor, coordinate.x(), coordinate.y(), coordinate.z());
+	return env->NewObject(clsPoint, constructor, static_cast<float>(coordinate.x()), static_cast<float>(coordinate.y()), static_cast<float>(coordinate.z()));
 }
 
 /**
  * Returns the x coordinate of the center of the current node.
  */
-JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_x
+JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_x
   (JNIEnv *env, jobject jiterator){
 	//get native object
 	LeafBBXIteratorInformation *information = (LeafBBXIteratorInformation*) getPointer(env, jiterator);
-	return information->current().getX();
+	return static_cast<float>(information->current().getX());
 }
 
 /**
  * Returns the y coordinate of the center of the current node.
  */
-JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_y
+JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_y
   (JNIEnv *env, jobject jiterator){
 	//get native object
 	LeafBBXIteratorInformation *information = (LeafBBXIteratorInformation*) getPointer(env, jiterator);
-	return information->current().getY();
+	return static_cast<float>(information->current().getY());
 }
 
 /**
  * Returns the z coordinate of the center of the current node.
  */
-JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_z
+JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_z
   (JNIEnv *env, jobject jiterator){
 	//get native object
 	LeafBBXIteratorInformation *information = (LeafBBXIteratorInformation*) getPointer(env, jiterator);
-	return information->current().getZ();
+	return static_cast<float>(information->current().getZ());
 }
 
 /**
  * Returns the size of the node.
  */
-JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_size
+JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_size
   (JNIEnv *env, jobject jiterator){
 	//get native object
 	LeafBBXIteratorInformation *information = (LeafBBXIteratorInformation*) getPointer(env, jiterator);
-	return information->current().getSize();
+	return static_cast<float>(information->current().getSize());
 }
 
 /**

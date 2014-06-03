@@ -42,7 +42,7 @@ JNIEXPORT jint JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator
 /*
  * Class:     es_usc_citius_lab_joctomap_iterators_LeafBBXIterator
  * Method:    coordinate
- * Signature: ()Les/usc/citius/lab/motionplanner/core/Point3D;
+ * Signature: ()Les/usc/citius/lab/motionplanner/core/spatial/Point3D;
  */
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_coordinate
   (JNIEnv *, jobject);
@@ -50,33 +50,33 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXItera
 /*
  * Class:     es_usc_citius_lab_joctomap_iterators_LeafBBXIterator
  * Method:    x
- * Signature: ()D
+ * Signature: ()F
  */
-JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_x
+JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_x
   (JNIEnv *, jobject);
 
 /*
  * Class:     es_usc_citius_lab_joctomap_iterators_LeafBBXIterator
  * Method:    y
- * Signature: ()D
+ * Signature: ()F
  */
-JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_y
+JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_y
   (JNIEnv *, jobject);
 
 /*
  * Class:     es_usc_citius_lab_joctomap_iterators_LeafBBXIterator
  * Method:    z
- * Signature: ()D
+ * Signature: ()F
  */
-JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_z
+JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_z
   (JNIEnv *, jobject);
 
 /*
  * Class:     es_usc_citius_lab_joctomap_iterators_LeafBBXIterator
  * Method:    size
- * Signature: ()D
+ * Signature: ()F
  */
-JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_size
+JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_size
   (JNIEnv *, jobject);
 
 /*
