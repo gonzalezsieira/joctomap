@@ -19,3 +19,4 @@ src/main/resources/joctomap-natives/lib
 src/main/resources/joctomap-natives/.cproject
 src/main/resources/joctomap-natives/.gdbinit
 /src/main/resources/motionplanner-models/build
+nbactions.xml
