@@ -1,5 +1,7 @@
 package es.usc.citius.lab.joctomap.util;
 
+import java.io.IOException;
+
 /**
  * Represents an object that supports native calls.
  * 
@@ -7,6 +9,15 @@ package es.usc.citius.lab.joctomap.util;
  */
 public abstract class NativeObject {
 
+        //place to load the dynamic libraries used in the code
+        static{
+            try {
+                NativeUtils.loadLibraryFromJar("/joctomap-natives/libjoctomap.so");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    
 	//stores the pointer used by native calls
 	protected long pointer;
 	

@@ -22,11 +22,4 @@ import es.usc.citius.lab.joctomap.iterators.LeafBBXIteratorTest;
 })
 public class NativeTests {
 	
-	/**
-	 * Load octomap native library before all tests
-	 */
-	@BeforeClass
-	public static void setUp(){
-		System.loadLibrary("joctomap");
-	}
 }

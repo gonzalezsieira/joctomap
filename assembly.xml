@@ -10,10 +10,6 @@
 			<source>target/${project.artifactId}-${project.version}.jar</source>
 			<outputDirectory>/</outputDirectory>
 		</file>
-		<file>
-			<source>libjoctomap.so</source>
-			<outputDirectory>/</outputDirectory>
-		</file>
 	</files>
 	<!-- Copy dependencies into lib/ directory-->
 	<dependencySets>
