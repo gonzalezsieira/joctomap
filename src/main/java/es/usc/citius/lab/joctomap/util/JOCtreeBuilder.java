@@ -67,7 +67,7 @@ public class JOCtreeBuilder extends Module{
                 boolean occupied = rgb[0] < 10 && rgb[1] < 10 && rgb[2] < 10;
                 if (occupied) {
                     //update occupancy information
-                    octree.updateNode(resX * x, resY * y, 0, occupied);
+                    octree.updateNode(resX * x, sizeY - resY * y, 0, occupied);
                 }
             }
         }
