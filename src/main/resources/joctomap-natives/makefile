@@ -36,7 +36,7 @@ INCLUDE=-I"$(JAVA)/include/" -I"$(JAVA)/include/linux/" -I"$(OCTOMAP)/include/" 
 
 all: libjoctomap.so
 
-libjoctomap.so: octomap dynamic joctree.o joctreenode.o joctreedistancemap.o leafbbxiterator.o collisionchecker2d.o
+libjoctomap.so: octomap dynamic joctree.o joctreenode.o joctreedistancemap.o leafbbxiterator.o collisionchecker2d.o joctreeutils.o
 	$(CC) $(DEBUG) build/*.o $(SHARED) $(INCLUDE)  $(LINK) -o $(TARGET)  
 
 ######################################################################################################
@@ -65,6 +65,9 @@ iteratorinformation.o: src/iteratorinformation.cpp include/iteratorinformation.h
 	
 collisionchecker2d.o : src/collisionchecker2d.cpp include/collisionchecker2d.h
 	$(CC) $(DEBUG) $(FILE) src/collisionchecker2d.cpp $(INCLUDE) $(LINK) -o build/collisionchecker2d.o
+	
+joctreeutils.o : src/joctreeutils.cpp include/joctreeutils.h
+	$(CC) $(DEBUG) $(FILE) src/joctreeutils.cpp $(INCLUDE) $(LINK) -o build/joctreeutils.o
 
 ######################################################################################################
 # 									OCTOMAP BUILD													 #

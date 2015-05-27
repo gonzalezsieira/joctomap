@@ -8,8 +8,6 @@ import java.io.IOException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import es.usc.citius.lab.joctomap.util.PPMFileReader;
-
 /**
  * Tests the reader of PPM files with an example file, testing if the reader information matches
  * with the header of the file.

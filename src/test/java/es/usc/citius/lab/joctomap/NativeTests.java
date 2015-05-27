@@ -5,6 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import es.usc.citius.lab.joctomap.iterators.LeafBBXIteratorTest;
+import es.usc.citius.lab.joctomap.util.JOctreeUtilsTest;
 
 /**
  * Order the execution of all native tests in the library.
@@ -15,7 +16,8 @@ import es.usc.citius.lab.joctomap.iterators.LeafBBXIteratorTest;
 @SuiteClasses({ 
 	JOctreeTest.class, 
 	JOctreeNodeTest.class,
-	LeafBBXIteratorTest.class
+	LeafBBXIteratorTest.class,
+        JOctreeUtilsTest.class
 	//disabled due to high memory consumption
 	//JOctreeDistanceMapTest.class 
 })
