@@ -38,6 +38,7 @@ public abstract class Module {
     private static Map<String, Class<?>> registerModules(){
         Map<String, Class<?>> modulesMap = new HashMap<String, Class<?>>();
         modulesMap.put("ppmot", JOCtreeBuilder.class);
+        modulesMap.put("gworld", GazeboWorldGenerator.class);
         return modulesMap;
     }
     
