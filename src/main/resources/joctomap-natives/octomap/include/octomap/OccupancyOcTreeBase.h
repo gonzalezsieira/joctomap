@@ -174,7 +174,7 @@ namespace octomap {
       * octree level
       *
       * @param key OcTreeKey of the NODE that is to be updated
-      * @param log_odds_update value to be added (+) to log_odds value of node
+      * @param log_odds_value value to be set as the log_odds value of the node
       * @param lazy_eval whether update of inner nodes is omitted after the update (default: false).
       *   This speeds up the insertion, but you need to call updateInnerOccupancy() when done.
       * @return pointer to the updated NODE
@@ -186,7 +186,7 @@ namespace octomap {
       * Looks up the OcTreeKey corresponding to the coordinate and then calls setNodeValue() with it.
       *
       * @param value 3d coordinate of the NODE that is to be updated
-      * @param log_odds_update value to be added (+) to log_odds value of node
+      * @param log_odds_value value to be set as the log_odds value of the node
       * @param lazy_eval whether update of inner nodes is omitted after the update (default: false).
       *   This speeds up the insertion, but you need to call updateInnerOccupancy() when done.
       * @return pointer to the updated NODE
@@ -200,7 +200,7 @@ namespace octomap {
       * @param x
       * @param y
       * @param z
-      * @param log_odds_update value to be added (+) to log_odds value of node
+      * @param log_odds_value value to be set as the log_odds value of the node
       * @param lazy_eval whether update of inner nodes is omitted after the update (default: false).
       *   This speeds up the insertion, but you need to call updateInnerOccupancy() when done.
       * @return pointer to the updated NODE
@@ -375,6 +375,7 @@ namespace octomap {
     //-- change detection on occupancy:
     /// track or ignore changes while inserting scans (default: ignore)
     void enableChangeDetection(bool enable) { use_change_detection = enable; }
+    bool isChangeDetectionEnabled() const { return use_change_detection; }
     /// Reset the set of changed keys. Call this after you obtained all changed nodes.
     void resetChangeDetection() { changed_keys.clear(); }
 
@@ -383,10 +384,13 @@ namespace octomap {
      * you need to enableChangeDetection() first. Here, an OcTreeKey always
      * refers to a node at the lowest tree level (its size is the minimum tree resolution)
      */
-    KeyBoolMap::const_iterator changedKeysBegin() {return changed_keys.begin();}
+    KeyBoolMap::const_iterator changedKeysBegin() const {return changed_keys.begin();}
 
     /// Iterator to traverse all keys of changed nodes.
-    KeyBoolMap::const_iterator changedKeysEnd() {return changed_keys.end();}
+    KeyBoolMap::const_iterator changedKeysEnd() const {return changed_keys.end();}
+
+    /// Number of changes since last reset.
+    size_t numChangesDetected() const { return changed_keys.size(); }
 
 
     /**
