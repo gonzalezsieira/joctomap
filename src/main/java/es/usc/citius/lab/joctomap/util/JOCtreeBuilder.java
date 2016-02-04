@@ -65,10 +65,8 @@ public class JOCtreeBuilder extends Module{
                 int[] rgb = reader.getPixels()[x][y];
                 //occupied case: one of the color components reaches the maximum value of the file
                 boolean occupied = rgb[0] < 10 && rgb[1] < 10 && rgb[2] < 10;
-                if (occupied) {
-                    //update occupancy information
-                    octree.updateNode(resX * x, sizeY - resY * y, 0, occupied);
-                }
+                //update occupancy information
+                octree.updateNode(resX * x, sizeY - resY * y, 0, occupied);
             }
         }
         return octree;
