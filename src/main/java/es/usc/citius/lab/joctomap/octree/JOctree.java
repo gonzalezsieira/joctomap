@@ -331,6 +331,12 @@ public class JOctree extends NativeObject{
          * Expands all the nodes in the octree to the minimum resolution.
          */
         public native void expand();
+        
+        /**
+         * Updates the occupancy of inner nodes to reflect the children's occupancy; needed to
+         * correct the multi-resolution behavior when updated the occupancy with lazy evaluation enabled.
+         */
+        public native void updateInnerOccupancy();
 	
 	/*
 	 * *******************************************************************************

@@ -249,6 +249,14 @@ JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_expand
 
 /*
  * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    updateInnerOccupancy
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_updateInnerOccupancy
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
  * Method:    write
  * Signature: (Ljava/lang/String;)Z
  */

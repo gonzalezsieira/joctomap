@@ -54,22 +54,26 @@ public class JOCtreeBuilder extends Module{
         } catch (IOException ex) {
             JOctomapLogger.severe("An I/O error occured processing the file: " + ex);
         }
-        JOctomapLogger.info("Reading PPM file " + input);
         //instantiate new octree
         JOctree octree = JOctree.create(0.125f);
         float resX = sizeX / (reader.getPixels().length - 1);
         float resY = sizeY / (reader.getPixels()[0].length - 1);
+        JOctomapLogger.info("Generating octomap structure...");
         //iterate over the read pixels to update the information of the nodes
         for (int x = 0; x < reader.getPixels().length; x++) {
             for (int y = 0; y < reader.getPixels()[x].length; y++) {
-                int[] rgb = reader.getPixels()[x][y];
-                //occupied case: one of the color components reaches the maximum value of the file
-                boolean occupied = rgb[0] < 10 && rgb[1] < 10 && rgb[2] < 10;
-                //update occupancy information
-                octree.updateNode(resX * x, sizeY - resY * y, 0, occupied);
+                for(float z = 0f; z < 2f; z += octree.getResolution()){
+                    int[] rgb = reader.getPixels()[x][y];
+                    //occupied case: one of the color components reaches the maximum value of the file
+                    boolean occupied = rgb[0] < 10 && rgb[1] < 10 && rgb[2] < 10;
+                    //update occupancy information
+                    octree.updateNode(resX * x, sizeY - resY * y, z, occupied);
+                }
             }
         }
+        JOctomapLogger.info("Pruning octomap...");
         //prunes octree
+        octree.updateInnerOccupancy();
         octree.prune();
         return octree;
     }

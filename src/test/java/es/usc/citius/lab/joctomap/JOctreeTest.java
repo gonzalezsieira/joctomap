@@ -366,6 +366,7 @@ public class JOctreeTest{
         /**
          * Prunes the elements of the octree.
          */
+        @Test
         public void test24_prune(){
             octree.prune();
         }
@@ -373,7 +374,16 @@ public class JOctreeTest{
         /**
          * Expands the nodes of the ocree to the minimum resolution.
          */
+        @Test
         public void test25_expand(){
             octree.expand();
+        }
+        
+        /**
+         * Updates the inner occupancy of the nodes of the occtree (to match the children's ones).
+         */
+        @Test
+        public void test26_a(){
+            octree.updateInnerOccupancy();
         }
 }

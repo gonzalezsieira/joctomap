@@ -639,3 +639,14 @@ JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_expand
     //call method expand() of the octree
     octree->expand();
 }
+
+/**
+ * Updates the occupancy of inner nodes to reflect the children's occupancy.
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_updateInnerOccupancy
+  (JNIEnv *env, jobject jtree){
+    //recover octree
+    OcTree *octree = (OcTree*) getPointer(env, jtree);
+    //call method expand() of the octree
+    octree->updateInnerOccupancy();
+}
