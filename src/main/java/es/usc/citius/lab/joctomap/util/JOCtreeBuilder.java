@@ -69,6 +69,8 @@ public class JOCtreeBuilder extends Module{
                 octree.updateNode(resX * x, sizeY - resY * y, 0, occupied);
             }
         }
+        //prunes octree
+        octree.prune();
         return octree;
     }
 	
