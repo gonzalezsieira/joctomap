@@ -233,6 +233,22 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_leafBBX
 
 /*
  * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    prune
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_prune
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    expand
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_expand
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
  * Method:    write
  * Signature: (Ljava/lang/String;)Z
  */

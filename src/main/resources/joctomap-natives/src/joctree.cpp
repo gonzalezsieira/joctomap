@@ -617,3 +617,25 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_create
 	//return new java instance of the octree
 	return env->NewObject(cls, constructor, octree);
 }
+
+/*
+ * Prunes all the nodes of the tree which has the same value to higher resolution nodes.
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_prune
+  (JNIEnv *env, jobject jtree){
+    //recover octree
+    OcTree *octree = (OcTree*) getPointer(env, jtree);
+    //call to prune() of the octree
+    octree->prune();
+}
+
+/*
+ * Opposite method to prune(), expands all the nodes to have the minimum resolution.
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_expand
+  (JNIEnv *env, jobject jtree){
+    //recover octree
+    OcTree *octree = (OcTree*) getPointer(env, jtree);
+    //call method expand() of the octree
+    octree->expand();
+}

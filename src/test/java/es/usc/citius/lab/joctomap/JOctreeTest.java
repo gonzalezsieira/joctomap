@@ -362,4 +362,18 @@ public class JOctreeTest{
 		assertTrue("BBX max offer bad information", octree.getBBXMax().equals(currentMax));
 		assertTrue("BBX min offer bad information", octree.getBBXMin().equals(new Point3D(0, 0, 0)));
 	}
+        
+        /**
+         * Prunes the elements of the octree.
+         */
+        public void test24_prune(){
+            octree.prune();
+        }
+        
+        /**
+         * Expands the nodes of the ocree to the minimum resolution.
+         */
+        public void test25_expand(){
+            octree.expand();
+        }
 }

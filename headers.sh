@@ -2,7 +2,7 @@
 
 # save current directory
 dir=`pwd`
-classpath=~/.m2/repository/es/usc/citius/lab/motionplanner-core/1.0/motionplanner-core-1.0.jar:.
+classpath=~/.m2/repository/es/usc/citius/lab/motionplanner-core/1.0.0-SNAPSHOT/motionplanner-core-1.0.0-SNAPSHOT.jar:.
 
 # enter in directory where the native methods are
 cd src/main/java/es/usc/citius/lab/joctomap/octree

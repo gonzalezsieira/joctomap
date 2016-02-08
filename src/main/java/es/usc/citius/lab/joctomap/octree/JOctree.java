@@ -320,6 +320,17 @@ public class JOctree extends NativeObject{
 	 * @return {@link JOctreeKey} iterator
 	 */
 	public native OctreeIterator leafBBXIterator(JOctreeKey min, JOctreeKey max, int maxDepth);
+        
+        /**
+         * Prunes all the nodes in the octree (cuts all the children when they have the same
+         * value).
+         */
+        public native void prune();
+        
+        /**
+         * Expands all the nodes in the octree to the minimum resolution.
+         */
+        public native void expand();
 	
 	/*
 	 * *******************************************************************************
