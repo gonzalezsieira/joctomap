@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.apache.commons.cli.CommandLine;
 
 import es.usc.citius.lab.joctomap.octree.JOctree;
+import java.text.DecimalFormat;
 
 /**
  * Builder for {@link JOctree}. Main functionality of this class is to instantiate 
@@ -28,7 +29,13 @@ public class JOCtreeBuilder extends Module{
         //retrieve input args
         String[] inputArgs = args.getOptionValues("i");
         //process the ppm to generate an octree
-        JOctree octree = octreeFromPPM(inputArgs[0], Float.parseFloat(inputArgs[1]), Float.parseFloat(inputArgs[2]));
+        JOctree octree = octreeFromPPM(
+                inputArgs[0], 
+                Float.parseFloat(inputArgs[1]),
+                Float.parseFloat(inputArgs[1]),
+                Float.parseFloat(inputArgs[2]),
+                Float.parseFloat(inputArgs[3])
+        );
         //write octree to file (.ot extension mandatory)
         String outputPath = args.getOptionValue("o");
         if(!outputPath.endsWith(".ot")) { outputPath = outputPath.concat(".ot"); }
@@ -38,11 +45,13 @@ public class JOCtreeBuilder extends Module{
     /**
      * Instantiates a new {@link JOctree} and puts the information contained in a {@link PPMFileReader}.
      * @param input where the PPM file is located
+     * @param resolution min size of the cells
      * @param sizeX max. size of the X dimension of the map
      * @param sizeY max. size of the Y dimension of the map
+     * @param sizeZ max. size of the Z dimension (altitude) of the map. Influences the max size of the cells when pruning.
      * @return
      */
-    public static JOctree octreeFromPPM(String input, float sizeX, float sizeY){
+    public static JOctree octreeFromPPM(String input, float resolution, float sizeX, float sizeY, float sizeZ){
         //read the ppm file 
         PPMFileReader reader = null;
         //open file and read data from
@@ -55,14 +64,20 @@ public class JOCtreeBuilder extends Module{
             JOctomapLogger.severe("An I/O error occured processing the file: " + ex);
         }
         //instantiate new octree
-        JOctree octree = JOctree.create(0.125f);
+        JOctree octree = JOctree.create(resolution);
         float resX = sizeX / (reader.getPixels().length - 1);
         float resY = sizeY / (reader.getPixels()[0].length - 1);
-        JOctomapLogger.info("Generating octomap structure...");
+        JOctomapLogger.info("Generating octomap structure with following params:"
+                + "\n\t* Resolution: " + resolution
+                + "\n\t* Dimensions: [" + sizeX + ", " + sizeY + ", " + sizeZ + "]");
+        //to show percentage of operation done
+        DecimalFormat formatter = new DecimalFormat("#.##%");
+        int iterations = (int) (sizeZ / octree.getResolution());
         //iterate over the read pixels to update the information of the nodes
-        for (int x = 0; x < reader.getPixels().length; x++) {
-            for (int y = 0; y < reader.getPixels()[x].length; y++) {
-                for(float z = 0f; z < 2f; z += octree.getResolution()){
+        int currentIteration = 0;
+        for(float z = 0f; z < sizeZ; z += octree.getResolution()){
+            for (int x = 0; x < reader.getPixels().length; x++) {
+                for (int y = 0; y < reader.getPixels()[x].length; y++) {
                     int[] rgb = reader.getPixels()[x][y];
                     //occupied case: one of the color components reaches the maximum value of the file
                     boolean occupied = rgb[0] < 10 && rgb[1] < 10 && rgb[2] < 10;
@@ -70,6 +85,8 @@ public class JOCtreeBuilder extends Module{
                     octree.updateNode(resX * x, sizeY - resY * y, z, occupied);
                 }
             }
+            currentIteration++;
+            System.out.println(formatter.format((float) currentIteration / (float) iterations));
         }
         JOctomapLogger.info("Pruning octomap...");
         //prunes octree
