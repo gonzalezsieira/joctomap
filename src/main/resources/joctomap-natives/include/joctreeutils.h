@@ -23,6 +23,22 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_getO
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_getOccupiedCoordinatesBetween
   (JNIEnv *, jclass, jobject, jobject, jobject);
 
+/*
+ * Class:     es_usc_citius_lab_joctomap_util_JOctreeUtils
+ * Method:    resolutionAt
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;Les/usc/citius/lab/motionplanner/core/spatial/Point3D;)F
+ */
+JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_resolutionAt
+  (JNIEnv *, jclass, jobject, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_util_JOctreeUtils
+ * Method:    resolutionAddedIn
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;Les/usc/citius/lab/motionplanner/core/spatial/Point3D;Les/usc/citius/lab/motionplanner/core/spatial/Point3D;)F
+ */
+JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_resolutionAddedIn
+  (JNIEnv *, jclass, jobject, jobject, jobject);
+
 #ifdef __cplusplus
 }
 #endif

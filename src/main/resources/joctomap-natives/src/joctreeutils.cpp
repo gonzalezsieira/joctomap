@@ -4,6 +4,7 @@
 #include <octomap/OcTreeKey.h>
 #include <octomap/OccupancyOcTreeBase.h>
 #include <octomap/OcTreeNode.h>
+#include <float.h>
 #include "nativeobject.h"
 #include "joctreeutils.h"
 
@@ -122,4 +123,68 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_getO
         }
     }
     return arrayListObject;
+}
+
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_util_JOctreeUtils
+ * Method:    resolutionAt
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;Les/usc/citius/lab/motionplanner/core/spatial/Point3D;)F
+ */
+JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_resolutionAt
+  (JNIEnv *env, jclass cls, jobject jtree, jobject jpoint){
+    //recover octree
+    OcTree *octree = (OcTree*) getPointer(env, jtree);
+    //get fields of Point3D object
+    jclass clsPoint3D = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point3D");
+    jfieldID fieldX = env->GetFieldID(clsPoint3D, "x", "F");
+    jfieldID fieldY = env->GetFieldID(clsPoint3D, "y", "F");
+    jfieldID fieldZ = env->GetFieldID(clsPoint3D, "z", "F");
+    //get values of the Point3D objects
+    float pointX = env->GetFloatField(jpoint, fieldX);
+    float pointY = env->GetFloatField(jpoint, fieldY);
+    float pointZ = env->GetFloatField(jpoint, fieldZ);
+    //query resolution of the octree
+    OcTree::leaf_bbx_iterator it = octree->begin_leafs_bbx(point3d(pointX, pointY, pointZ), point3d(pointX, pointY, pointZ), 0);
+    float resolution = FLT_MAX;
+    if(it != octree->end_leafs_bbx()){
+        resolution = static_cast<float>(it.getSize());
+    }
+    return resolution;
+}
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_util_JOctreeUtils
+ * Method:    resolutionAddedIn
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;Les/usc/citius/lab/motionplanner/core/spatial/Point3D;Les/usc/citius/lab/motionplanner/core/spatial/Point3D;)F
+ */
+JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_resolutionAddedIn
+  (JNIEnv *env, jclass cls, jobject jtree, jobject jpoint1, jobject jpoint2){
+    //recover octree
+    OcTree *octree = (OcTree*) getPointer(env, jtree);
+    //get fields of Point3D object
+    jclass clsPoint3D = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point3D");
+    jfieldID fieldX = env->GetFieldID(clsPoint3D, "x", "F");
+    jfieldID fieldY = env->GetFieldID(clsPoint3D, "y", "F");
+    jfieldID fieldZ = env->GetFieldID(clsPoint3D, "z", "F");
+    //get values of the Point3D objects
+    float point1X = env->GetFloatField(jpoint1, fieldX);
+    float point1Y = env->GetFloatField(jpoint1, fieldY);
+    float point1Z = env->GetFloatField(jpoint1, fieldZ);
+    float point2X = env->GetFloatField(jpoint2, fieldX);
+    float point2Y = env->GetFloatField(jpoint2, fieldY);
+    float point2Z = env->GetFloatField(jpoint2, fieldZ);
+    //query first resolution of the octree
+    OcTree::leaf_bbx_iterator it1 = octree->begin_leafs_bbx(point3d(point1X, point1Y, point1Z), point3d(point1X, point1Y, point1Z), 0);
+    float resolution1 = FLT_MAX;
+    if(it1 != octree->end_leafs_bbx()){
+        resolution1 = static_cast<float>(it1.getSize());
+    }
+    //query second resolution of the octree
+    OcTree::leaf_bbx_iterator it2 = octree->begin_leafs_bbx(point3d(point2X, point2Y, point2Z), point3d(point2X, point2Y, point2Z), 0);
+    float resolution2 = FLT_MAX;
+    if(it2 != octree->end_leafs_bbx()){
+        resolution2 = static_cast<float>(it2.getSize());
+    }
+    return resolution1 + resolution2;
 }

@@ -50,4 +50,25 @@ public class JOctreeUtils {
      */
     public native static Collection<Pair<Point3D, Float>> getOccupiedCoordinatesBetween(JOctree octree, Point3D min, Point3D max);
     
+    /**
+     * Queries the resolution at a current point of the octree; retrieves Float.MAX_VALUE
+     * if the point has not correspondence with a cell in the map.
+     * 
+     * @param octree instance of {@link JOctree}
+     * @param point position to query
+     * @return resolution of the cell at the given point, Float.MAX_VALUE if doesn't exist in the map
+     */
+    public native static float resolutionAt(JOctree octree, Point3D point);
+    
+    /**
+     * Queries the resolution between the given points; this is, the resolution at the first
+     * point added to the resolution in the second point.
+     * 
+     * @param octree instance of {@link JOctree}
+     * @param point1 position to query
+     * @param point2 position to query
+     * @return resolution of the cell at the given point, Float.MAX_VALUE if any point don't exist in the map
+     */
+    public native static float resolutionAddedIn(JOctree octree, Point3D point1, Point3D point2);
+    
 }
