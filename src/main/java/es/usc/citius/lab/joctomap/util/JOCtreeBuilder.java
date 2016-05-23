@@ -39,6 +39,7 @@ public class JOCtreeBuilder extends Module{
         //write octree to file (.ot extension mandatory)
         String outputPath = args.getOptionValue("o");
         if(!outputPath.endsWith(".ot")) { outputPath = outputPath.concat(".ot"); }
+        System.out.println("Saving to " + outputPath);
         octree.write(outputPath);
     }
 
