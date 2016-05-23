@@ -32,9 +32,9 @@ public class JOCtreeBuilder extends Module{
         JOctree octree = octreeFromPPM(
                 inputArgs[0], 
                 Float.parseFloat(inputArgs[1]),
-                Float.parseFloat(inputArgs[1]),
                 Float.parseFloat(inputArgs[2]),
-                Float.parseFloat(inputArgs[3])
+                Float.parseFloat(inputArgs[3]),
+                Float.parseFloat(inputArgs[4])
         );
         //write octree to file (.ot extension mandatory)
         String outputPath = args.getOptionValue("o");
