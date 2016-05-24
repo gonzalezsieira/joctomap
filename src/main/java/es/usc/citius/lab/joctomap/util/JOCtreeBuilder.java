@@ -72,11 +72,11 @@ public class JOCtreeBuilder extends Module{
                 + "\n\t* Resolution: " + resolution
                 + "\n\t* Dimensions: [" + sizeX + ", " + sizeY + ", " + sizeZ + "]");
         //to show percentage of operation done
-        DecimalFormat formatter = new DecimalFormat("#.##%");
-        int iterations = (int) (sizeZ / octree.getResolution());
+        DecimalFormat formatter = new DecimalFormat("0.00%");
+        int iterations = (int) (sizeZ / octree.getResolution()) * 2;
         //iterate over the read pixels to update the information of the nodes
         int currentIteration = 0;
-        for(float z = 0f; z < sizeZ; z += octree.getResolution()){
+        for(float z = 0f; z < sizeZ; z += octree.getResolution() / 2f){
             for (int x = 0; x < reader.getPixels().length; x++) {
                 for (int y = 0; y < reader.getPixels()[x].length; y++) {
                     int[] rgb = reader.getPixels()[x][y];
@@ -87,7 +87,7 @@ public class JOCtreeBuilder extends Module{
                 }
             }
             currentIteration++;
-            System.out.println(formatter.format((float) currentIteration / (float) iterations));
+            System.out.print("\r" + formatter.format((float) currentIteration / (float) iterations));
         }
         JOctomapLogger.info("Pruning octomap...");
         //prunes octree
