@@ -29,10 +29,10 @@ public class Main {
         Options op = new Options();
         op.addOption(
                 OptionBuilder
-                .withDescription("Input .ppm file, resolution, size X (m), size Y (m) and size Z (m)")
+                .withDescription("Input .ppm file, resolution, size X (m), size Y (m) and max depth of cells")
                 .hasArgs(5)
                 .withLongOpt("input")
-                .withArgName("ppmFile> <resolution> <sizeX> <sizeY> <sizeZ")
+                .withArgName("ppmFile> <resolution> <sizeX> <sizeY> <maxDepthCell")
                 .create("i")
         );
         op.addOption(

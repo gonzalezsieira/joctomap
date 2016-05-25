@@ -34,7 +34,7 @@ public class JOCtreeBuilder extends Module{
                 Float.parseFloat(inputArgs[1]),
                 Float.parseFloat(inputArgs[2]),
                 Float.parseFloat(inputArgs[3]),
-                Float.parseFloat(inputArgs[4])
+                Integer.parseInt(inputArgs[4])
         );
         //write octree to file (.ot extension mandatory)
         String outputPath = args.getOptionValue("o");
@@ -49,10 +49,10 @@ public class JOCtreeBuilder extends Module{
      * @param resolution min size of the cells
      * @param sizeX max. size of the X dimension of the map
      * @param sizeY max. size of the Y dimension of the map
-     * @param sizeZ max. size of the Z dimension (altitude) of the map. Influences the max size of the cells when pruning.
+     * @param maxDepthCell number of levels which a cell is allowed to compact
      * @return
      */
-    public static JOctree octreeFromPPM(String input, float resolution, float sizeX, float sizeY, float sizeZ){
+    public static JOctree octreeFromPPM(String input, float resolution, float sizeX, float sizeY, int maxDepthCell){
         //read the ppm file 
         PPMFileReader reader = null;
         //open file and read data from
@@ -68,6 +68,7 @@ public class JOCtreeBuilder extends Module{
         JOctree octree = JOctree.create(resolution);
         float resX = sizeX / (reader.getPixels().length - 1);
         float resY = sizeY / (reader.getPixels()[0].length - 1);
+        float sizeZ = octree.getNodeSize(octree.getTreeDepth() - maxDepthCell);
         JOctomapLogger.info("Generating octomap structure with following params:"
                 + "\n\t* Resolution: " + resolution
                 + "\n\t* Dimensions: [" + sizeX + ", " + sizeY + ", " + sizeZ + "]");
