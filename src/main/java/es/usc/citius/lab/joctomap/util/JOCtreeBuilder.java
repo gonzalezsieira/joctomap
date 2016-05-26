@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.apache.commons.cli.CommandLine;
 
 import es.usc.citius.lab.joctomap.octree.JOctree;
+import es.usc.citius.lab.joctomap.octree.JOctreeNode;
 import java.text.DecimalFormat;
 
 /**
@@ -83,8 +84,15 @@ public class JOCtreeBuilder extends Module{
                     int[] rgb = reader.getPixels()[Math.round(x / resX)][Math.round(y / resY)];
                     //occupied case: one of the color components reaches the maximum value of the file
                     boolean occupied = rgb[0] < 10 && rgb[1] < 10 && rgb[2] < 10;
-                    //update occupancy information
-                    octree.updateNode(x, sizeY - y, z, occupied);
+                    //update occupancy information until we get an absolute value for the occupancy (1 or 0)
+                    Double previousOccupancy = null;
+                    do {
+                        JOctreeNode node = octree.updateNode(x, sizeY - y, z, occupied);
+                        if(previousOccupancy != null && Double.compare(node.getOccupancy(), previousOccupancy) == 0){
+                            break;
+                        }
+                        previousOccupancy = node.getOccupancy();
+                    } while (true);
                 }
             }
             currentIteration++;
