@@ -78,9 +78,9 @@ public class JOCtreeBuilder extends Module{
         //iterate over the read pixels to update the information of the nodes
         int currentIteration = 0;
         for(float z = 0f; z < sizeZ; z += octree.getResolution() / 2f){
-            for (int x = 0; x < reader.getPixels().length; x++) {
-                for (int y = 0; y < reader.getPixels()[x].length; y++) {
-                    int[] rgb = reader.getPixels()[x][y];
+            for (float x = 0; x < sizeX; x += octree.getResolution() / 2f) {
+                for (float y = 0; y < sizeY; y += octree.getResolution() / 2f) {
+                    int[] rgb = reader.getPixels()[Math.round(x / resX)][Math.round(y / resY)];
                     //occupied case: one of the color components reaches the maximum value of the file
                     boolean occupied = rgb[0] < 10 && rgb[1] < 10 && rgb[2] < 10;
                     //update occupancy information
