@@ -13,6 +13,21 @@
 using namespace std;
 using namespace octomap;
 
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_dispose
+  (JNIEnv *env, jobject jtree){
+        //get pointer
+        long pointer = getPointer(env, jtree);
+        //if not released yet
+        if(pointer != INVALID_POINTER){
+            //recover octree
+            OcTree *object = (OcTree*) pointer;
+            //delete object
+            delete object;
+            //delete pointer
+            deletePointer(env, jtree);
+        }
+}
+
 /*
  * This method finds the position of a cell given a real position in the map (x, y, z)
  */

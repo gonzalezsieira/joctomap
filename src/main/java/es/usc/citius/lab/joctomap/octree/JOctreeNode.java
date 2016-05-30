@@ -26,6 +26,15 @@ public class JOctreeNode extends NativeObject{
 	public JOctreeNode(long pointer) {
 		super(pointer);
 	}
+
+        @Override
+        public native void dispose();
+        
+        @Override
+        protected void finalize() throws Throwable {
+            super.finalize(); //To change body of generated methods, choose Tools | Templates.
+            dispose();
+        }
 	
 	/**
 	 * Retrieves the probability of occupancy of the node.

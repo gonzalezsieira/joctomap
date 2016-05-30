@@ -87,6 +87,14 @@ JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterat
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_node
   (JNIEnv *, jobject);
 
+/*
+ * Class:     es_usc_citius_lab_joctomap_iterators_LeafBBXIterator
+ * Method:    dispose
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_dispose
+  (JNIEnv *, jobject);
+
 #ifdef __cplusplus
 }
 #endif

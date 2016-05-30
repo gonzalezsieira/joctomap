@@ -69,4 +69,12 @@ public class JOctreeDistanceMap extends NativeObject{
 	 */
 	public static native JOctreeDistanceMap create(JOctree octree, double maxDistance);
 
+        @Override
+        public native void dispose();
+        
+        @Override
+        protected void finalize() throws Throwable {
+            super.finalize(); //To change body of generated methods, choose Tools | Templates.
+            dispose();
+        }
 }

@@ -7,6 +7,14 @@
 using namespace std;
 using namespace octomap;
 
+/*
+ * Freees memory when calling finalize() in java.
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctreeNode_dispose
+  (JNIEnv *env, jobject jnode){
+    //Not needed to do anything to free memory of this object.
+}
+
 /**
  * Retrieves the occupancy probability of the node.
  */

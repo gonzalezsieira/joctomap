@@ -6,9 +6,6 @@ import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
 
 public class JOctree extends NativeObject{
 	
-	//used by native methods
-	private long pointer;
-	
 	/**
 	 * Initializes the JOctree with a pointer to the native OcTree object of
 	 * the Octomap library. Used by native methods.
@@ -18,8 +15,16 @@ public class JOctree extends NativeObject{
 	private JOctree(long pointer) {
 		super(pointer);
 	}
-	
-	
+
+        @Override
+        public native void dispose();
+        
+        @Override
+        protected void finalize() throws Throwable {
+            super.finalize(); //To change body of generated methods, choose Tools | Templates.
+            dispose();
+        }
+        
 	/*
 	 * *******************************************************************************
 	 * *					Position query functions	                             *

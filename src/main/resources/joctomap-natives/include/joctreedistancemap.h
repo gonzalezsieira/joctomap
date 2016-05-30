@@ -47,6 +47,14 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_distance_JOctreeDistan
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_distance_JOctreeDistanceMap_create
   (JNIEnv *, jclass, jobject, jdouble);
 
+/*
+ * Class:     es_usc_citius_lab_joctomap_distance_JOctreeDistanceMap
+ * Method:    dispose
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_distance_JOctreeDistanceMap_dispose
+  (JNIEnv *, jobject);
+
 #ifdef __cplusplus
 }
 #endif

@@ -53,4 +53,12 @@ public class LeafBBXIterator extends OctreeIterator{
 	@Override
 	public native JOctreeNode node();
 
+        @Override
+        public native void dispose();
+        
+        @Override
+        protected void finalize() throws Throwable {
+            super.finalize(); //To change body of generated methods, choose Tools | Templates.
+            dispose();
+        }
 }

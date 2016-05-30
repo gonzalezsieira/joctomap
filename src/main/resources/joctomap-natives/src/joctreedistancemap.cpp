@@ -6,6 +6,26 @@
 
 using namespace octomap;
 
+/*
+ * Class:     es_usc_citius_lab_joctomap_distance_JOctreeDistanceMap
+ * Method:    freeMemory
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_distance_JOctreeDistanceMap_dispose
+  (JNIEnv *env, jobject jdistancemap){
+        //get pointer
+        long pointer = getPointer(env, jdistancemap);
+        //if not released yet
+        if(pointer != INVALID_POINTER){
+            //recover octree
+            DynamicEDTOctomap *object = (DynamicEDTOctomap*) pointer;
+            //delete object
+            delete object;
+            //delete pointer
+            deletePointer(env, jdistancemap);
+        }
+}
+
 /**
  * Executes the update operation of the distance map.
  */

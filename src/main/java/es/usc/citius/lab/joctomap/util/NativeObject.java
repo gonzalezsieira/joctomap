@@ -40,5 +40,12 @@ public abstract class NativeObject {
 	public long getPointer() {
 		return pointer;
 	}
-	
+        
+        /**
+         * CAUTION: ONLY TO BE CALLED BY THE FINALIZE METHOD OF EACH CLASS IMPLEMENTING
+         * NATIVEOBJECT; THIS WILL FREE THE MEMORY USED BY THE POINTER STORED IN THIS
+         * CLASS, SO THIS OBJECT IS NOT BEING USABLE ANYMORE.
+         */
+        public abstract void dispose();
+        
 }

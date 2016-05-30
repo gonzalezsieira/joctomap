@@ -9,6 +9,14 @@ extern "C" {
 #endif
 /*
  * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    dispose
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_dispose
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
  * Method:    coordToKey
  * Signature: (FFF)Les/usc/citius/lab/joctomap/octree/JOctreeKey;
  */

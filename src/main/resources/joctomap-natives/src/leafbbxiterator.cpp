@@ -7,6 +7,24 @@
 using namespace std;
 using namespace octomap;
 
+/*
+ * Frees memory used by this object. Called when finalize() in jvm.
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterator_dispose
+  (JNIEnv *env, jobject jiterator){
+        //get pointer
+        long pointer = getPointer(env, jiterator);
+        //if not released yet
+        if(pointer != INVALID_POINTER){
+            //recover octree
+            LeafBBXIteratorInformation *object = (LeafBBXIteratorInformation*) pointer;
+            //delete object
+            delete object;
+            //delete pointer
+            deletePointer(env, jiterator);
+        }
+}
+
 /**
  * Queries if this iterator has reached its end point.
  */
