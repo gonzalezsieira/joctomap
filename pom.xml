@@ -79,6 +79,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+                                <version>3.0.0</version>
 				<configuration>
 					<archive>
 						<manifest>
@@ -117,7 +118,7 @@
 						*.so -->
 					<execution>
 						<id>compile</id>
-						<phase>process-resources</phase>
+						<phase>generate-resources</phase>
 						<goals>
 							<goal>exec</goal>
 						</goals>
