@@ -42,18 +42,6 @@
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- JUnit 4 extensions -->
-		<dependency>
-			<groupId>net.sf.jexample</groupId>
-			<artifactId>jexample</artifactId>
-			<version>4.4-378</version>
-			<scope>test</scope>
-		</dependency>
-                <dependency>
-                    <groupId>org.ros.rosjava_messages</groupId>
-                    <artifactId>octomap_msgs</artifactId>
-                    <version>0.3.2</version>
-                </dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
