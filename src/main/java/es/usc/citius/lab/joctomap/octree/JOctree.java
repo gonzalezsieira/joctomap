@@ -217,6 +217,12 @@ public class JOctree extends NativeObject{
 	 * *				Octree information query functions                           *
 	 * *******************************************************************************
 	 */
+        /**
+         * Retrieves the number of leafs in the octree.
+         * 
+         * @return number of leafs in the tree
+         */
+        public native int size();
 	/**
 	 * Retrieves the maximum depth of the octree.
 	 * 

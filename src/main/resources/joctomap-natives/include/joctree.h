@@ -137,6 +137,14 @@ JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_setBBXMax
 
 /*
  * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    size
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_size
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
  * Method:    getTreeDepth
  * Signature: ()I
  */

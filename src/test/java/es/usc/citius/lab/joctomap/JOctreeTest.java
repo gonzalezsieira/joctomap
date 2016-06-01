@@ -1,5 +1,6 @@
 package es.usc.citius.lab.joctomap;
 
+import es.usc.citius.lab.joctomap.iterators.OctreeIterator;
 import java.io.File;
 import java.io.IOException;
 
@@ -386,7 +387,17 @@ public class JOctreeTest{
          * Updates the inner occupancy of the nodes of the occtree (to match the children's ones).
          */
         @Test
-        public void test26_a(){
+        public void test26_innerOcupancy(){
             octree.updateInnerOccupancy();
+        }
+        
+        @Test 
+        public void test27_size(){
+            int sizeNative = octree.size();
+            int sizeJava = 0;
+            for(OctreeIterator it = octree.leafBBXIterator(octree.getMetricMin(), octree.getMetricMax(), 0); it.hasNext(); it.next()){
+                sizeJava++;
+            }
+            assertEquals("Native and java methods to retrieve the size do not match", sizeJava, sizeNative);
         }
 }

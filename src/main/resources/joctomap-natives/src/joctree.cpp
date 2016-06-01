@@ -345,6 +345,28 @@ JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_setBBXMax
 	octree->setBBXMax(max);
 }
 
+/*
+ * Method that obtains the number of leafs in the octree.
+ */
+JNIEXPORT jint JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_size
+  (JNIEnv *env, jobject jtree){
+    //recover octree
+    OcTree *octree = (OcTree*) getPointer(env, jtree);
+    double minx, miny, minz, maxx, maxy, maxz;
+    //query for min/max points
+    octree->getMetricMin(minx, miny, minz);
+    octree->getMetricMax(maxx, maxy, maxz);
+    //count number of iterations
+    int nodes = 0;
+    for(OcTree::leaf_bbx_iterator it = octree->begin_leafs_bbx(point3d(minx, miny, minz), point3d(maxx, maxy, maxz), 0), 
+            end = octree->end_leafs_bbx(); 
+            it != end; 
+            ++it){
+        nodes++;
+    }
+    return nodes;
+}
+
 /**
  * Method that obtains the octree maximum depth.
  */
