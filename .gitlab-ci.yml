@@ -1,0 +1,2 @@
+build:
+    script: "mvn install -B -Djdk=/usr/lib/jvm/java-8-oracle"
