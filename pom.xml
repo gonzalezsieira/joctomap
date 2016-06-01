@@ -116,6 +116,9 @@
 								<argument>${basedir}/compile.sh</argument>
 								<argument>${env.JAVA_HOME}</argument>
 							</arguments>
+                                                        <successCodes>
+                                                            <successCode>0</successCode>
+                                                        </successCodes>
 						</configuration>
 					</execution>
 					<!-- Run clean.sh to remove binary compiled files in C/C++ -->
