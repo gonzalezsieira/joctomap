@@ -1,9 +1,11 @@
 package es.usc.citius.lab.joctomap.util;
 
+import java.io.File;
 import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,18 +18,18 @@ import org.junit.Test;
  */
 public class PPMFileReaderTest {
 
-	private static PPMFileReader reader;
+	private PPMFileReader reader;
 	
-	/**
-	 * Reads a ppm file in src/test/resources
+        /**
+	 * Constructor which loads a resource
 	 * 
 	 * @throws FileNotFoundException if file not found
 	 * @throws IOException if I/O error occurs
+         * @throws URISyntaxException if URI bad formatted
 	 */
-	@BeforeClass
-	public static void initialize() throws FileNotFoundException, IOException{
-		reader = new PPMFileReader("src/test/resources/ecmr.ppm");
-	}
+        public PPMFileReaderTest() throws IOException, URISyntaxException{
+            this.reader = new PPMFileReader(new File(PPMFileReaderTest.class.getClassLoader().getResource("ecmr.ppm").toURI()).getAbsolutePath());
+        }
 	
 	/**
 	 * Tests the dimension of the read map file.
