@@ -44,9 +44,9 @@ public class AdjacencyMap implements Serializable{
      * @param octree current octree instance
      */
     public AdjacencyMap(JOctree octree){
-        this.adjacencies = new HashMap<>();
+        this.adjacencies = new HashMap<JOctreeKey, List<JOctreeKey>>();
         this.octree = octree;
-        this.nodesInfo = new HashMap<>();
+        this.nodesInfo = new HashMap<JOctreeKey, Pair<Float, Point3D>>();
         //create cache
         Cache cacheOfKeys = new Cache();
 
@@ -58,7 +58,7 @@ public class AdjacencyMap implements Serializable{
             Point3D coordinate1 = it.coordinate();
             float size1 = it.size();
             JOctreeKey key = cacheOfKeys.getInstance(it.key());
-            nodesInfo.put(key, new Pair<>(it.size(), it.coordinate()));
+            nodesInfo.put(key, new Pair<Float, Point3D>(it.size(), it.coordinate()));
             OctreeIterator it2;
             for(it2 = octree.leafBBXIterator(new Point3D(coordinate1.getX() - resolution, coordinate1.getY() - resolution, coordinate1.getZ() - resolution), new Point3D(coordinate1.getX() + resolution, coordinate1.getY() + resolution, coordinate1.getZ() + resolution), 0); it2.hasNext(); it2.next()){
                 //get coordinates and size
@@ -74,7 +74,7 @@ public class AdjacencyMap implements Serializable{
                     //adjacent cells
                     List<JOctreeKey> adjacentCells = adjacencies.get(key);
                     if (adjacentCells == null) {
-                        adjacentCells = new ArrayList<>();
+                        adjacentCells = new ArrayList<JOctreeKey>();
                         adjacencies.put(key, adjacentCells);
                     }
                     adjacentCells.add(key2);
@@ -131,10 +131,12 @@ public class AdjacencyMap implements Serializable{
             JOctomapLogger.warning(filename + " already exists. Content will be replaced.");
             outputFile.delete();
         }
-        //open output stream (will be closed after this statement)
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(outputFile))) {
+        //open output stream
+        try{
+            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(outputFile));
             //write this instance
             outputStream.writeObject(this);
+            outputStream.close();
         } catch (IOException ex) {
             //I/O error
             JOctomapLogger.severe("I/O error when writing adjacency map to " + filename);
@@ -159,9 +161,11 @@ public class AdjacencyMap implements Serializable{
         }
         AdjacencyMap map;
         //open input stream (will be closed after this statement)
-        try(ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(inputFile))) {
+        try{
+            ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(inputFile));
             //read map instance
             map = (AdjacencyMap) inputStream.readObject();
+            inputStream.close();
         } catch (IOException ex) {
             //I/O error
             JOctomapLogger.severe("I/O error when reading adjacency map from " + filename);
@@ -214,7 +218,7 @@ public class AdjacencyMap implements Serializable{
         private HashMap<JOctreeKey, JOctreeKey> cache;
 
         public Cache(){
-            this.cache = new HashMap<>();
+            this.cache = new HashMap<JOctreeKey, JOctreeKey>();
         }
 
         /**
