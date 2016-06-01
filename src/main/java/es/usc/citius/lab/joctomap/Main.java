@@ -9,7 +9,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import es.usc.citius.lab.joctomap.util.JOctomapLogger;
-import es.usc.citius.lab.joctomap.util.Module;
+import es.usc.citius.lab.joctomap.module.Module;
 
 /**
  * This class executes the utilities stored in this library, to make them

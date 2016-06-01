@@ -1,5 +1,6 @@
-package es.usc.citius.lab.joctomap.util;
+package es.usc.citius.lab.joctomap.module;
 
+import es.usc.citius.lab.joctomap.module.Module;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -7,6 +8,8 @@ import org.apache.commons.cli.CommandLine;
 
 import es.usc.citius.lab.joctomap.octree.JOctree;
 import es.usc.citius.lab.joctomap.octree.JOctreeNode;
+import es.usc.citius.lab.joctomap.util.JOctomapLogger;
+import es.usc.citius.lab.joctomap.util.PPMFileReader;
 import java.text.DecimalFormat;
 
 /**

@@ -5,6 +5,13 @@ import es.usc.citius.lab.joctomap.octree.JOctree;
 import es.usc.citius.lab.joctomap.octree.JOctreeKey;
 import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
 import es.usc.citius.lab.motionplanner.core.util.Pair;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import org.apache.commons.math3.util.FastMath;
 
 import java.util.ArrayList;
@@ -22,7 +29,7 @@ import java.util.Map;
  * @author Adrián González Sieira <<a href="mailto:adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
  * @since 09/03/2016
  */
-public class AdjacencyMap {
+public class AdjacencyMap implements Serializable{
 
     private Map<JOctreeKey, List<JOctreeKey>> adjacencies;
     private JOctree octree;
@@ -59,19 +66,18 @@ public class AdjacencyMap {
                 float sizeAdded = size1/2f + it2.size()/2f;
                 JOctreeKey key2 = cacheOfKeys.getInstance(it2.key());
                 //skip current keys
-                if(!key.equals(key2)) {
-                    //calculate adjacency using the AABB method (Axis Aligned Bounding Box)
-                    if (FastMath.abs(coordinate1.getX() - coordinate2.getX()) - sizeAdded <= EPSILON &&
-                            FastMath.abs(coordinate1.getY() - coordinate2.getY()) - sizeAdded <= EPSILON &&
-                            FastMath.abs(coordinate1.getZ() - coordinate2.getZ()) - sizeAdded <= EPSILON) {
-                        //adjacent cells
-                        List<JOctreeKey> adjacentCells = adjacencies.get(key);
-                        if (adjacentCells == null) {
-                            adjacentCells = new ArrayList<>();
-                            adjacencies.put(key, adjacentCells);
-                        }
-                        adjacentCells.add(key2);
+                //calculate adjacency using the AABB method (Axis Aligned Bounding Box)
+                if (!key.equals(key2) &&
+                        FastMath.abs(coordinate1.getX() - coordinate2.getX()) - sizeAdded <= EPSILON &&
+                        FastMath.abs(coordinate1.getY() - coordinate2.getY()) - sizeAdded <= EPSILON &&
+                        FastMath.abs(coordinate1.getZ() - coordinate2.getZ()) - sizeAdded <= EPSILON) {
+                    //adjacent cells
+                    List<JOctreeKey> adjacentCells = adjacencies.get(key);
+                    if (adjacentCells == null) {
+                        adjacentCells = new ArrayList<>();
+                        adjacencies.put(key, adjacentCells);
                     }
+                    adjacentCells.add(key2);
                 }
             }
             it2.dispose();
@@ -106,6 +112,98 @@ public class AdjacencyMap {
     public Pair<Float, Point3D> nodeInfo(JOctreeKey key){
         return nodesInfo.get(key);
     }
+    
+    /**************************************************************************
+     *                      I/O OPERATIONS
+     **************************************************************************/
+    
+    /**
+     * Saves into a file the current instance of AdjacencyMap.
+     * 
+     * @param filename path to output file
+     * @return true if write operation was successful
+     */
+    public boolean write(String filename){
+        //create new file
+        File outputFile = new File(filename);
+        //if file exists, delete
+        if (outputFile.exists()){
+            JOctomapLogger.warning(filename + " already exists. Content will be replaced.");
+            outputFile.delete();
+        }
+        //open output stream (will be closed after this statement)
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(outputFile))) {
+            //write this instance
+            outputStream.writeObject(this);
+        } catch (IOException ex) {
+            //I/O error
+            JOctomapLogger.severe("I/O error when writing adjacency map to " + filename);
+            throw new RuntimeException(ex);
+        }
+        return true;
+    }
+    
+    /**
+     * Reads an instance of AdjacencyMap from file.
+     * 
+     * @param filename path to input file
+     * @return stored instance of AdjacencyMap
+     */
+    public static AdjacencyMap read(String filename){
+        //create new file
+        File inputFile = new File(filename);
+        //error if input file does not exist
+        if(!inputFile.exists()){
+            JOctomapLogger.severe("Could not open " + filename + ". File does not exist.");
+            throw new RuntimeException("Specified file " + filename + " does not exist");
+        }
+        AdjacencyMap map;
+        //open input stream (will be closed after this statement)
+        try(ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(inputFile))) {
+            //read map instance
+            map = (AdjacencyMap) inputStream.readObject();
+        } catch (IOException ex) {
+            //I/O error
+            JOctomapLogger.severe("I/O error when reading adjacency map from " + filename);
+            throw new RuntimeException(ex);
+        } catch (ClassNotFoundException ex) {
+            //error if object cannot be casted
+            JOctomapLogger.severe("Cannot cast object to AdjacencyMap");
+            throw new RuntimeException(ex);
+        }
+        return map;
+    }
+    
+    /**
+     * Routine to write an object of this class to an output stream.
+     * 
+     * @param out output stream
+     * @throws IOException if some I/O error occurs
+     */
+    private void writeObject(ObjectOutputStream out) throws IOException{
+        out.writeObject(this.adjacencies);
+        out.writeObject(this.nodesInfo);
+        out.writeObject(this.octree.getPath());
+    }
+    
+    /**
+     * Routine to read an object of this class from an input stream.
+     * 
+     * @param in input stream
+     * @throws IOException if some I/O error occurs
+     * @throws ClassNotFoundException if object cannot be casted to target class
+     */
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException{
+        this.adjacencies = (Map<JOctreeKey, List<JOctreeKey>>) in.readObject();
+        this.nodesInfo = (Map<JOctreeKey, Pair<Float, Point3D>>) in.readObject();
+        String path = (String) in.readObject();
+        this.octree = JOctree.read(path);
+    }
+    
+    /**************************************************************************
+     *                      CACHE OF STORED KEYS
+     **************************************************************************/
+    
 
     /**
      * Cache of objects "Joctreekey" that will be used in this class. The cache will allow to obtain maps where

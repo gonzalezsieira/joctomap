@@ -1,4 +1,4 @@
-package es.usc.citius.lab.joctomap.util;
+package es.usc.citius.lab.joctomap.module;
 
 import java.util.HashMap;
 import java.util.Map;

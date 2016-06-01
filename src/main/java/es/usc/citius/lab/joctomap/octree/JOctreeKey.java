@@ -1,5 +1,7 @@
 package es.usc.citius.lab.joctomap.octree;
 
+import java.io.Serializable;
+
 
 /**
  * Represents a key of the {@link JOctree}, which is the identifier
@@ -8,7 +10,7 @@ package es.usc.citius.lab.joctomap.octree;
  * 
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  */
-public class JOctreeKey{
+public class JOctreeKey implements Serializable{
 
 	private int x;
 	private int y;

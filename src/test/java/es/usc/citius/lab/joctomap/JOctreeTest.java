@@ -83,9 +83,11 @@ public class JOctreeTest{
 	 */
 	@Test
 	public void test02_readFileOt() throws IOException {
-		octree = JOctree.read(fileRead.getAbsolutePath());
+                String inputPath = fileRead.getAbsolutePath();
+		octree = JOctree.read(inputPath);
 		assertTrue("Octree direction of memory not assigned",
 				octree.getPointer() != 0);
+                assertTrue("Octree input path not assigned", octree.getPath().equals(inputPath));
 	}
 
 	/**
@@ -100,6 +102,7 @@ public class JOctreeTest{
 		// compare by content both files
 		assertTrue("Input and output files with the same content",
 				FileUtils.contentEquals(fileRead, fileWrite));
+                assertTrue("File path not set properly after write", octree.getPath().equals(fileWrite.getAbsolutePath()));
 	}
 	
 	/**

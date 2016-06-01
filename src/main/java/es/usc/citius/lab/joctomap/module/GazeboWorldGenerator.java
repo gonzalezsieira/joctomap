@@ -1,5 +1,6 @@
-package es.usc.citius.lab.joctomap.util;
+package es.usc.citius.lab.joctomap.module;
 
+import es.usc.citius.lab.joctomap.module.Module;
 import es.usc.citius.lab.joctomap.iterators.OctreeIterator;
 import es.usc.citius.lab.joctomap.octree.JOctree;
 import es.usc.citius.lab.motionplanner.core.spatial.Point3D;

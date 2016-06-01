@@ -9,6 +9,7 @@
 #include "nativeobject.h"
 #include "leafbbxiterator.h"
 #include "iteratorinformation.h"
+#include "definitions.h"
 
 using namespace std;
 using namespace octomap;
@@ -37,8 +38,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_coordTo
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	OcTreeKey key = octree->coordToKey(x, y, z);
 	//find class and constructor to instantiate JOCtreekey
-	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeKey");
-	jmethodID constructor = env->GetMethodID(cls, "<init>", "(III)V");
+	jclass cls = env->FindClass(CLS_JOCTREEKEY);
+	jmethodID constructor = env->GetMethodID(cls, METHOD_CONSTRUCTOR, "(III)V");
 	//new JOctreeKey(x, y, z)
 	return env->NewObject(cls, constructor, static_cast<int>(key.k[0]), static_cast<int>(key.k[1]), static_cast<int>(key.k[2]));
 }
@@ -53,8 +54,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_coordTo
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	OcTreeKey key = octree->coordToKey(x, y, z, depth);
 	//find class and constructor to instantiate JOCtreekey
-	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeKey");
-	jmethodID constructor = env->GetMethodID(cls, "<init>", "(III)V");
+	jclass cls = env->FindClass(CLS_JOCTREEKEY);
+	jmethodID constructor = env->GetMethodID(cls, METHOD_CONSTRUCTOR, "(III)V");
 	return env->NewObject(cls, constructor, static_cast<int>(key.k[0]), static_cast<int>(key.k[1]), static_cast<int>(key.k[2]));
 }
 
@@ -66,10 +67,10 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_adjustK
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	//recover field IDs
-	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeKey");
-	jfieldID fieldX = env->GetFieldID(cls, "x", "I");
-	jfieldID fieldY = env->GetFieldID(cls, "y", "I");
-	jfieldID fieldZ = env->GetFieldID(cls, "z", "I");
+	jclass cls = env->FindClass(CLS_JOCTREEKEY);
+	jfieldID fieldX = env->GetFieldID(cls, FIELD_X, SIGNATURE_INT);
+	jfieldID fieldY = env->GetFieldID(cls, FIELD_Y, SIGNATURE_INT);
+	jfieldID fieldZ = env->GetFieldID(cls, FIELD_Z, SIGNATURE_INT);
 	//recover field values
 	int x = env->GetIntField(jkey, fieldX);
 	int y = env->GetIntField(jkey, fieldY);
@@ -90,13 +91,13 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_coordTo
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	//find class and constructor to instantiate JOCtreekey
-	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeKey");
-	jmethodID constructor = env->GetMethodID(cls, "<init>", "(III)V");
+	jclass cls = env->FindClass(CLS_JOCTREEKEY);
+	jmethodID constructor = env->GetMethodID(cls, METHOD_CONSTRUCTOR, "(III)V");
 	//find class and fields of point3d
-	jclass clspoint = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point3D");
-	jfieldID fieldX = env->GetFieldID(clspoint, "x", "F");
-	jfieldID fieldY = env->GetFieldID(clspoint, "y", "F");
-	jfieldID fieldZ = env->GetFieldID(clspoint, "z", "F");
+	jclass clspoint = env->FindClass(CLS_POINT3D);
+	jfieldID fieldX = env->GetFieldID(clspoint, FIELD_X, SIGNATURE_FLOAT);
+	jfieldID fieldY = env->GetFieldID(clspoint, FIELD_Y, SIGNATURE_FLOAT);
+	jfieldID fieldZ = env->GetFieldID(clspoint, FIELD_Z, SIGNATURE_FLOAT);
 	//retrieve values of the fields
 	jfloat x = env->GetFloatField(jcoord, fieldX);
 	jfloat y = env->GetFloatField(jcoord, fieldY);
@@ -114,13 +115,13 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_coordTo
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	//find class and constructor to instantiate JOCtreekey
-	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeKey");
-	jmethodID constructor = env->GetMethodID(cls, "<init>", "(III)V");
+	jclass cls = env->FindClass(CLS_JOCTREEKEY);
+	jmethodID constructor = env->GetMethodID(cls, METHOD_CONSTRUCTOR, "(III)V");
 	//find class and fields of point3d
-	jclass clspoint = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point3D");
-	jfieldID fieldX = env->GetFieldID(clspoint, "x", "F");
-	jfieldID fieldY = env->GetFieldID(clspoint, "y", "F");
-	jfieldID fieldZ = env->GetFieldID(clspoint, "z", "F");
+	jclass clspoint = env->FindClass(CLS_POINT3D);
+	jfieldID fieldX = env->GetFieldID(clspoint, FIELD_X, SIGNATURE_FLOAT);
+	jfieldID fieldY = env->GetFieldID(clspoint, FIELD_Y, SIGNATURE_FLOAT);
+	jfieldID fieldZ = env->GetFieldID(clspoint, FIELD_Z, SIGNATURE_FLOAT);
 	//retrieve values of the fields
 	jfloat x = env->GetFloatField(jcoord, fieldX);
 	jfloat y = env->GetFloatField(jcoord, fieldY);
@@ -138,17 +139,17 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_keyToCo
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	//recover key field IDs
-	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeKey");
-	jfieldID fieldX = env->GetFieldID(cls, "x", "I");
-	jfieldID fieldY = env->GetFieldID(cls, "y", "I");
-	jfieldID fieldZ = env->GetFieldID(cls, "z", "I");
+	jclass cls = env->FindClass(CLS_JOCTREEKEY);
+	jfieldID fieldX = env->GetFieldID(cls, FIELD_X, SIGNATURE_INT);
+	jfieldID fieldY = env->GetFieldID(cls, FIELD_Y, SIGNATURE_INT);
+	jfieldID fieldZ = env->GetFieldID(cls, FIELD_Z, SIGNATURE_INT);
 	//recover key field values
 	int kx = env->GetIntField(jkey, fieldX);
 	int ky = env->GetIntField(jkey, fieldY);
 	int kz = env->GetIntField(jkey, fieldZ);
 	//recover class of the point3d and its constructor, to return the instance
-	jclass clspoint = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point3D");
-	jmethodID constructor = env->GetMethodID(clspoint, "<init>", "(FFF)V");
+	jclass clspoint = env->FindClass(CLS_POINT3D);
+	jmethodID constructor = env->GetMethodID(clspoint, METHOD_CONSTRUCTOR, "(FFF)V");
 	//recover coordinate of the key
 	point3d coord = octree->keyToCoord(OcTreeKey(kx, ky, kz));
 	//return new object
@@ -163,17 +164,17 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_keyToCo
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	//recover key field IDs
-	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeKey");
-	jfieldID fieldX = env->GetFieldID(cls, "x", "I");
-	jfieldID fieldY = env->GetFieldID(cls, "y", "I");
-	jfieldID fieldZ = env->GetFieldID(cls, "z", "I");
+	jclass cls = env->FindClass(CLS_JOCTREEKEY);
+	jfieldID fieldX = env->GetFieldID(cls, FIELD_X, SIGNATURE_INT);
+	jfieldID fieldY = env->GetFieldID(cls, FIELD_Y, SIGNATURE_INT);
+	jfieldID fieldZ = env->GetFieldID(cls, FIELD_Z, SIGNATURE_INT);
 	//recover key field values
 	int kx = env->GetIntField(jkey, fieldX);
 	int ky = env->GetIntField(jkey, fieldY);
 	int kz = env->GetIntField(jkey, fieldZ);
 	//recover class of the point3d and its constructor, to return the instance
-	jclass clspoint = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point3D");
-	jmethodID constructor = env->GetMethodID(clspoint, "<init>", "(FFF)V");
+	jclass clspoint = env->FindClass(CLS_POINT3D);
+	jmethodID constructor = env->GetMethodID(clspoint, METHOD_CONSTRUCTOR, "(FFF)V");
 	//recover coordinate of the key
 	point3d coord = octree->keyToCoord(OcTreeKey(kx, ky, kz), depth);
 	//return new object
@@ -189,10 +190,10 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_search_
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	//recover key field IDs
-	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeKey");
-	jfieldID fieldX = env->GetFieldID(cls, "x", "I");
-	jfieldID fieldY = env->GetFieldID(cls, "y", "I");
-	jfieldID fieldZ = env->GetFieldID(cls, "z", "I");
+	jclass cls = env->FindClass(CLS_JOCTREEKEY);
+	jfieldID fieldX = env->GetFieldID(cls, FIELD_X, SIGNATURE_INT);
+	jfieldID fieldY = env->GetFieldID(cls, FIELD_Y, SIGNATURE_INT);
+	jfieldID fieldZ = env->GetFieldID(cls, FIELD_Z, SIGNATURE_INT);
 	//recover field values
 	int x = env->GetIntField(jkey, fieldX);
 	int y = env->GetIntField(jkey, fieldY);
@@ -204,8 +205,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_search_
 	//return new node instance if the node is found in the octree
 	if(node != NULL){
 		//find class and constructor to instantiate joctreenode
-		cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeNode");
-		jmethodID constructor = env->GetMethodID(cls, "<init>", "(J)V");
+		cls = env->FindClass(CLS_JOCTREENODE);
+		jmethodID constructor = env->GetMethodID(cls, METHOD_CONSTRUCTOR, "(J)V");
 		//return new instance
 		return env->NewObject(cls, constructor, node);
 	}
@@ -227,8 +228,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_search_
 	//return new node instance if the node is found in the octree
 	if(node != NULL){
 		//find class and constructor to instantiate joctreenode
-		jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeNode");
-		jmethodID constructor = env->GetMethodID(cls, "<init>", "(J)V");
+		jclass cls = env->FindClass(CLS_JOCTREENODE);
+		jmethodID constructor = env->GetMethodID(cls, METHOD_CONSTRUCTOR, "(J)V");
 		//return new instance
 		return env->NewObject(cls, constructor, node);
 	}
@@ -261,8 +262,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_updateN
 	//update information of the node
 	OcTreeNode *node = octree->updateNode(x, y, z, (bool) occupied, false);
 	//find class and constructor to instantiate joctreenode
-	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeNode");
-	jmethodID constructor = env->GetMethodID(cls, "<init>", "(J)V");
+	jclass cls = env->FindClass(CLS_JOCTREENODE);
+	jmethodID constructor = env->GetMethodID(cls, METHOD_CONSTRUCTOR, "(J)V");
 	//return new instance
 	return env->NewObject(cls, constructor, node);
 }
@@ -286,10 +287,10 @@ JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_setBBX
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	//recover field information of the class
-	jclass clsPoint = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point3D");
-	jfieldID fieldx = env->GetFieldID(clsPoint, "x", "F");
-	jfieldID fieldy = env->GetFieldID(clsPoint, "y", "F");
-	jfieldID fieldz = env->GetFieldID(clsPoint, "z", "F");
+	jclass clsPoint = env->FindClass(CLS_POINT3D);
+	jfieldID fieldx = env->GetFieldID(clsPoint, FIELD_X, SIGNATURE_FLOAT);
+	jfieldID fieldy = env->GetFieldID(clsPoint, FIELD_Y, SIGNATURE_FLOAT);
+	jfieldID fieldz = env->GetFieldID(clsPoint, FIELD_Z, SIGNATURE_FLOAT);
 	//recover information of point3d: min
 	jfloat minx = env->GetFloatField(minPoint, fieldx);
 	jfloat miny = env->GetFloatField(minPoint, fieldy);
@@ -312,10 +313,10 @@ JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_setBBXMin
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	//recover field information of the class
-	jclass clsPoint = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point3D");
-	jfieldID fieldx = env->GetFieldID(clsPoint, "x", "F");
-	jfieldID fieldy = env->GetFieldID(clsPoint, "y", "F");
-	jfieldID fieldz = env->GetFieldID(clsPoint, "z", "F");
+	jclass clsPoint = env->FindClass(CLS_POINT3D);
+	jfieldID fieldx = env->GetFieldID(clsPoint, FIELD_X, SIGNATURE_FLOAT);
+	jfieldID fieldy = env->GetFieldID(clsPoint, FIELD_Y, SIGNATURE_FLOAT);
+	jfieldID fieldz = env->GetFieldID(clsPoint, FIELD_Z, SIGNATURE_FLOAT);
 	//recover information of point3d: min
 	jfloat minx = env->GetFloatField(minPoint, fieldx);
 	jfloat miny = env->GetFloatField(minPoint, fieldy);
@@ -332,10 +333,10 @@ JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_setBBXMax
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	//recover field information of the class
-	jclass clsPoint = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point3D");
-	jfieldID fieldx = env->GetFieldID(clsPoint, "x", "F");
-	jfieldID fieldy = env->GetFieldID(clsPoint, "y", "F");
-	jfieldID fieldz = env->GetFieldID(clsPoint, "z", "F");
+	jclass clsPoint = env->FindClass(CLS_POINT3D);
+	jfieldID fieldx = env->GetFieldID(clsPoint, FIELD_X, SIGNATURE_FLOAT);
+	jfieldID fieldy = env->GetFieldID(clsPoint, FIELD_Y, SIGNATURE_FLOAT);
+	jfieldID fieldz = env->GetFieldID(clsPoint, FIELD_Z, SIGNATURE_FLOAT);
 	//recover information of point3d: max
 	jfloat maxx = env->GetFloatField(maxPoint, fieldx);
 	jfloat maxy = env->GetFloatField(maxPoint, fieldy);
@@ -386,8 +387,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getBBXC
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	//get value
 	point3d point = octree->getBBXCenter();
-	jclass clspoint = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point3D");
-	jmethodID constructor = env->GetMethodID(clspoint, "<init>", "(FFF)V");
+	jclass clspoint = env->FindClass(CLS_POINT3D);
+	jmethodID constructor = env->GetMethodID(clspoint, METHOD_CONSTRUCTOR, "(FFF)V");
 	//new Point3D
 	return env->NewObject(clspoint, constructor, static_cast<float>(point.x()), static_cast<float>(point.y()), static_cast<float>(point.z()));
 }
@@ -401,8 +402,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getBBXM
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	//get value
 	point3d min = octree->getBBXMin();
-	jclass clspoint = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point3D");
-	jmethodID constructor = env->GetMethodID(clspoint, "<init>", "(FFF)V");
+	jclass clspoint = env->FindClass(CLS_POINT3D);
+	jmethodID constructor = env->GetMethodID(clspoint, METHOD_CONSTRUCTOR, "(FFF)V");
 	//new Point3D
 	return env->NewObject(clspoint, constructor, static_cast<float>(min.x()), static_cast<float>(min.y()), static_cast<float>(min.z()));
 }
@@ -416,8 +417,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getBBXM
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	//get value
 	point3d max = octree->getBBXMax();
-	jclass clspoint = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point3D");
-	jmethodID constructor = env->GetMethodID(clspoint, "<init>", "(FFF)V");
+	jclass clspoint = env->FindClass(CLS_POINT3D);
+	jmethodID constructor = env->GetMethodID(clspoint, METHOD_CONSTRUCTOR, "(FFF)V");
 	//new Point3D
 	return env->NewObject(clspoint, constructor, static_cast<float>(max.x()), static_cast<float>(max.y()), static_cast<float>(max.z()));
 }
@@ -432,8 +433,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getMetr
 	double x, y, z;
 	//get value
 	octree->getMetricMin(x, y, z);
-	jclass clspoint = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point3D");
-	jmethodID constructor = env->GetMethodID(clspoint, "<init>", "(FFF)V");
+	jclass clspoint = env->FindClass(CLS_POINT3D);
+	jmethodID constructor = env->GetMethodID(clspoint, METHOD_CONSTRUCTOR, "(FFF)V");
 	//new Point3D
 	return env->NewObject(clspoint, constructor, static_cast<float>(x), static_cast<float>(y), static_cast<float>(z));
 }
@@ -448,8 +449,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getMetr
 	double x, y, z;
 	//get value
 	octree->getMetricMax(x, y, z);
-	jclass clspoint = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point3D");
-	jmethodID constructor = env->GetMethodID(clspoint, "<init>", "(FFF)V");
+	jclass clspoint = env->FindClass(CLS_POINT3D);
+	jmethodID constructor = env->GetMethodID(clspoint, METHOD_CONSTRUCTOR, "(FFF)V");
 	//new Point3D
 	return env->NewObject(clspoint, constructor, static_cast<float>(x), static_cast<float>(y), static_cast<float>(z));
 }
@@ -507,10 +508,10 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_leafBBX
 	//recover octree
 	OcTree *octree = (OcTree*) getPointer(env, jtree);
 	//recover field information of the class
-	jclass clsPoint = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point3D");
-	jfieldID fieldx = env->GetFieldID(clsPoint, "x", "F");
-	jfieldID fieldy = env->GetFieldID(clsPoint, "y", "F");
-	jfieldID fieldz = env->GetFieldID(clsPoint, "z", "F");
+	jclass clsPoint = env->FindClass(CLS_POINT3D);
+	jfieldID fieldx = env->GetFieldID(clsPoint, FIELD_X, SIGNATURE_FLOAT);
+	jfieldID fieldy = env->GetFieldID(clsPoint, FIELD_Y, SIGNATURE_FLOAT);
+	jfieldID fieldz = env->GetFieldID(clsPoint, FIELD_Z, SIGNATURE_FLOAT);
 	//recover information of point3d: min
 	jfloat minx = env->GetFloatField(minPoint, fieldx);
 	jfloat miny = env->GetFloatField(minPoint, fieldy);
@@ -524,8 +525,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_leafBBX
 	OcTree::leaf_bbx_iterator it2 = octree->end_leafs_bbx();
 	LeafBBXIteratorInformation *info = new LeafBBXIteratorInformation(it, it2);
 	//instantiate iterator
-	jclass clsIterator = env->FindClass("es/usc/citius/lab/joctomap/iterators/LeafBBXIterator");
-	jmethodID constructorID = env->GetMethodID(clsIterator, "<init>", "(J)V");
+	jclass clsIterator = env->FindClass(CLS_LEAFBBXITERATOR);
+	jmethodID constructorID = env->GetMethodID(clsIterator, METHOD_CONSTRUCTOR, "(J)V");
 	return env->NewObject(clsIterator, constructorID, info);
 }
 
@@ -543,8 +544,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_leafBBX
 	OcTree::leaf_bbx_iterator *it = new OcTree::leaf_bbx_iterator(octree, *minKey, *maxKey, maxDepth);
 	OcTree::leaf_bbx_iterator *it2 = new OcTree::leaf_bbx_iterator(octree->end_leafs_bbx());
 	//instantiate iterator
-	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/iterators/LeafBBXIterator");
-	jmethodID constructorID = env->GetMethodID(cls, "<init>", "(JJ)V");
+	jclass cls = env->FindClass(CLS_LEAFBBXITERATOR);
+	jmethodID constructorID = env->GetMethodID(cls, METHOD_CONSTRUCTOR, "(JJ)V");
 	return env->NewObject(cls, constructorID, it, it2);
 }
 
@@ -560,6 +561,9 @@ JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_write
 	const char *nativeFilename = env->GetStringUTFChars(filename, &iscopy);
 	//write octree in filename
 	bool value = octree->write(nativeFilename);
+        //set path to which the octree was read
+        jfieldID pathField = env->GetFieldID(env->GetObjectClass(obj), FIELD_PATH, CLS_STRING);
+        env->SetObjectField(obj, pathField, filename);
 	//release memory of native char*
 	env->ReleaseStringUTFChars(filename, nativeFilename);
 	//return obtained value
@@ -573,7 +577,7 @@ JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_write
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_read
   (JNIEnv *env, jclass cls, jstring filename){
 	//find constructor to instantiate the result
-	jmethodID constructor = env->GetMethodID(cls, "<init>", "(J)V");
+	jmethodID constructor = env->GetMethodID(cls, METHOD_CONSTRUCTOR, "(J)V");
 	//convert jstring into native char*
 	jboolean iscopy = false;
 	/*
@@ -617,7 +621,12 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_read
 	ot->readData(stream);
 	//close input stream
 	stream.close();
-	return env->NewObject(cls, constructor, ot);
+        //create joctree object
+	jobject jtree =  env->NewObject(cls, constructor, ot);
+        //set path from which the octree was read
+        jfieldID pathField = env->GetFieldID(cls, FIELD_PATH, CLS_STRING);
+        env->SetObjectField(jtree, pathField, filename);
+        return jtree;
 }
 
 /**
@@ -626,7 +635,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_read
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_create
   (JNIEnv *env, jclass cls, jfloat res){
 	//find constructor to instantiate the result
-	jmethodID constructor = env->GetMethodID(cls, "<init>", "(J)V");
+	jmethodID constructor = env->GetMethodID(cls, METHOD_CONSTRUCTOR, "(J)V");
 	//instantiate new empty octree
 	OcTree *octree = new OcTree(res);
 	//return new java instance of the octree
