@@ -52,7 +52,7 @@ public class AdjacencyMapTest {
                                 Math.abs(centerCell1.getZ() - centerCell2.getZ())
                         )
                 );
-                assertTrue("Distance between centers is greater than sum of half size of cells", sizeCell1 / 2f + sizeCell2 / 2f < distanceMaxAxis);
+                assertTrue("Distance between centers is greater than sum of half size of cells", sizeCell1 / 2f + sizeCell2 / 2f <= distanceMaxAxis);
             }
         }
     }
