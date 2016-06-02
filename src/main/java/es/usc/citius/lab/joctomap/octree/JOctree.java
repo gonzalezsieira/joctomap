@@ -4,6 +4,29 @@ import es.usc.citius.lab.joctomap.iterators.OctreeIterator;
 import es.usc.citius.lab.joctomap.util.NativeObject;
 import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
 
+/**
+ * This class wraps an octree object in the Octomap library to be used in 
+ * java; native wrapped functions include the following:
+ * <ul>
+ *      <li>Translation between world coordinates and map keys.</li>
+ *      <li>Adjust a key to different depth levels.</li>
+ *      <li>Look for a node in the octree.</li>
+ *      <li>Query occupancy of a node.</li>
+ *      <li>Update occupancy of a node.</li>
+ *      <li>Manage limits and usage of the octree bounding box.</li>
+ *      <li>Query structure of the octree: size, depth, resolution.</li>
+ *      <li>Query size of a node.</li>
+ *      <li>Query center/limits of the octree: bounding box, space.</li>
+ *      <li>Query if the bounding box is set and applied.</li>
+ *      <li>Create iterators to traverse the leaf nodes of the octree.</li>
+ *      <li>Prune and expand nodes according to their occupancy.</li>
+ *      <li>Recalculate occupancy of inner nodes.</li>
+ *      <li>Save and load octree objects to disk.</li>
+ *      <li>Create empty octree.</li>
+ * </ul>
+ * 
+ * @author adrian.gonzalez
+ */
 public class JOctree extends NativeObject{
 	
         private String path;
