@@ -59,6 +59,7 @@ public class AdjacencyMap implements Serializable{
             float size1 = it.size();
             JOctreeKey key = cacheOfKeys.getInstance(it.key());
             nodesInfo.put(key, new Pair<Float, Point3D>(it.size(), it.coordinate()));
+            adjacencies.put(key, new ArrayList<JOctreeKey>());
             OctreeIterator it2;
             for(it2 = octree.leafBBXIterator(new Point3D(coordinate1.getX() - resolution, coordinate1.getY() - resolution, coordinate1.getZ() - resolution), new Point3D(coordinate1.getX() + resolution, coordinate1.getY() + resolution, coordinate1.getZ() + resolution), 0); it2.hasNext(); it2.next()){
                 //get coordinates and size
@@ -72,12 +73,7 @@ public class AdjacencyMap implements Serializable{
                         FastMath.abs(coordinate1.getY() - coordinate2.getY()) - sizeAdded <= EPSILON &&
                         FastMath.abs(coordinate1.getZ() - coordinate2.getZ()) - sizeAdded <= EPSILON) {
                     //adjacent cells
-                    List<JOctreeKey> adjacentCells = adjacencies.get(key);
-                    if (adjacentCells == null) {
-                        adjacentCells = new ArrayList<JOctreeKey>();
-                        adjacencies.put(key, adjacentCells);
-                    }
-                    adjacentCells.add(key2);
+                    adjacencies.get(key).add(key2);
                 }
             }
             it2.dispose();
@@ -97,6 +93,10 @@ public class AdjacencyMap implements Serializable{
 
     public Map<JOctreeKey, List<JOctreeKey>> getAdjacencies(){
         return adjacencies;
+    }
+
+    public Map<JOctreeKey, Pair<Float, Point3D>> getNodesInfo() {
+        return nodesInfo;
     }
 
     public JOctree getOctree() {
