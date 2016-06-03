@@ -5,7 +5,6 @@ import es.usc.citius.lab.joctomap.util.AdjacencyMap;
 import es.usc.citius.lab.joctomap.util.JOctomapLogger;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
 /**
@@ -42,7 +41,7 @@ public class AdjacencyMapBuilder extends Module{
                 Option.builder("i")
                         .required()
                         .desc("Input octree file")
-                        .numberOfArgs(1)
+                        .hasArg()
                         .longOpt("input")
                         .build()
         );
@@ -50,7 +49,7 @@ public class AdjacencyMapBuilder extends Module{
                 Option.builder("o")
                         .required()
                         .desc("Output file")
-                        .numberOfArgs(1)
+                        .hasArg()
                         .longOpt("output")
                         .build()
         );

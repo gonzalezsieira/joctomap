@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
 /**
@@ -89,7 +88,7 @@ public class GazeboWorldGenerator extends Module {
                 Option.builder("i")
                         .required()
                         .desc("Input octree file")
-                        .numberOfArgs(1)
+                        .hasArg()
                         .longOpt("input")
                         .build()
         );
@@ -97,7 +96,7 @@ public class GazeboWorldGenerator extends Module {
                 Option.builder("o")
                         .required()
                         .desc("Output file")
-                        .numberOfArgs(1)
+                        .hasArg()
                         .longOpt("output")
                         .build()
         );

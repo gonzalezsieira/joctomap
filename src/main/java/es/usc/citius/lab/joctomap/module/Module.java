@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.reflections.Reflections;
 
@@ -25,7 +25,14 @@ public abstract class Module {
      */
     public static Options getGenericOptions() {
         Options op = new Options();
-        op.addOption(OptionBuilder.withDescription("Tool to execute").hasArg().isRequired().withArgName("tool_name").create("t"));
+        op.addOption(
+                Option.builder("t")
+                        .desc("Tool to execute")
+                        .hasArg()
+                        .required()
+                        .argName("tool_name")
+                        .build()
+        );
         return op;
     }
 	

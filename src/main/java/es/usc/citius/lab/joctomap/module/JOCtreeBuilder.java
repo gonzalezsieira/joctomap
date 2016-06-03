@@ -11,7 +11,6 @@ import es.usc.citius.lab.joctomap.util.JOctomapLogger;
 import es.usc.citius.lab.joctomap.util.PPMFileReader;
 import java.text.DecimalFormat;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
 /**
@@ -121,7 +120,7 @@ public class JOCtreeBuilder extends Module{
             Option.builder("o")
                 .required()
                 .desc("Output .ot file")
-                .numberOfArgs(1)
+                .hasArg()
                 .longOpt("output")
                 .argName("ot")
                 .build()
