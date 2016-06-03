@@ -1,7 +1,7 @@
 package es.usc.citius.lab.joctomap.module;
 
-import es.usc.citius.lab.joctomap.module.Module;
 import es.usc.citius.lab.joctomap.iterators.OctreeIterator;
+import static es.usc.citius.lab.joctomap.module.Module.getGenericOptions;
 import es.usc.citius.lab.joctomap.octree.JOctree;
 import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
 import org.apache.commons.cli.CommandLine;
@@ -9,16 +9,14 @@ import org.apache.commons.cli.CommandLine;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Options;
 
 /**
  * Created by adrian.gonzalez on 22/10/15.
  */
 public class GazeboWorldGenerator extends Module {
-
-    @Override
-    public String getName() {
-        return "gworld";
-    }
 
     @Override
     public void execute(CommandLine args) {
@@ -82,6 +80,28 @@ public class GazeboWorldGenerator extends Module {
         } catch (IOException ex) {
             System.err.println(ex);
         }
+    }
+
+    @Override
+    public Options getModuleOptions() {
+        Options op = getGenericOptions();
+        op.addOption(
+                Option.builder("i")
+                        .required()
+                        .desc("Input octree file")
+                        .numberOfArgs(1)
+                        .longOpt("input")
+                        .build()
+        );
+        op.addOption(
+                Option.builder("o")
+                        .required()
+                        .desc("Output file")
+                        .numberOfArgs(1)
+                        .longOpt("output")
+                        .build()
+        );
+        return op;
     }
 
 }

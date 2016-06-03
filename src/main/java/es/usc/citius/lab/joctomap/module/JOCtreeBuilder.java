@@ -1,6 +1,5 @@
 package es.usc.citius.lab.joctomap.module;
 
-import es.usc.citius.lab.joctomap.module.Module;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -11,6 +10,9 @@ import es.usc.citius.lab.joctomap.octree.JOctreeNode;
 import es.usc.citius.lab.joctomap.util.JOctomapLogger;
 import es.usc.citius.lab.joctomap.util.PPMFileReader;
 import java.text.DecimalFormat;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Options;
 
 /**
  * Builder for {@link JOctree}. Main functionality of this class is to instantiate 
@@ -22,11 +24,6 @@ import java.text.DecimalFormat;
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  */
 public class JOCtreeBuilder extends Module{
-
-    @Override
-    public String getName() {
-        return "ppmot";
-    }
 
     @Override
     public void execute(CommandLine args) {
@@ -106,6 +103,30 @@ public class JOCtreeBuilder extends Module{
         octree.updateInnerOccupancy();
         octree.prune();
         return octree;
+    }
+
+    @Override
+    public Options getModuleOptions() {
+        Options op = new Options();
+        op.addOption(
+            Option.builder("i")
+                .required()
+                .desc("Input .ppm file, resolution, size X (m), size Y (m) and max depth of cells")
+                .numberOfArgs(5)
+                .longOpt("input")
+                .argName("ppmFile> <resolution> <sizeX> <sizeY> <maxDepthCell")
+                .build()
+        );
+        op.addOption(
+            Option.builder("o")
+                .required()
+                .desc("Output .ot file")
+                .numberOfArgs(1)
+                .longOpt("output")
+                .argName("ot")
+                .build()
+        );
+        return op;
     }
 	
 }

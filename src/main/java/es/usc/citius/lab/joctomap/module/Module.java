@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Options;
+import org.reflections.Reflections;
 
 /**
  * Definition of an executable module for the application. The
@@ -13,15 +16,18 @@ import org.apache.commons.cli.CommandLine;
  */
 public abstract class Module {
 	
-	private static final Map<String, Class<?>> modules = registerModules();
+    public static final Map<String, Class<?>> MODULES = registerModules();
 
-	/**
-	 * Name of the module that will be called by the "-t" argument of the
-	 * application
-	 * 
-	 * @return module name
-	 */
-	public abstract String getName();
+    /**
+     * Retrieves the set of generic options used by all modules.
+     *
+     * @return module-independent {@link Options}
+     */
+    public static Options getGenericOptions() {
+        Options op = new Options();
+        op.addOption(OptionBuilder.withDescription("Tool to execute").hasArg().isRequired().withArgName("tool_name").create("t"));
+        return op;
+    }
 	
 	/**
 	 * Executes the functions of the module based on the {@link CommandLine} parsed
@@ -37,8 +43,10 @@ public abstract class Module {
 	 */
     private static Map<String, Class<?>> registerModules(){
         Map<String, Class<?>> modulesMap = new HashMap<String, Class<?>>();
-        modulesMap.put("ppmot", JOCtreeBuilder.class);
-        modulesMap.put("gworld", GazeboWorldGenerator.class);
+        Reflections subclasses = new Reflections(Module.class.getPackage().getName());
+        for(Class current : subclasses.getSubTypesOf(Module.class)){
+            modulesMap.put(current.getSimpleName(), current);
+        }
         return modulesMap;
     }
     
@@ -50,10 +58,18 @@ public abstract class Module {
      */
     @SuppressWarnings("unchecked")
 	public static Class<Module> getModule(String s) throws RuntimeException{
-        if(!modules.containsKey(s)){
-            throw new RuntimeException("Module not found: " + s);
+        if(!MODULES.containsKey(s)){
+            throw new IllegalArgumentException("Module not found: " + s + ". Available modules are: " + MODULES.keySet());
         }
-        return (Class<Module>) modules.get(s);
+        return (Class<Module>) MODULES.get(s);
     }
+    
+    /**
+     * This method constructs a list of required arguments in order to validate
+     * inputs.
+     * 
+     * @return instance of {@link Options} to let CLI parse inputs
+     */
+    public abstract Options getModuleOptions();
     
 }
