@@ -26,7 +26,7 @@ public class AdjacencyMapBuilder extends Module{
         JOctree octree = JOctree.read(args.getOptionValue("i"));
         //Creating adjacency map
         JOctomapLogger.info("Creating adjacency map...");
-        AdjacencyMap map = new AdjacencyMap(octree);
+        AdjacencyMap map = AdjacencyMap.create(octree);
         //store result
         JOctomapLogger.info("Storing to file: " + args.getOptionValue("o"));
         map.write(args.getOptionValue("o"));

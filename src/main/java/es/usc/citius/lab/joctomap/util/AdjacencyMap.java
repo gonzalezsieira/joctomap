@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import org.apache.commons.math3.util.FastMath;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,19 +37,18 @@ public class AdjacencyMap implements Serializable{
     private double EPSILON = 1e-3;
 
     /**
-     * Here the adjacency between the leafs of the octreee is calculated. Two leafs are considered adjacent
-     * if the distance between the paralell planes containing their centers is the sum of their resolutions.
+     * Here the adjacency between the leafs of the octreee is calculated; two leafs are considered adjacent
+     * if the distance between the paralell planes containing their centers is the sum of their resolutions;
+     * here the adjacency map is filled using a java implementation.
      *
      * @param octree current octree instance
      */
-    public AdjacencyMap(JOctree octree){
+    private AdjacencyMap(JOctree octree){
         this.adjacencies = new HashMap<JOctreeKey, List<JOctreeKey>>();
         this.octree = octree;
         this.nodesInfo = new HashMap<JOctreeKey, Pair<Float, Point3D>>();
         //create cache
         Cache cacheOfKeys = new Cache();
-
-        float resolution = octree.getResolution();
 
         //iterate over the cells of the octree twice, to generate the distances in pairs
         OctreeIterator it;
@@ -60,8 +58,9 @@ public class AdjacencyMap implements Serializable{
             JOctreeKey key = cacheOfKeys.getInstance(it.key());
             nodesInfo.put(key, new Pair<Float, Point3D>(it.size(), it.coordinate()));
             adjacencies.put(key, new ArrayList<JOctreeKey>());
+            float diff = octree.getResolution() + it.size() / 2f;
             OctreeIterator it2;
-            for(it2 = octree.leafBBXIterator(new Point3D(coordinate1.getX() - resolution, coordinate1.getY() - resolution, coordinate1.getZ() - resolution), new Point3D(coordinate1.getX() + resolution, coordinate1.getY() + resolution, coordinate1.getZ() + resolution), 0); it2.hasNext(); it2.next()){
+            for(it2 = octree.leafBBXIterator(new Point3D(coordinate1.getX() - diff, coordinate1.getY() - diff, coordinate1.getZ() - diff), new Point3D(coordinate1.getX() + diff, coordinate1.getY() + diff, coordinate1.getZ() + diff), 0); it2.hasNext(); it2.next()){
                 //get coordinates and size
                 Point3D coordinate2 = it2.coordinate();
                 float sizeAdded = size1/2f + it2.size()/2f;
@@ -69,9 +68,9 @@ public class AdjacencyMap implements Serializable{
                 //skip current keys
                 //calculate adjacency using the AABB method (Axis Aligned Bounding Box)
                 if (!key.equals(key2) &&
-                        FastMath.abs(coordinate1.getX() - coordinate2.getX()) - sizeAdded <= EPSILON &&
-                        FastMath.abs(coordinate1.getY() - coordinate2.getY()) - sizeAdded <= EPSILON &&
-                        FastMath.abs(coordinate1.getZ() - coordinate2.getZ()) - sizeAdded <= EPSILON) {
+                        Math.abs(coordinate1.getX() - coordinate2.getX()) - sizeAdded <= EPSILON &&
+                        Math.abs(coordinate1.getY() - coordinate2.getY()) - sizeAdded <= EPSILON &&
+                        Math.abs(coordinate1.getZ() - coordinate2.getZ()) - sizeAdded <= EPSILON) {
                     //adjacent cells
                     adjacencies.get(key).add(key2);
                 }
@@ -80,6 +79,49 @@ public class AdjacencyMap implements Serializable{
         }
         it.dispose();
     }
+    
+    /**
+     * This initializes the adjacency map with the basic structures that are used to store information;
+     * octree is initialized in JNI code.
+     */
+    private AdjacencyMap(){
+        this.adjacencies = new HashMap<JOctreeKey, List<JOctreeKey>>();
+        this.nodesInfo = new HashMap<JOctreeKey, Pair<Float, Point3D>>();
+    }
+    
+    /**
+     * Native method to obtain an instance of AdjacencyMap from an octree.
+     * 
+     * @param octree {@link JOctree} instance
+     * @return instance of {@link AdjacencyMap}
+     */
+    public static AdjacencyMap create(JOctree octree){
+        //initialize structures
+        AdjacencyMap map = new AdjacencyMap();
+        //assign octree
+        map.octree = octree;
+        //fill with JNI method
+        map.initializeJNI();
+        //retrieve result
+        return map;
+    }
+    
+    /**
+     * Java method to obtain an instance of AdjacencyMap from an octree.
+     * 
+     * @param octree {@link JOctree} instance
+     * @return instance of {@link AdjacencyMap}
+     * @deprecated it is preferrable to use the native implementation provided in {@link #create(es.usc.citius.lab.joctomap.octree.JOctree) } rather than the java one
+     */
+    public static AdjacencyMap createJava(JOctree octree){
+       return new AdjacencyMap(octree);
+    }
+    
+    /**
+     * This fills the structures of the adjacency map using full-native
+     * implementation method for efficiency.
+     */
+    private native void initializeJNI();
 
     /**
      * Retrieves the adjacencies for a current key.

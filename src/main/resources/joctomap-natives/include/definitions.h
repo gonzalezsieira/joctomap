@@ -21,12 +21,19 @@
 #define CLS_JOCTREENODE "es/usc/citius/lab/joctomap/octree/JOctreeNode"
 #define CLS_JOCTREEKEY "es/usc/citius/lab/joctomap/octree/JOctreeKey"
 #define CLS_JOCTREE "es/usc/citius/lab/joctomap/octree/JOctree"
+#define CLS_HASHMAP "Ljava/util/HashMap;"
+#define CLS_PAIR "es/usc/citius/lab/motionplanner/core/util/Pair"
+#define CLS_FLOAT "Ljava/lang/Float;"
+#define CLS_ARRAYLIST "Ljava/util/ArrayList;"
 
 //Fields
 #define FIELD_PATH "path"
 #define FIELD_X "x"
 #define FIELD_Y "y"
 #define FIELD_Z "z"
+#define FIELD_ADJACENCYMAP_OCTREE "octree"
+#define FIELD_ADJACENCYMAP_NODESINFO "nodesInfo"
+#define FIELD_ADJACENCYMAP_ADJACENCIES "adjacencies"
 
 //Methods
 #define METHOD_CONSTRUCTOR "<init>"
