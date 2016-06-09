@@ -91,6 +91,7 @@ public class AdjacencyMapTest {
         compareMaps(loadedMap);
     }
     
+    @Test
     public void test03_nativeImplementation(){
         Stopwatch timer = Stopwatch.createStarted();
         AdjacencyMap adjacencyMapJNI = AdjacencyMap.create(octree);

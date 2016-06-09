@@ -27,16 +27,16 @@ JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_util_AdjacencyMap_initial
     //error margin
     float EPSILON = 0.001f;
     //retrieve fields from adjacencymap
-    jclass cls_jadjacencymap = env->GetObjectClass(jadjacencymap);
+    jclass cls_jadjacencymap = env->FindClass(CLS_JADJACENCYMAP);
     jfieldID field_joctomap = env->GetFieldID(cls_jadjacencymap, FIELD_ADJACENCYMAP_OCTREE, CLS_JOCTREE);
-    jfieldID field_nodes_info = env->GetFieldID(cls_jadjacencymap, FIELD_ADJACENCYMAP_NODESINFO, CLS_HASHMAP);
-    jfieldID field_adjacencies = env->GetFieldID(cls_jadjacencymap, FIELD_ADJACENCYMAP_ADJACENCIES, CLS_HASHMAP);
+    jfieldID field_nodes_info = env->GetFieldID(cls_jadjacencymap, FIELD_ADJACENCYMAP_NODESINFO, CLS_MAP);
+    jfieldID field_adjacencies = env->GetFieldID(cls_jadjacencymap, FIELD_ADJACENCYMAP_ADJACENCIES, CLS_MAP);
     //retrieve objects from fields
     jobject joctree = env->GetObjectField(jadjacencymap, field_joctomap);
     jobject jnodes_info = env->GetObjectField(jadjacencymap, field_nodes_info);
     jobject jadjacencies = env->GetObjectField(jadjacencymap, field_adjacencies);
     //retrieve HashMap, JOctreeKey, Pair, Point3D class
-    jclass cls_hashmap = env->FindClass(CLS_HASHMAP);
+    jclass cls_hashmap = env->FindClass(CLS_MAP);
     jclass cls_joctreekey = env->FindClass(CLS_JOCTREEKEY);
     jclass cls_pair = env->FindClass(CLS_PAIR);
     jclass cls_point3d = env->FindClass(CLS_POINT3D);
@@ -47,7 +47,7 @@ JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_util_AdjacencyMap_initial
     jmethodID method_arraylist_add = env->GetMethodID(cls_arraylist, "add", "(Ljava/lang/Object;)Z");
     jmethodID constructor_pair = env->GetMethodID(cls_pair, METHOD_CONSTRUCTOR, "(Ljava/lang/Object;Ljava/lang/Object;)V");
     jmethodID constructor_point3d = env->GetMethodID(cls_point3d, METHOD_CONSTRUCTOR, "(FFF)V");
-    jmethodID constructor_joctreekey = env->GetMethodID(cls_joctreekey, METHOD_CONSTRUCTOR, "(FFF)V");
+    jmethodID constructor_joctreekey = env->GetMethodID(cls_joctreekey, METHOD_CONSTRUCTOR, "(III)V");
     jmethodID constructor_float = env->GetMethodID(cls_float, METHOD_CONSTRUCTOR, "(F)V");
     jmethodID constructor_arraylist = env->GetMethodID(cls_arraylist, METHOD_CONSTRUCTOR, "()V");
     
@@ -83,19 +83,39 @@ JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_util_AdjacencyMap_initial
             OcTreeKey key2 = it2.getKey();
             //calculate (sum of sizes of both cells / 2.0f)
             float size_added = size/2.0f + static_cast<float>(it2.getSize())/2.0f;
-            //build object "joctreekey"
-            jobject joctreekey2 = env->NewObject(cls_joctreekey, constructor_joctreekey, key2.k[0], key2.k[1], key2.k[2]);
             //calculate if cells are adjacent
             if(key != key2 
                     && std::abs(coordinate.x() - coordinate2.x()) - size_added <= EPSILON
                     && std::abs(coordinate.y() - coordinate2.y()) - size_added <= EPSILON
                     && std::abs(coordinate.z() - coordinate2.z()) - size_added <= EPSILON
             ){
+                //build object "joctreekey"
+                jobject joctreekey2 = env->NewObject(cls_joctreekey, constructor_joctreekey, key2.k[0], key2.k[1], key2.k[2]);
                 //add cell as adjacent
                 env->CallBooleanMethod(jarraylist, method_arraylist_add, joctreekey2);
+                //release local ref
+                env->DeleteLocalRef(joctreekey2);
             }
         }
         //put into "adjacencies" a new instance of arraylist
-        env->CallObjectMethod(jadjacencies, method_hashmap_put, jarraylist);
+        env->CallObjectMethod(jadjacencies, method_hashmap_put, joctreekey, jarraylist);
+        //delete local references used in this loop
+        env->DeleteLocalRef(jarraylist);
+        env->DeleteLocalRef(jpair);
+        env->DeleteLocalRef(jpoint3d);
+        env->DeleteLocalRef(jfloat);
+        env->DeleteLocalRef(joctreekey);
     }
+    //delete local reference used by jclass
+    env->DeleteLocalRef(cls_arraylist);
+    env->DeleteLocalRef(cls_float);
+    env->DeleteLocalRef(cls_point3d);
+    env->DeleteLocalRef(cls_pair);
+    env->DeleteLocalRef(cls_joctreekey);
+    env->DeleteLocalRef(cls_hashmap);
+    env->DeleteLocalRef(cls_jadjacencymap);
+    //delete local references used by jobjects from fields
+    env->DeleteLocalRef(jadjacencies);
+    env->DeleteLocalRef(jnodes_info);
+    env->DeleteLocalRef(jadjacencies);
 }

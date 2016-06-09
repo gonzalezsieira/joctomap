@@ -31,13 +31,15 @@
 
 //Classes
 #define CLS_STRING "Ljava/lang/String;"
-#define CLS_LEAFBBXITERATOR "es/usc/citius/lab/joctomap/iterators/LeafBBXIterator"
-#define CLS_POINT3D "es/usc/citius/lab/motionplanner/core/spatial/Point3D"
-#define CLS_JOCTREENODE "es/usc/citius/lab/joctomap/octree/JOctreeNode"
-#define CLS_JOCTREEKEY "es/usc/citius/lab/joctomap/octree/JOctreeKey"
-#define CLS_JOCTREE "es/usc/citius/lab/joctomap/octree/JOctree"
-#define CLS_HASHMAP "Ljava/util/HashMap;"
-#define CLS_PAIR "es/usc/citius/lab/motionplanner/core/util/Pair"
+#define CLS_LEAFBBXITERATOR "Les/usc/citius/lab/joctomap/iterators/LeafBBXIterator;"
+#define CLS_POINT3D "Les/usc/citius/lab/motionplanner/core/spatial/Point3D;"
+#define CLS_JOCTREENODE "Les/usc/citius/lab/joctomap/octree/JOctreeNode;"
+#define CLS_JOCTREEKEY "Les/usc/citius/lab/joctomap/octree/JOctreeKey;"
+#define CLS_JOCTREE "Les/usc/citius/lab/joctomap/octree/JOctree;"
+#define CLS_JADJACENCYMAP "Les/usc/citius/lab/joctomap/util/AdjacencyMap;"
+#define CLS_NATIVEOBJECT "Les/usc/citius/lab/joctomap/util/NativeObject;"
+#define CLS_MAP "Ljava/util/Map;"
+#define CLS_PAIR "Les/usc/citius/lab/motionplanner/core/util/Pair;"
 #define CLS_FLOAT "Ljava/lang/Float;"
 #define CLS_ARRAYLIST "Ljava/util/ArrayList;"
 
@@ -49,6 +51,7 @@
 #define FIELD_ADJACENCYMAP_OCTREE "octree"
 #define FIELD_ADJACENCYMAP_NODESINFO "nodesInfo"
 #define FIELD_ADJACENCYMAP_ADJACENCIES "adjacencies"
+#define FIELD_NATIVEOBJECT_POINTER "pointer"
 
 //Methods
 #define METHOD_CONSTRUCTOR "<init>"
@@ -56,6 +59,7 @@
 //Signatures
 #define SIGNATURE_FLOAT "F"
 #define SIGNATURE_INT "I"
+#define SIGNATURE_LONG "J"
 
 #endif /* DEFINITIONS_H */
 

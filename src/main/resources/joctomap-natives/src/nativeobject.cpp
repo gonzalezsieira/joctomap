@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 #include "nativeobject.h"
+#include "definitions.h"
 
 /*
  * Piece of code to retrieve native pointer.
  */
 jlong getPointer(JNIEnv *env, jobject obj){
 	//find field to access the OcTree pointer
-	jclass cls = env->FindClass("es/usc/citius/lab/joctomap/util/NativeObject");
-	jfieldID field = env->GetFieldID(cls, "pointer", "J");
+	jclass cls = env->FindClass(CLS_NATIVEOBJECT);
+	jfieldID field = env->GetFieldID(cls, FIELD_NATIVEOBJECT_POINTER, SIGNATURE_LONG);
 	//retrieve value of field
 	return env->GetLongField(obj, field);
 }
