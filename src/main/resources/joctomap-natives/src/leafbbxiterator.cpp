@@ -18,6 +18,7 @@
 #include "leafbbxiterator.h"
 #include "iteratorinformation.h"
 #include "nativeobject.h"
+#include "definitions.h"
 
 using namespace std;
 using namespace octomap;
@@ -62,10 +63,10 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXItera
 	//retrieve current key
 	OcTreeKey key = information->next().getKey();
 	//find class and constructor to instantiate JOCtreekey
-	jclass clsKey = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeKey");
-	jmethodID constructor = env->GetMethodID(clsKey, "<init>", "(III)V");
+	jclass clsKey = env->FindClass(CLS_JOCTREEKEY);
+	jmethodID constructor = env->GetMethodID(clsKey, METHOD_CONSTRUCTOR, "(III)V");
 	//new JOctreeKey(x, y, z)
-	return env->NewObject(clsKey, constructor, static_cast<int>(key.k[0]), static_cast<int>(key.k[1]), static_cast<int>(key.k[2]));
+	return env->NewObject(clsKey, constructor, (int) key.k[0], (int) key.k[1], (int) key.k[2]);
 }
 
 /**
@@ -78,10 +79,10 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXItera
 	//retrieve current key
 	OcTreeKey key = information->current().getKey();
 	//find class and constructor to instantiate JOCtreekey
-	jclass clsKey = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeKey");
-	jmethodID constructor = env->GetMethodID(clsKey, "<init>", "(III)V");
+	jclass clsKey = env->FindClass(CLS_JOCTREEKEY);
+	jmethodID constructor = env->GetMethodID(clsKey, METHOD_CONSTRUCTOR, "(III)V");
 	//new JOctreeKey(x, y, z)
-	return env->NewObject(clsKey, constructor, static_cast<int>(key.k[0]), static_cast<int>(key.k[1]), static_cast<int>(key.k[2]));
+	return env->NewObject(clsKey, constructor, (int) key.k[0], (int) key.k[1], (int) key.k[2]);
 }
 
 /**
@@ -103,10 +104,10 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXItera
 	//get native object
 	LeafBBXIteratorInformation *information = (LeafBBXIteratorInformation*) getPointer(env, jiterator);
 	point3d coordinate = information->current().getCoordinate();
-	jclass clsPoint = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point3D");
-	jmethodID constructor = env->GetMethodID(clsPoint, "<init>", "(FFF)V");
+	jclass clsPoint = env->FindClass(CLS_POINT3D);
+	jmethodID constructor = env->GetMethodID(clsPoint, METHOD_CONSTRUCTOR, "(FFF)V");
 	//new Point3D(x, y, z)
-	return env->NewObject(clsPoint, constructor, static_cast<float>(coordinate.x()), static_cast<float>(coordinate.y()), static_cast<float>(coordinate.z()));
+	return env->NewObject(clsPoint, constructor, (float) coordinate.x(), (float) coordinate.y(), (float) coordinate.z());
 }
 
 /**
@@ -116,7 +117,7 @@ JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterat
   (JNIEnv *env, jobject jiterator){
 	//get native object
 	LeafBBXIteratorInformation *information = (LeafBBXIteratorInformation*) getPointer(env, jiterator);
-	return static_cast<float>(information->current().getX());
+	return (float) information->current().getX();
 }
 
 /**
@@ -126,7 +127,7 @@ JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterat
   (JNIEnv *env, jobject jiterator){
 	//get native object
 	LeafBBXIteratorInformation *information = (LeafBBXIteratorInformation*) getPointer(env, jiterator);
-	return static_cast<float>(information->current().getY());
+	return (float) information->current().getY();
 }
 
 /**
@@ -136,7 +137,7 @@ JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterat
   (JNIEnv *env, jobject jiterator){
 	//get native object
 	LeafBBXIteratorInformation *information = (LeafBBXIteratorInformation*) getPointer(env, jiterator);
-	return static_cast<float>(information->current().getZ());
+	return (float) information->current().getZ();
 }
 
 /**
@@ -146,7 +147,7 @@ JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXIterat
   (JNIEnv *env, jobject jiterator){
 	//get native object
 	LeafBBXIteratorInformation *information = (LeafBBXIteratorInformation*) getPointer(env, jiterator);
-	return static_cast<float>(information->current().getSize());
+	return (float) information->current().getSize();
 }
 
 /**
@@ -157,7 +158,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_iterators_LeafBBXItera
 	//get native object
 	LeafBBXIteratorInformation *information = (LeafBBXIteratorInformation*) getPointer(env, jiterator);
 	OcTreeNode *node = (OcTreeNode*) information->current().operator ->();
-	jclass clsNode = env->FindClass("es/usc/citius/lab/joctomap/octree/JOctreeNode");
-	jmethodID constructor = env->GetMethodID(clsNode, "<init>", "(J)V");
+	jclass clsNode = env->FindClass(CLS_JOCTREENODE);
+	jmethodID constructor = env->GetMethodID(clsNode, METHOD_CONSTRUCTOR, "(J)V");
 	return env->NewObject(clsNode, constructor, node);
 }
