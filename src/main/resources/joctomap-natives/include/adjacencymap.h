@@ -25,10 +25,10 @@ extern "C" {
 /*
  * Class:     es_usc_citius_lab_joctomap_util_AdjacencyMap
  * Method:    initializeJNI
- * Signature: ()V
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;)V
  */
 JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_util_AdjacencyMap_initializeJNI
-  (JNIEnv *, jobject);
+  (JNIEnv *, jobject, jobject);
 
 #ifdef __cplusplus
 }

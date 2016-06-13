@@ -43,8 +43,6 @@ import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
  * @author adrian.gonzalez
  */
 public class JOctree extends NativeObject{
-	
-        private String path;
     
 	/**
 	 * Initializes the JOctree with a pointer to the native OcTree object of
@@ -424,14 +422,5 @@ public class JOctree extends NativeObject{
 	 * @return octree with the given resolution
 	 */
 	public static native JOctree create(float res);
-
-        /**
-         * Retrieves the path from which the octree was loaded.
-         * 
-         * @return 
-         */
-        public String getPath() {
-            return path;
-        }
         
 }

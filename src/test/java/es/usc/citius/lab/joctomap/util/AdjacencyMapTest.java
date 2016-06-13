@@ -55,8 +55,8 @@ public class AdjacencyMapTest {
     @Test
     public void test01_calculateAdjacencyMap(){
         
-        assertEquals("Nodes info size do not match with number of leaves.", adjacencyMap.getOctree().size(), adjacencyMap.getNodesInfo().size());
-        assertEquals("Adjacencies info size do not match with number of leaves.", adjacencyMap.getOctree().size(), adjacencyMap.getAdjacencies().size());
+        assertEquals("Nodes info size do not match with number of leaves.", octree.size(), adjacencyMap.getNodesInfo().size());
+        assertEquals("Adjacencies info size do not match with number of leaves.", octree.size(), adjacencyMap.getAdjacencies().size());
         //iterate over the entries of the adjacency map
         for(Map.Entry<JOctreeKey, List<JOctreeKey>> entry : adjacencyMap.getAdjacencies().entrySet()){
             //center of first cell

@@ -26,15 +26,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * This class implements a builder for calculating the adjacency map of an Octomap.
@@ -49,7 +46,6 @@ import java.util.Set;
 public class AdjacencyMap implements Serializable{
 
     private Map<JOctreeKey, List<JOctreeKey>> adjacencies;
-    private JOctree octree;
     //contains the information of size and center of each leaf in the octree
     private Map<JOctreeKey, Pair<Float, Point3D>> nodesInfo;
     private double EPSILON = 1e-3;
@@ -63,7 +59,6 @@ public class AdjacencyMap implements Serializable{
      */
     private AdjacencyMap(JOctree octree){
         this.adjacencies = new HashMap<JOctreeKey, List<JOctreeKey>>();
-        this.octree = octree;
         this.nodesInfo = new HashMap<JOctreeKey, Pair<Float, Point3D>>();
         //create cache
         Cache cacheOfKeys = new Cache();
@@ -116,10 +111,8 @@ public class AdjacencyMap implements Serializable{
     public static AdjacencyMap create(JOctree octree){
         //initialize structures
         AdjacencyMap map = new AdjacencyMap();
-        //assign octree
-        map.octree = octree;
         //fill with JNI method
-        map.initializeJNI();
+        map.initializeJNI(octree);
         //retrieve result
         return map;
     }
@@ -139,7 +132,7 @@ public class AdjacencyMap implements Serializable{
      * This fills the structures of the adjacency map using full-native
      * implementation method for efficiency.
      */
-    private native void initializeJNI();
+    private native void initializeJNI(JOctree octree);
 
     /**
      * Retrieves the adjacencies for a current key.
@@ -157,10 +150,6 @@ public class AdjacencyMap implements Serializable{
 
     public Map<JOctreeKey, Pair<Float, Point3D>> getNodesInfo() {
         return nodesInfo;
-    }
-
-    public JOctree getOctree() {
-        return octree;
     }
 
     /**
@@ -194,8 +183,6 @@ public class AdjacencyMap implements Serializable{
         //open output stream
         try{
             DataOutputStream outputStream = new DataOutputStream(new FileOutputStream(outputFile));
-            //write name of octree
-            outputStream.writeUTF(this.octree.getPath());
             //write adjacencies & nodesInfo
             outputStream.writeInt(adjacencies.size());
             for(Map.Entry<JOctreeKey, List<JOctreeKey>> current : adjacencies.entrySet()){
@@ -239,10 +226,6 @@ public class AdjacencyMap implements Serializable{
         //open input stream (will be closed after this statement)
         try{
             DataInputStream inputStream = new DataInputStream(new FileInputStream(inputFile));
-            //read name of the octree
-            String octreePath = inputStream.readUTF();
-            //load octree
-            map.octree = JOctree.read(octreePath);
             //read map instance
             int sizeMap = inputStream.readInt();
             map.adjacencies = new HashMap<JOctreeKey, List<JOctreeKey>>(sizeMap);

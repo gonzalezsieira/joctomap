@@ -23,16 +23,14 @@
 using namespace octomap;
 
 JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_util_AdjacencyMap_initializeJNI
-  (JNIEnv *env, jobject jadjacencymap){
+  (JNIEnv *env, jobject jadjacencymap, jobject joctree){
     //error margin
     float EPSILON = 0.001f;
     //retrieve fields from adjacencymap
     jclass cls_jadjacencymap = env->FindClass(CLS_JADJACENCYMAP);
-    jfieldID field_joctomap = env->GetFieldID(cls_jadjacencymap, FIELD_ADJACENCYMAP_OCTREE, CLS_JOCTREE);
     jfieldID field_nodes_info = env->GetFieldID(cls_jadjacencymap, FIELD_ADJACENCYMAP_NODESINFO, CLS_MAP);
     jfieldID field_adjacencies = env->GetFieldID(cls_jadjacencymap, FIELD_ADJACENCYMAP_ADJACENCIES, CLS_MAP);
     //retrieve objects from fields
-    jobject joctree = env->GetObjectField(jadjacencymap, field_joctomap);
     jobject jnodes_info = env->GetObjectField(jadjacencymap, field_nodes_info);
     jobject jadjacencies = env->GetObjectField(jadjacencymap, field_adjacencies);
     //retrieve HashMap, JOctreeKey, Pair, Point3D class

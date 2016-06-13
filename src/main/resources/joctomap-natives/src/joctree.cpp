@@ -598,9 +598,6 @@ JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_write
 	const char *nativeFilename = env->GetStringUTFChars(filename, &iscopy);
 	//write octree in filename
 	bool value = octree->write(nativeFilename);
-        //set path to which the octree was read
-        jfieldID pathField = env->GetFieldID(env->GetObjectClass(obj), FIELD_PATH, CLS_STRING);
-        env->SetObjectField(obj, pathField, filename);
 	//release memory of native char*
 	env->ReleaseStringUTFChars(filename, nativeFilename);
 	//return obtained value
@@ -660,9 +657,6 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_read
 	stream.close();
         //create joctree object
 	jobject jtree =  env->NewObject(cls, constructor, ot);
-        //set path from which the octree was read
-        jfieldID pathField = env->GetFieldID(cls, FIELD_PATH, CLS_STRING);
-        env->SetObjectField(jtree, pathField, filename);
         return jtree;
 }
 
