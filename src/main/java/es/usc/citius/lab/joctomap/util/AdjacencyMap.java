@@ -20,6 +20,8 @@ import es.usc.citius.lab.joctomap.octree.JOctree;
 import es.usc.citius.lab.joctomap.octree.JOctreeKey;
 import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
 import es.usc.citius.lab.motionplanner.core.util.Pair;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -32,6 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This class implements a builder for calculating the adjacency map of an Octomap.
@@ -190,9 +193,25 @@ public class AdjacencyMap implements Serializable{
         }
         //open output stream
         try{
-            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(outputFile));
-            //write this instance
-            outputStream.writeObject(this);
+            DataOutputStream outputStream = new DataOutputStream(new FileOutputStream(outputFile));
+            //write name of octree
+            outputStream.writeUTF(this.octree.getPath());
+            //write adjacencies & nodesInfo
+            outputStream.writeInt(adjacencies.size());
+            for(Map.Entry<JOctreeKey, List<JOctreeKey>> current : adjacencies.entrySet()){
+                //write key (adjacencies & nodesInfo)
+                writeJOctreeKey(outputStream, current.getKey());
+                //write value (adjacencies)
+                outputStream.writeInt(current.getValue().size());
+                for(int i = 0; i < current.getValue().size(); i++){
+                    writeJOctreeKey(outputStream, current.getValue().get(i));
+                }
+                //write 1st value (nodesInfo)
+                Pair<Float, Point3D> currentInfo = nodesInfo.get(current.getKey());
+                outputStream.writeFloat(currentInfo.getKey());
+                //write second value (nodesInfo)
+                writePoint3D(outputStream, currentInfo.getContent());
+            }
             outputStream.close();
         } catch (IOException ex) {
             //I/O error
@@ -216,49 +235,68 @@ public class AdjacencyMap implements Serializable{
             JOctomapLogger.severe("Could not open " + filename + ". File does not exist.");
             throw new RuntimeException("Specified file " + filename + " does not exist");
         }
-        AdjacencyMap map;
+        AdjacencyMap map = new AdjacencyMap();
         //open input stream (will be closed after this statement)
         try{
-            ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(inputFile));
+            DataInputStream inputStream = new DataInputStream(new FileInputStream(inputFile));
+            //read name of the octree
+            String octreePath = inputStream.readUTF();
+            //load octree
+            map.octree = JOctree.read(octreePath);
             //read map instance
-            map = (AdjacencyMap) inputStream.readObject();
+            int sizeMap = inputStream.readInt();
+            map.adjacencies = new HashMap<JOctreeKey, List<JOctreeKey>>(sizeMap);
+            map.nodesInfo = new HashMap<JOctreeKey, Pair<Float, Point3D>>(sizeMap);
+            while(map.adjacencies.size() < sizeMap || map.nodesInfo.size() < sizeMap){
+                //read key of hashmaps
+                JOctreeKey key = readJOctreeKey(inputStream);
+                //load array of adjacencies
+                int sizeArray = inputStream.readInt();
+                List<JOctreeKey> arrayAdjacencies = new ArrayList<JOctreeKey>(sizeArray);
+                while(arrayAdjacencies.size() < sizeArray){
+                    //add read key to the list
+                    arrayAdjacencies.add(readJOctreeKey(inputStream));
+                }
+                //read pair of information
+                Float sizeCell = inputStream.readFloat();
+                Point3D centerCell = readPoint3D(inputStream);
+                //put information into the HashMap instances
+                map.adjacencies.put(key, arrayAdjacencies);
+                map.nodesInfo.put(key, new Pair<Float, Point3D>(sizeCell, centerCell));
+            }
             inputStream.close();
         } catch (IOException ex) {
             //I/O error
             JOctomapLogger.severe("I/O error when reading adjacency map from " + filename);
             throw new RuntimeException(ex);
-        } catch (ClassNotFoundException ex) {
-            //error if object cannot be casted
-            JOctomapLogger.severe("Cannot cast object to AdjacencyMap");
-            throw new RuntimeException(ex);
         }
         return map;
     }
     
-    /**
-     * Routine to write an object of this class to an output stream.
-     * 
-     * @param out output stream
-     * @throws IOException if some I/O error occurs
-     */
-    private void writeObject(ObjectOutputStream out) throws IOException{
-        out.writeObject(this.adjacencies);
-        out.writeObject(this.nodesInfo);
-        out.writeObject(this.octree.getPath());
+        private static void writeJOctreeKey(DataOutputStream out, JOctreeKey key) throws IOException{
+        out.writeInt(key.getX());
+        out.writeInt(key.getY());
+        out.writeInt(key.getZ());
     }
     
-    /**
-     * Routine to read an object of this class from an input stream.
-     * 
-     * @param in input stream
-     * @throws IOException if some I/O error occurs
-     * @throws ClassNotFoundException if object cannot be casted to target class
-     */
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException{
-        this.adjacencies = (Map<JOctreeKey, List<JOctreeKey>>) in.readObject();
-        this.nodesInfo = (Map<JOctreeKey, Pair<Float, Point3D>>) in.readObject();
-        String path = (String) in.readObject();
-        this.octree = JOctree.read(path);
+    private static JOctreeKey readJOctreeKey(DataInputStream in) throws IOException{
+        int x = in.readInt();
+        int y = in.readInt();
+        int z = in.readInt();
+        return new JOctreeKey(x, y, z);
+    }
+    
+    private static void writePoint3D(DataOutputStream out, Point3D point) throws IOException{
+        out.writeFloat(point.getX());
+        out.writeFloat(point.getY());
+        out.writeFloat(point.getZ());
+    }
+    
+    private static Point3D readPoint3D(DataInputStream in) throws IOException{
+        float x = in.readFloat();
+        float y = in.readFloat();
+        float z = in.readFloat();
+        return new Point3D(x, y, z);
     }
     
     /**************************************************************************
