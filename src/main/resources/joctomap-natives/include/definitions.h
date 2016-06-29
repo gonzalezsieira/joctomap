@@ -33,6 +33,7 @@
 #define CLS_STRING "Ljava/lang/String;"
 #define CLS_LEAFBBXITERATOR "Les/usc/citius/lab/joctomap/iterators/LeafBBXIterator;"
 #define CLS_POINT3D "Les/usc/citius/lab/motionplanner/core/spatial/Point3D;"
+#define CLS_POINT2D "Les/usc/citius/lab/motionplanner/core/spatial/Point2D;"
 #define CLS_JOCTREENODE "Les/usc/citius/lab/joctomap/octree/JOctreeNode;"
 #define CLS_JOCTREEKEY "Les/usc/citius/lab/joctomap/octree/JOctreeKey;"
 #define CLS_JOCTREE "Les/usc/citius/lab/joctomap/octree/JOctree;"
@@ -42,6 +43,8 @@
 #define CLS_PAIR "Les/usc/citius/lab/motionplanner/core/util/Pair;"
 #define CLS_FLOAT "Ljava/lang/Float;"
 #define CLS_ARRAYLIST "Ljava/util/ArrayList;"
+#define CLS_TRANSITION "Les/usc/citius/hipster/model/Transition;"
+#define CLS_OBJECT "Ljava/lang/Object;"
 
 //Fields
 #define FIELD_PATH "path"
@@ -52,6 +55,7 @@
 #define FIELD_ADJACENCYMAP_NODESINFO "nodesInfo"
 #define FIELD_ADJACENCYMAP_ADJACENCIES "adjacencies"
 #define FIELD_NATIVEOBJECT_POINTER "pointer"
+#define FIELD_PAIR_FIRST "first"
 
 //Methods
 #define METHOD_CONSTRUCTOR "<init>"

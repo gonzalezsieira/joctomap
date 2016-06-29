@@ -48,6 +48,9 @@ joctree.o: nativeobject.o iteratorinformation.o
 joctreenode.o: nativeobject.o
 	$(CC) $(DEBUG) $(FILE) src/joctreenode.cpp $(INCLUDE) $(LINK) -o build/joctreenode.o 
 	
+collisions.o: src/collisions.cpp include/collisions.h
+	$(CC) $(DEBUG) $(FILE) src/collisions.cpp $(INCLUDE) $(LINK) -o build/collisions.o 
+	
 joctreedistancemap.o: nativeobject.o
 	$(CC) $(DEBUG) $(FILE) src/joctreedistancemap.cpp $(INCLUDE) $(LINK) -o build/joctreedistancemap.o
 	
@@ -63,7 +66,7 @@ nativeobject.o: src/nativeobject.cpp include/nativeobject.h
 iteratorinformation.o: src/iteratorinformation.cpp include/iteratorinformation.h
 	$(CC) $(DEBUG) $(FILE) src/iteratorinformation.cpp $(INCLUDE) $(LINK) -o build/iteratorinformation.o
 	
-collisionchecker2d.o : src/collisionchecker2d.cpp include/collisionchecker2d.h
+collisionchecker2d.o : collisions.o src/collisionchecker2d.cpp include/collisionchecker2d.h
 	$(CC) $(DEBUG) $(FILE) src/collisionchecker2d.cpp $(INCLUDE) $(LINK) -o build/collisionchecker2d.o
 	
 joctreeutils.o : src/joctreeutils.cpp include/joctreeutils.h
