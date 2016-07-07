@@ -55,7 +55,9 @@
 #define FIELD_ADJACENCYMAP_NODESINFO "nodesInfo"
 #define FIELD_ADJACENCYMAP_ADJACENCIES "adjacencies"
 #define FIELD_NATIVEOBJECT_POINTER "pointer"
-#define FIELD_PAIR_FIRST "first"
+#define FIELD_PAIR_KEY "key"
+#define FIELD_PAIR_CONTENT "content"
+#define FIELD_VALUE "value"
 
 //Methods
 #define METHOD_CONSTRUCTOR "<init>"
