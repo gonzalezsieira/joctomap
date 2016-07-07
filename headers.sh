@@ -42,6 +42,7 @@ mv *LeafBBXIterator.h ../resources/joctomap-natives/include/leafbbxiterator.h
 mv *CollisionChecker2D.h ../resources/joctomap-natives/include/collisionchecker2d.h
 mv *JOctreeUtils.h ../resources/joctomap-natives/include/joctreeutils.h
 mv *AdjacencyMap.h ../resources/joctomap-natives/include/adjacencymap.h
+rm *AdjacencyMap_Cache.h
 
 # go to initial directory
 cd "$dir"
