@@ -22,3 +22,4 @@ src/main/resources/joctomap-natives/.gdbinit
 /src/main/resources/motionplanner-models/build
 nbactions*
 nb-configuration.xml
+.cproject
