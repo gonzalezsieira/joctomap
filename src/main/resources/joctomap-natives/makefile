@@ -2,7 +2,7 @@
 # 									PARAMETERS														 #
 ######################################################################################################	
 # Compiler to use
-CC=g++ -std=c++0x
+CC=g++ -O3 -std=c++0x
 
 # Flags to create the shared library
 SHARED=-shared -fPIC
