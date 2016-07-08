@@ -83,7 +83,7 @@ octomap:
 	mkdir build; \
 	mkdir build/octomap; \
 	cd build/octomap; \
-	cmake ../../$(OCTOMAP); \
+	cmake ../../$(OCTOMAP) -DCMAKE_BUILD_TYPE=Release; \
 	make; \
 	cp ../../$(OCTOMAP)/lib/*.a ../../lib/
 	
