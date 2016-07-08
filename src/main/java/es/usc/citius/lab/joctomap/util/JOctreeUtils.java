@@ -15,6 +15,7 @@
  */
 package es.usc.citius.lab.joctomap.util;
 
+import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.lab.joctomap.octree.JOctree;
 import es.usc.citius.lab.joctomap.octree.JOctreeKey;
 import es.usc.citius.lab.motionplanner.core.spatial.Point2D;
@@ -87,5 +88,5 @@ public class JOctreeUtils {
      */
     public native static float resolutionAddedIn(JOctree octree, Point3D point1, Point3D point2);
     
-    public native static Iterable<Point2D> availableH2DMRTransitions(JOctree octree, AdjacencyMap adjacencyMap, Point2D state, float radius);
+    public native static Iterable<Transition<Void, Point2D>> availableH2DMRTransitions(JOctree octree, AdjacencyMap adjacencyMap, Point2D state, float radius);
 }

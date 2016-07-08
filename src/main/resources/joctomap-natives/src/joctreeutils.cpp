@@ -366,7 +366,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_avai
     //retrieve classes used in this method
     jclass cls_joctreekey = env->FindClass(CLS_JOCTREEKEY);
     jclass cls_arraylist = env->FindClass(CLS_ARRAYLIST);
-    //jclass cls_transition = env->FindClass(CLS_TRANSITION);
+    jclass cls_transition = env->FindClass(CLS_TRANSITION);
     jclass cls_pair = env->FindClass(CLS_PAIR);
     //retrieve argument-passed object methods
     jmethodID method_adjacency = env->GetMethodID(cls_adjacencymap, "adjacency", "(Les/usc/citius/lab/joctomap/octree/JOctreeKey;)Ljava/util/List;");
@@ -374,7 +374,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_avai
     //retrieve constructors of classes used in this method
     jmethodID method_constructor_arraylist = env->GetMethodID(cls_arraylist, METHOD_CONSTRUCTOR, "()V");
     jmethodID method_constructor_joctreekey = env->GetMethodID(cls_joctreekey, METHOD_CONSTRUCTOR, "(III)V");
-    //jmethodID method_constructor_transition = env->GetMethodID(cls_joctreekey, METHOD_CONSTRUCTOR, "(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V");
+    jmethodID method_create_transition = env->GetStaticMethodID(cls_transition, "create", "(Ljava/lang/Object;Ljava/lang/Object;)Les/usc/citius/hipster/model/Transition;");
     jmethodID method_constructor_point2d = env->GetMethodID(cls_point2d, METHOD_CONSTRUCTOR, "(FF)V");
     //retrieve fields used by classes in this method
     jfieldID field_joctreekey_x = env->GetFieldID(cls_joctreekey, FIELD_X, SIGNATURE_INT);
@@ -432,11 +432,11 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_avai
 				//create instance of Point2D
 				jobject jpoint2dneighbor = env->NewObject(cls_point2d, method_constructor_point2d, center.x(), center.y());
 				//create transition object
-				//jobject transition = env->NewObject(cls_transition, method_constructor_transition, jpoint2d, jpoint2dneighbor);
+				jobject transition = env->CallObjectMethod(cls_transition, method_create_transition, jpoint2d, jpoint2dneighbor);
 				//add to the arraylist
-				env->CallBooleanMethod(jarraylistneighbors, method_add_arraylist, jpoint2dneighbor);
+				env->CallBooleanMethod(jarraylistneighbors, method_add_arraylist, transition);
 				//delete local references used by instantiated objects
-				//env->DeleteLocalRef(transition);
+				env->DeleteLocalRef(transition);
 				env->DeleteLocalRef(jpoint2dneighbor);
 			}
 			//RELEVANT FRONTIER POINTS CHECKING
@@ -452,12 +452,12 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_avai
 					//create instance of Point2D
 					jobject jpoint2dneighbor = env->NewObject(cls_point2d, method_constructor_point2d, current.x(), current.y());
 					//create transition object
-					//jobject transition = env->NewObject(cls_transition, method_constructor_transition, jpoint2d, jpoint2dneighbor);
+					jobject transition = env->CallObjectMethod(cls_transition, method_create_transition, jpoint2d, jpoint2dneighbor);
 					//add to the arraylist
-					env->CallBooleanMethod(jarraylistneighbors, method_add_arraylist, jpoint2dneighbor);
+					env->CallBooleanMethod(jarraylistneighbors, method_add_arraylist, transition);
 					generated++;
 					//delete local references used by instantiated objects
-					//env->DeleteLocalRef(transition);
+					env->DeleteLocalRef(transition);
 					env->DeleteLocalRef(jpoint2dneighbor);
 				}
 			}
@@ -473,9 +473,9 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_avai
         //create instance of Point2D
         jobject jpoint2dneighbor = env->NewObject(cls_point2d, method_constructor_point2d, center.x(), center.y());
         //create transition object
-        //jobject transition = env->NewObject(cls_transition, method_constructor_transition, jpoint2d, jpoint2dneighbor);
+        jobject transition = env->CallObjectMethod(cls_transition, method_create_transition, jpoint2d, jpoint2dneighbor);
         //add to the arraylist
-        env->CallBooleanMethod(jarraylistneighbors, method_add_arraylist, jpoint2dneighbor);
+        env->CallBooleanMethod(jarraylistneighbors, method_add_arraylist, transition);
         //delete local references used by instantiated objects
         //env->DeleteLocalRef(transition);
         env->DeleteLocalRef(jpoint2dneighbor);
@@ -488,7 +488,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_avai
     env->DeleteLocalRef(cls_joctreekey);
     env->DeleteLocalRef(cls_pair);
     env->DeleteLocalRef(cls_point2d);
-    //env->DeleteLocalRef(cls_transition);
+    env->DeleteLocalRef(cls_transition);
     
     //delete local references used by instantiated objects
     //env->DeleteLocalRef(jarraylistneighbors);
