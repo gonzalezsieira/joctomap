@@ -351,7 +351,7 @@ NodeInfo_Adjacencies search_node(OcTree* octree, point3d point, JNIEnv* env, job
         jkey = env->NewObject(cls_joctreekey, method_constructor_joctreekey, key.k[0], key.k[1], key.k[2]);
         jadjacencies = env->CallObjectMethod(jadjacencymap, method_adjacency, jkey);
     } while(depth > 0 && jadjacencies == NULL);
-    return NodeInfo_Adjacencies( key, octree->getNodeSize(depth), jkey, Point2D(octree->keyToCoord(key)), jadjacencies );
+    return NodeInfo_Adjacencies( key, octree->getNodeSize(depth), jkey, Point2D(octree->keyToCoord(key, depth)), jadjacencies );
     
 }
 
