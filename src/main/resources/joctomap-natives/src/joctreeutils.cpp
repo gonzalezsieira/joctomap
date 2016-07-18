@@ -309,8 +309,9 @@ struct ComparePoint3D {
 //define priority queue
 typedef std::priority_queue<point3d, std::vector<point3d>, ComparePoint3D> priorityqueue;
 
-void frontier_points(double octree_resolution, float size_cell, Point2D center, priorityqueue &queue){
-    if(size_cell > octree_resolution){
+void frontier_points(double octree_resolution, float size_cell, Point2D center, float minimumResolutionTrajectories, priorityqueue &queue){
+	//TODO: Put this as an argument
+    if(size_cell >= 2 * minimumResolutionTrajectories){
         float diff = size_cell / 4.0;
         queue.push(point3d(center.x() - diff, center.y() - diff, 0));
         queue.push(point3d(center.x() - diff, center.y() + diff, 0));
@@ -356,7 +357,7 @@ NodeInfo_Adjacencies search_node(OcTree* octree, point3d point, JNIEnv* env, job
 }
 
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_availableH2DMRTransitions
-  (JNIEnv *env, jclass cls_joctree_utils, jobject joctree, jobject jadjacencymap, jobject jpoint2d, jfloat radius){
+  (JNIEnv *env, jclass cls_joctree_utils, jobject joctree, jobject jadjacencymap, jobject jpoint2d, jfloat radius, jfloat minimumResolutionTrajectories){
     //retrieve native objects
     OcTree* octree = (OcTree*) getPointer(env, joctree);
     //retrieve argument-passed types
@@ -440,7 +441,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_avai
 				env->DeleteLocalRef(jpoint2dneighbor);
 			}
 			//RELEVANT FRONTIER POINTS CHECKING
-			frontier_points(resolution, current_node_info.size, current_node_info.coordinate, queue_frontier_points);
+			frontier_points(resolution, current_node_info.size, current_node_info.coordinate, minimumResolutionTrajectories, queue_frontier_points);
 			int generated = 0;
 			while(queue_frontier_points.size() > 0 && generated < POINTS_CONSIDERED){
 				//retrieve first

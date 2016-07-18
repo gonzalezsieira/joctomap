@@ -57,10 +57,18 @@ JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_resol
 /*
  * Class:     es_usc_citius_lab_joctomap_util_JOctreeUtils
  * Method:    availableH2DMRTransitions
- * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;Les/usc/citius/lab/joctomap/util/AdjacencyMap;Les/usc/citius/lab/motionplanner/core/spatial/Point2D;F)Ljava/lang/Iterable;
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;Les/usc/citius/lab/joctomap/util/AdjacencyMap;Les/usc/citius/lab/motionplanner/core/spatial/Point2D;FF)Ljava/lang/Iterable;
  */
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_availableH2DMRTransitions
-  (JNIEnv *, jclass, jobject, jobject, jobject, jfloat);
+  (JNIEnv *, jclass, jobject, jobject, jobject, jfloat, jfloat);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_util_JOctreeUtils
+ * Method:    queryClosed
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;Les/usc/citius/lab/joctomap/util/AdjacencyMap;Les/usc/citius/lab/motionplanner/core/spatial/Point2D;Ljava/util/Map;F)Les/usc/citius/lab/motionplanner/core/util/Pair;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_queryClosed
+  (JNIEnv *, jclass, jobject, jobject, jobject, jobject, jfloat);
 
 #ifdef __cplusplus
 }

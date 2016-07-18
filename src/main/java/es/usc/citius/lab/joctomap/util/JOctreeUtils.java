@@ -16,6 +16,7 @@
 package es.usc.citius.lab.joctomap.util;
 
 import es.usc.citius.hipster.model.Transition;
+import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.lab.joctomap.octree.JOctree;
 import es.usc.citius.lab.joctomap.octree.JOctreeKey;
 import es.usc.citius.lab.motionplanner.core.spatial.Point2D;
@@ -23,6 +24,7 @@ import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
 import es.usc.citius.lab.motionplanner.core.util.Pair;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Contains utilities implemented for the {@link JOctree}, but not included
@@ -88,5 +90,21 @@ public class JOctreeUtils {
      */
     public native static float resolutionAddedIn(JOctree octree, Point3D point1, Point3D point2);
     
-    public native static Iterable<Transition<Void, Point2D>> availableH2DMRTransitions(JOctree octree, AdjacencyMap adjacencyMap, Point2D state, float radius);
+    /**
+     * Calculates and returns the available transitions from a given state, acting as transition function of the 
+     * Multiresolution H2D heuristic (H2DMR). The native implementation provides a better efficiency of managing the
+     * calls to the API of Octomap.
+     *  
+     * @param octree instance of {@link JOctree}
+     * @param adjacencyMap instance of {@link AdjacencyMap}
+     * @param state position to calculate the neighbors from
+     * @param minimumResolutionTrajectories lowest resolution between states in the trajectory set
+     * @param radius optimistic size of the robot to check collisions on the neighbor positions
+     * @return
+     */
+    //TODO: This method should be in a subproject of motionplanner
+    public native static Iterable<Transition<Void, Point2D>> availableH2DMRTransitions(JOctree octree, AdjacencyMap adjacencyMap, Point2D state, float radius, float minimumResolutionTrajectories);
+    
+    //TODO: This method should be in a subproject of motionplanner
+    public native static Pair<Double, WeightedNode<Void, Point2D, Double>> queryClosed(JOctree octree, AdjacencyMap adjacencyMap, Point2D point, Map<Point2D, WeightedNode<Void, Point2D, Double>> closedList, float speed);
 }
