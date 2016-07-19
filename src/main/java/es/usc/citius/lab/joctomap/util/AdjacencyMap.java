@@ -20,6 +20,9 @@ import es.usc.citius.lab.joctomap.octree.JOctree;
 import es.usc.citius.lab.joctomap.octree.JOctreeKey;
 import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
 import es.usc.citius.lab.motionplanner.core.util.Pair;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -49,6 +52,7 @@ public class AdjacencyMap implements Serializable{
     //contains the information of size and center of each leaf in the octree
     private Map<JOctreeKey, Pair<Float, Point3D>> nodesInfo;
     private double EPSILON = 1e-3;
+    private static int BUFFER_SIZE = 102400;
 
     /**
      * Here the adjacency between the leafs of the octreee is calculated; two leafs are considered adjacent
@@ -182,7 +186,7 @@ public class AdjacencyMap implements Serializable{
         }
         //open output stream
         try{
-            DataOutputStream outputStream = new DataOutputStream(new FileOutputStream(outputFile));
+            DataOutputStream outputStream = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(outputFile)));
             //write adjacencies & nodesInfo
             outputStream.writeInt(adjacencies.size());
             for(Map.Entry<JOctreeKey, List<JOctreeKey>> current : adjacencies.entrySet()){
@@ -225,7 +229,7 @@ public class AdjacencyMap implements Serializable{
         AdjacencyMap map = new AdjacencyMap();
         //open input stream (will be closed after this statement)
         try{
-            DataInputStream inputStream = new DataInputStream(new FileInputStream(inputFile));
+            DataInputStream inputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(inputFile), BUFFER_SIZE));
             //read map instance
             int sizeMap = inputStream.readInt();
             map.adjacencies = new HashMap<JOctreeKey, List<JOctreeKey>>(sizeMap);
