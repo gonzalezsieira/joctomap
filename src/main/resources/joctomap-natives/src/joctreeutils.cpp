@@ -423,8 +423,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_avai
         //node info
         NodeInfo current_node_info = node_info(currentkey, jcurrentkey, env, method_nodeinfo, field_float_value, field_pair_first, field_pair_second, field_jpoint2d_x, field_jpoint2d_y, jadjacencymap);
         //CENTER OF THE CELL CHECKING
-        point3d center = octree->keyToCoord(currentkey);
-        Point2D center_2d = Point2D(center);
+        point3d center = point3d(current_node_info.coordinate.x(), current_node_info.coordinate.y(), 0);
+        Point2D center_2d = current_node_info.coordinate;
         //Check if the key was already explored. If it was, then skip
         if(points_considered.find(center_2d) == points_considered.end()){
         	//add to the list of explored keys
