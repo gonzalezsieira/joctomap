@@ -13,7 +13,8 @@ for planning and navigation problems.
 This project is compatible for JDK1.6+. Here is how you can compile it:
 
 ```bash
-git clone https://gitlab.citius.usc.es/adrian.gonzalez/joctomap.git
+git clone https://github.com/gonzalezsieira/joctomap
+cd joctomap
 mvn install
 ```
 
@@ -24,6 +25,6 @@ project or, if you use maven, add the following dependency:
 <dependency>
     <groupId>es.usc.citius.lab</groupId>
     <artifactId>joctomap</artifactId>
-    <version>1.7.2-SNAPSHOT</version>
+    <version>1.7.2.0</version>
 </dependency>
 ```
