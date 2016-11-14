@@ -121,7 +121,7 @@ public class JOCtreeBuilder extends Module{
 
     @Override
     public Options getModuleOptions() {
-        Options op = new Options();
+        Options op = getGenericOptions();
         op.addOption(
             Option.builder("i")
                 .required()

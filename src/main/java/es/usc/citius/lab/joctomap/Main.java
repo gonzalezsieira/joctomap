@@ -73,6 +73,7 @@ public class Main {
         try{
             commands = parser.parse(module.getModuleOptions(), args);
         } catch (ParseException ex){
+            JOctomapLogger.severe(ex.getMessage());
             printHelp(module.getClass().getSimpleName(), module.getModuleOptions());
             System.exit(1);
         }
