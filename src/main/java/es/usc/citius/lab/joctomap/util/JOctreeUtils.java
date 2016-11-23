@@ -97,13 +97,15 @@ public class JOctreeUtils {
      *  
      * @param octree instance of {@link JOctree}
      * @param adjacencyMap instance of {@link AdjacencyMap}
+     * @param neighborsByDirection angles/points of neighbors at minimum resolution
      * @param state position to calculate the neighbors from
      * @param minimumResolutionTrajectories lowest resolution between states in the trajectory set
      * @param radius optimistic size of the robot to check collisions on the neighbor positions
+     * @param maxDepth level of resolution of the map corresponding with the minimum distance of trajectories
      * @return
      */
     //TODO: This method should be in a subproject of motionplanner
-    public native static Iterable<Transition<Void, Point2D>> availableH2DMRTransitions(JOctree octree, AdjacencyMap adjacencyMap, Point2D state, float radius, float minimumResolutionTrajectories);
+    public native static Iterable<Transition<Void, Point2D>> availableH2DMRTransitions(JOctree octree, AdjacencyMap adjacencyMap, float[] directionsNeighbors, Map<Float, Point2D> neighborsByDirection, float radius, float minimumResolutionTrajectories, int maxDepth, Point2D state);
     
     //TODO: This method should be in a subproject of motionplanner
     public native static Pair<Double, WeightedNode<Void, Point2D, Double>> queryClosed(JOctree octree, AdjacencyMap adjacencyMap, Point2D point, Map<Point2D, WeightedNode<Void, Point2D, Double>> closedList, float speed);
