@@ -462,7 +462,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitio
                 //remove first
                 queue_frontier_points.pop();
                 if(current == state || !isInBounds(octree_min_x, octree_min_y, octree_max_x, octree_max_y, current)) continue;
-                if(!checkCollision(current, information->radius_optimistic, information->octree)){
+                if(!checkCollision_Cached(information, current)){
                     //create instance of Point2D
                     jobject jpoint2dneighbor = env->NewObject(information->cls_point2d, information->method_constructor_point2d, current.x(), current.y());
                     //create transition object
