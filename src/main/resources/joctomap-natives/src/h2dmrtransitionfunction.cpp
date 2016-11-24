@@ -16,6 +16,7 @@
 #include <jni.h>
 #include <map>
 #include <queue>
+#include <unordered_map>
 #include <unordered_set>
 #include <iostream>
 #include <limits>
@@ -131,8 +132,11 @@ struct StaticInformation{
     int maxdepth;
     float maxdepthsize;
     std::list<float> neighbors_directions;
-    std::map<float, Point2D> neighbors;
+    std::unordered_map<float, Point2D> neighbors;
     int POINTS_CONSIDERED = 2;
+    
+    //cache for collision check
+    std::unordered_map<Point2D, bool, Point2D_Hash> cache_collisions;
     
     
     StaticInformation(JNIEnv *env, long octree_pointer, jobject jadjacencymap, float radius_optimistic, float min_resolution_trajectories){
@@ -351,6 +355,21 @@ float closestOrientationTo(std::list<float> neighbors_orientations, float value)
         closestori = M_PI;
     }
     return closestori;
+}
+
+
+bool checkCollision_Cached(StaticInformation* information, point3d point){
+    Point2D point_2d = Point2D(point);
+    //not found, calculate and cache
+    bool result;
+    if(information->cache_collisions.find(point_2d) == information->cache_collisions.end()){
+        result = checkCollision(point, information->radius_optimistic, information->octree);
+        information->cache_collisions[point_2d] = result;
+    }
+    else{
+        result = information->cache_collisions[point_2d];
+    }
+    return result;
 }
 
 
