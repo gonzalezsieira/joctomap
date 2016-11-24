@@ -295,39 +295,37 @@ void frontier_points(float size_cell, Point2D center, priorityqueue &queue){
     queue.push(point3d(center.x() + diff, center.y() - diff, 0));
 }
 
-NodeInfo node_info(OcTreeKey key, jobject jkey, JNIEnv* env, jmethodID method_nodesinfo,
-		jfieldID field_float_value, jfieldID field_first, jfieldID field_second,
-		jfieldID field_jpoin2d_x, jfieldID field_jpoin2d_y, jobject jadjacencymap){
+NodeInfo node_info(StaticInformation* information, OcTreeKey key, jobject jkey){
     //get node info from java object
-    jobject jnode_info = env->CallObjectMethod(jadjacencymap, method_nodesinfo, jkey);
+    jobject jnode_info = information->env->CallObjectMethod(information->jadjacencymap, information->method_nodeinfo, jkey);
     //get key value
-    jobject size_float = env->GetObjectField(jnode_info, field_first);
+    jobject size_float = information->env->GetObjectField(jnode_info, information->field_pair_first);
     //get Float value
-    jfloat size = env->GetFloatField(size_float, field_float_value);
+    jfloat size = information->env->GetFloatField(size_float, information->field_float_value);
     //get coordinate value
-    jobject jpoint2d = env->GetObjectField(jnode_info, field_second);
+    jobject jpoint2d = information->env->GetObjectField(jnode_info, information->field_pair_second);
     //transform point3d from java to C++
-    Point2D point2d = jpoint2d_to_Point2D(jpoint2d, env, field_jpoin2d_x, field_jpoin2d_y);
+    Point2D point2d = jpoint2d_to_Point2D(jpoint2d, information->env, information->field_jpoint2d_x, information->field_jpoint2d_y);
     //convert float to 
     return NodeInfo(key, size, jkey, point2d);
     
 }
 
-NodeInfo_Adjacencies search_node(OcTree* octree, point3d point, JNIEnv* env, jobject jadjacencymap, jmethodID method_adjacency, jclass cls_joctreekey, jmethodID method_constructor_joctreekey){
+NodeInfo_Adjacencies search_node(StaticInformation* information, point3d point){
     //get max depth
-    int depth = octree->getTreeDepth() + 1;
+    int depth = information->octree->getTreeDepth() + 1;
     OcTreeKey key;
     jobject jkey, jadjacencies;
     //this loop breaks when a key in the adjacency map is found (means that it exists in the tree)
     do{
         //find 
         depth--;
-        key = octree->coordToKey(point, depth);
+        key = information->octree->coordToKey(point, depth);
         //instantiate key in java
-        jkey = env->NewObject(cls_joctreekey, method_constructor_joctreekey, key.k[0], key.k[1], key.k[2]);
-        jadjacencies = env->CallObjectMethod(jadjacencymap, method_adjacency, jkey);
+        jkey = information->env->NewObject(information->cls_joctreekey, information->method_constructor_joctreekey, key.k[0], key.k[1], key.k[2]);
+        jadjacencies = information->env->CallObjectMethod(information->jadjacencymap, information->method_adjacency, jkey);
     } while(depth > 0 && jadjacencies == NULL);
-    return NodeInfo_Adjacencies( key, octree->getNodeSize(depth), jkey, Point2D(octree->keyToCoord(key, depth)), jadjacencies );
+    return NodeInfo_Adjacencies( key, information->octree->getNodeSize(depth), jkey, Point2D(information->octree->keyToCoord(key, depth)), jadjacencies );
     
 }
 
@@ -384,13 +382,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitio
     information->octree->getMetricMax(octree_max_x, octree_max_y, octree_max_z);
     //get info for current node
     NodeInfo_Adjacencies info = search_node(
-            information->octree, 
-            state, 
-            env, 
-            information->jadjacencymap,
-            information->method_adjacency,
-            information->cls_joctreekey,
-            information->method_constructor_joctreekey
+            information, 
+            state
     );
     //know current adjacencies for this point
     jobject jcells = info.jadjacencies;
@@ -410,16 +403,9 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitio
         //TODO: pass information instead of all this params?
         //node info
         NodeInfo current_node_info = node_info(
+                information,
                 currentkey, 
-                jcurrentkey, 
-                env, 
-                information->method_nodeinfo, 
-                information->field_float_value, 
-                information->field_pair_first, 
-                information->field_pair_second,
-                information->field_jpoint2d_x,
-                information->field_jpoint2d_y,
-                information->jadjacencymap
+                jcurrentkey
         );
         //CENTER OF THE CELL CHECKING
         point3d center = point3d(current_node_info.coordinate.x(), current_node_info.coordinate.y(), 0);
