@@ -36,7 +36,7 @@ INCLUDE=-I"$(JAVA)/include/" -I"$(JAVA)/include/linux/" -I"$(OCTOMAP)/include/" 
 
 all: libjoctomap.so
 
-libjoctomap.so: octomap dynamic joctree.o joctreenode.o joctreedistancemap.o leafbbxiterator.o collisionchecker2d.o joctreeutils.o adjacencymap.o
+libjoctomap.so: octomap dynamic joctree.o joctreenode.o joctreedistancemap.o leafbbxiterator.o collisionchecker2d.o joctreeutils.o adjacencymap.o h2dmrtransitionfunction.o
 	$(CC) $(DEBUG) build/*.o $(SHARED) $(INCLUDE)  $(LINK) -o $(TARGET)  
 
 ######################################################################################################
@@ -74,6 +74,9 @@ joctreeutils.o : src/joctreeutils.cpp include/joctreeutils.h
 	
 adjacencymap.o : src/adjacencymap.cpp include/adjacencymap.h
 	$(CC) $(DEBUG) $(FILE) src/adjacencymap.cpp $(INCLUDE) $(LINK) -o build/adjacencymap.o
+	
+h2dmrtransitionfunction.o : src/h2dmrtransitionfunction.cpp include/h2dmrtransitionfunction.h
+	$(CC) $(DEBUG) $(FILE) src/h2dmrtransitionfunction.cpp $(INCLUDE) $(LINK) -o build/h2dmrtransitionfunction.o
 
 ######################################################################################################
 # 									OCTOMAP BUILD													 #
