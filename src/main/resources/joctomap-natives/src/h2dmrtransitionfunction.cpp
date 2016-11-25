@@ -439,7 +439,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitio
             }
             else{
                 Point2D upCenter = Point2D(information->octree->keyToCoord(currentkey, information->maxdepth));
-                if(upCenter == state_2D){
+                if(fabs(upCenter.x() - state_2D.x()) < 0.001 && fabs(upCenter.y() - state_2D.y() < 0.001)){
                     float directionNeighbor = atan2(center.y() - state_2D.y(), center.x() - state_2D.x());
                     float orientation_adapted = closestOrientationTo(information->neighbors_directions, directionNeighbor);
                     Point2D neighbor = information->neighbors[orientation_adapted];
