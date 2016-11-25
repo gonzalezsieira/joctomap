@@ -485,3 +485,10 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitio
     return jarraylistneighbors;
 }
 
+
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitionFunction_dispose
+  (JNIEnv *env, jobject jh2dmrtransitiongenerator){
+    StaticInformation* information = (StaticInformation*) getPointer(env, jh2dmrtransitiongenerator);
+    delete information;
+}
+

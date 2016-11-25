@@ -62,8 +62,12 @@ public class H2DMRTransitionFunction extends NativeObject implements TransitionF
     );
 
     @Override
-    public void dispose() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public native void dispose();
+        
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize(); //To change body of generated methods, choose Tools | Templates.
+        dispose();
     }
 
     @Override
