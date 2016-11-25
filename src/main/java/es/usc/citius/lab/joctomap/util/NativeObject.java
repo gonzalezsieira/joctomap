@@ -27,7 +27,7 @@ public abstract class NativeObject {
         //place to load the dynamic libraries used in the code
         static{
             try {
-                NativeUtils.loadLibraryFromJar("/joctomap-natives/libjoctomap.so");
+                NativeUtils.loadLibraryFromJar("/libjoctomap_natives.so");
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
