@@ -15,6 +15,7 @@ set(SOURCE_FILES
     include/joctreeutils.h
     include/leafbbxiterator.h
     include/nativeobject.h
+    include/joctreedistancemap.h
     src/adjacencymap.cpp
     src/collisionchecker2d.cpp
     src/collisions.cpp
@@ -25,6 +26,7 @@ set(SOURCE_FILES
     src/joctreeutils.cpp
     src/leafbbxiterator.cpp
     src/nativeobject.cpp
+    src/joctreedistancemap.cpp
     )
 
 include_directories(include)
