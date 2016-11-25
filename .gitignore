@@ -16,6 +16,7 @@ joctomap-natives/lib
 joctomap-natives/bin
 joctomap-natives/cmake-build-debug
 .attach*
+src/main/resources/*
 joctomap-natives/.gdbinit
 nbactions*
 nb-configuration.xml
