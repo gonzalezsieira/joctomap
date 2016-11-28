@@ -11,21 +11,37 @@ echo "[exec] Building libjoctomap.so... (JAVA_JDK="$1")"
 mkdir build
 cd build
 cmake ../
-make
-cd ..
 
-# Check failure
+# Check failure (after cmake)
 result=$?
 failure=0; [ $result -ne 0 ] && failure=1
 
-# Copy target
-cp build/libjoctomap_natives.so ../src/main/resources/
-mkdir ../src/main/resources/lib
-cp lib/*.a ../src/main/resources/lib
+if [ "$result" == 0 ]; then
 
-# go to beginning directory
-cd "$dir"
+	# Make native library
+	make
 
-echo -e "[exec] C/C++ build script ends"
+	# Check failure (after cmake)
+	result=$?
+	failure=0; [ $result -ne 0 ] && failure=1
+
+	if [ "$result" == 0 ]; then
+		cd ..
+
+		# Copy target
+		cp build/libjoctomap_natives.so ../src/main/resources/
+		mkdir ../src/main/resources/lib
+		cp lib/*.a ../src/main/resources/lib
+
+		# go to beginning directory
+		cd "$dir"
+
+		echo -e "[exec] C/C++ build script ends"
+		result=0
+	fi
+
+fi
 
 exit $failure
+
+
