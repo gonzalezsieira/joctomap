@@ -446,7 +446,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitio
                     upCenter = Point2D(upCenter.x() + neighbor.x(), upCenter.y() + neighbor.y());
                 }
                 //if current cell is occupied, try subsampling
-                if(information->octree->isNodeOccupied(information->octree->search(upCenter.x(), upCenter.y(), 0, information->maxdepth))){
+                OcTreeNode *node = information->octree->search(upCenter.x(), upCenter.y(), 0, information->maxdepth);
+                if(node != NULL && information->octree->isNodeOccupied(node)){
                     frontier_points(information->maxdepthsize, upCenter, queue_frontier_points);
                 }
                 //only add center
