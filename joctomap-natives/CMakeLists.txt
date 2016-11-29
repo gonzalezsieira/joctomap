@@ -39,6 +39,15 @@ set(SOURCE_FILES
 set_property(SOURCE ${SOURCES_CPP} PROPERTY COMPILE_FLAGS "-O3 -std=c++0x")
 set_property(SOURCE ${SOURCES_H} PROPERTY COMPILE_FLAGS "-O3 -std=c++0x")
 
+# Overwrite if it is debug
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message(STATUS "Building in Release=Debug mode disables all optimizations" )
+    set_property(SOURCE ${SOURCES_CPP} PROPERTY COMPILE_FLAGS "-std=c++0x")
+    set_property(SOURCE ${SOURCES_H} PROPERTY COMPILE_FLAGS "-std=c++0x")
+endif()
+
+message(STATUS "Java SDK location: " ${JDK})
+
 include_directories(include)
 include_directories("${JDK}/include")
 include_directories("${JDK}/include/linux")
