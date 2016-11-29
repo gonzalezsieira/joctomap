@@ -10,7 +10,7 @@ cd joctomap-natives
 echo "[exec] Building libjoctomap.so... (JAVA_JDK="$1")"
 mkdir build
 cd build
-cmake ../
+cmake ../ -DJDK:STRING="$1"
 
 # Check failure (after cmake)
 result=$?

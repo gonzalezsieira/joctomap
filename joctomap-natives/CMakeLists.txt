@@ -1,8 +1,15 @@
+# Script for building the shared library libjoctomap_natives.so
+# REQUIRES:
+#	- Octomap
+#	- Cmake 2.8+
+#	- variable JDK pointing to the Java SDK installation folder
+
 cmake_minimum_required(VERSION 2.8)
 project(joctomap_natives)
 
-set(CMAKE_CXX_STANDARD 11)
-
+file(GLOB SOURCES_CPP src/*.cpp)
+file(GLOB SOURCES_H include/*.h)
+	
 set(SOURCE_FILES
     include/adjacencymap.h
     include/collisionchecker2d.h
@@ -29,13 +36,16 @@ set(SOURCE_FILES
     src/joctreedistancemap.cpp
     )
 
+set_property(SOURCE ${SOURCES_CPP} PROPERTY COMPILE_FLAGS "-O3 -std=c++0x")
+set_property(SOURCE ${SOURCES_H} PROPERTY COMPILE_FLAGS "-O3 -std=c++0x")
+
 include_directories(include)
-include_directories(/usr/lib/jvm/java-8-openjdk-amd64/include)
-include_directories(/usr/lib/jvm/java-8-openjdk-amd64/include/linux)
+include_directories("${JDK}/include")
+include_directories("${JDK}/include/linux")
 include_directories(octomap/octomap/include)
 include_directories(octomap/dynamicEDT3D/include)
 
-add_subdirectory(octomap)
+add_subdirectory(octomap/octomap)
 
 add_library(joctomap_natives SHARED ${SOURCE_FILES})
 
