@@ -1,3 +1,4 @@
+src/main/resources/*
 nbproject/
 .idea/
 *.cproject
@@ -11,16 +12,13 @@ bin/
 libjoctomap.so
 target/
 build/
-src/main/resources/joctomap-natives/build
-src/main/resources/joctomap-natives/octomap/lib
-src/main/resources/joctomap-natives/octomap/bin
-src/main/resources/joctomap-natives/dynamicEDT3D/lib
-src/main/resources/joctomap-natives/dynamicEDT3D/bin
-src/main/resources/joctomap-natives/lib
+joctomap-natives/build
+joctomap-natives/lib
+joctomap-natives/bin
+joctomap-natives/cmake-build-debug
 .attach*
-src/main/resources/joctomap-natives/.cproject
-src/main/resources/joctomap-natives/.gdbinit
-/src/main/resources/motionplanner-models/build
+src/main/resources/*
+joctomap-natives/.gdbinit
 nbactions*
 nb-configuration.xml
 .cproject

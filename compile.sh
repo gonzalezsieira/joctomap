@@ -4,19 +4,56 @@ echo -e "[exec] C/C++ build script begins"
 dir=`pwd`
 
 # enter in native packages to compile .c and .cpp sources
-cd src/main/resources/joctomap-natives
+cd joctomap-natives
 
-# compile
+# Start compiling
 echo "[exec] Building libjoctomap.so... (JAVA_JDK="$1")"
-make JAVA=`echo $1`
+mkdir build
+cd build
 
-# Check failure
+# Get release type
+release=$2
+if [ "$release" == "Debug" ]; then
+	echo "Release type: Debug"	
+	cmake ../ -DJDK:STRING="$1" -DCMAKE_BUILD_TYPE=Debug
+elif [ "$release" == "Release" ]; then
+	echo "Release type: Release" 
+	cmake ../ -DJDK:STRING="$1" -DCMAKE_BUILD_TYPE=Release
+else
+	echo "Release type not recognized, must be Release or Debug"
+	exit 1
+fi
+
+# Check failure (after cmake)
 result=$?
 failure=0; [ $result -ne 0 ] && failure=1
 
-# go to beginning directory
-cd "$dir"
+if [ "$result" == 0 ]; then
 
-echo -e "[exec] C/C++ build script ends"
+	# Make native library
+	make
+
+	# Check failure (after cmake)
+	result=$?
+	failure=0; [ $result -ne 0 ] && failure=1
+
+	if [ "$result" == 0 ]; then
+		cd ..
+
+		# Copy target
+		cp build/libjoctomap_natives.so ../src/main/resources/
+		mkdir ../src/main/resources/lib
+		cp lib/*.a ../src/main/resources/lib
+
+		# go to beginning directory
+		cd "$dir"
+
+		echo -e "[exec] C/C++ build script ends"
+		result=0
+	fi
+
+fi
 
 exit $failure
+
+
