@@ -404,6 +404,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitio
             information, 
             state
     );
+    Point2D center_of_current_cell = info.coordinate;
     Point2D state_2D_compare = Point2D(information->octree->keyToCoord(info.key, information->maxdepth));
     //know current adjacencies for this point
     jobject jcells = info.jadjacencies;
@@ -441,7 +442,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitio
             else{
                 Point2D upCenter = Point2D(information->octree->keyToCoord(currentkey, information->maxdepth));
                 if(fabs(upCenter.x() - state_2D_compare.x()) < 0.001 && fabs(upCenter.y() - state_2D_compare.y()) < 0.001){
-                    float directionNeighbor = atan2(center.y() - state_2D.y(), center.x() - state_2D.x());
+                    float directionNeighbor = atan2(center.y() - center_of_current_cell.y(), center.x() - center_of_current_cell.x());
                     float orientation_adapted = closestOrientationTo(information->neighbors_directions, directionNeighbor);
                     Point2D neighbor = information->neighbors[orientation_adapted];
                     upCenter = Point2D(upCenter.x() + neighbor.x(), upCenter.y() + neighbor.y());
