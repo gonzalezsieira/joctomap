@@ -26,7 +26,7 @@ DYNAMIC=dynamicEDT3D
 LINK=-L"lib/" -loctomath -loctomap -ldynamicedt3d
 
 # Includes to use with the compiler
-INCLUDE=-I"$(JAVA)/include/" -I"$(JAVA)/include/linux/" -I"$(OCTOMAP)/include/" -I"$(DYNAMIC)/include/" -I"include/"
+INCLUDE=-I"$(JAVA)/include/" -I"$(JAVA)/include/linux/" -I"$(JAVA)/include/darwin/" -I"$(OCTOMAP)/include/" -I"$(DYNAMIC)/include/" -I"include/"
 
 ######################################################################################################
 # 									SHARED LIBRARY BUILD											 #
