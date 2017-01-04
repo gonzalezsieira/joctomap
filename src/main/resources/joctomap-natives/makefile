@@ -7,9 +7,6 @@ CC=g++ -std=c++0x
 # Flags to create the shared library
 SHARED=-shared -fPIC
 
-# Flags to generate debug information
-DEBUG=-g
-
 # Flags to copmpile single files
 FILE=-c -fPIC
 
@@ -37,40 +34,40 @@ INCLUDE=-I"$(JAVA)/include/" -I"$(JAVA)/include/linux/" -I"$(JAVA)/include/darwi
 all: libjoctomap.so
 
 libjoctomap.so: octomap dynamic joctree.o joctreenode.o joctreedistancemap.o leafbbxiterator.o collisionchecker2d.o joctreeutils.o adjacencymap.o
-	$(CC) $(DEBUG) build/*.o $(SHARED) $(INCLUDE)  $(LINK) -o $(TARGET)  
+	$(CC) $(CC_FLAGS) build/*.o $(SHARED) $(INCLUDE)  $(LINK) -o $(TARGET)
 
 ######################################################################################################
 # 									NATIVE IMPLEMENTATIONS BUILD									 #
 ######################################################################################################	
 joctree.o: nativeobject.o iteratorinformation.o
-	$(CC) $(DEBUG) $(FILE) src/joctree.cpp $(INCLUDE) $(LINK) -o build/joctree.o 
+	$(CC) $(CC_FLAGS) $(FILE) src/joctree.cpp $(INCLUDE) $(LINK) -o build/joctree.o
 	
 joctreenode.o: nativeobject.o
-	$(CC) $(DEBUG) $(FILE) src/joctreenode.cpp $(INCLUDE) $(LINK) -o build/joctreenode.o 
+	$(CC) $(CC_FLAGS) $(FILE) src/joctreenode.cpp $(INCLUDE) $(LINK) -o build/joctreenode.o
 	
 joctreedistancemap.o: nativeobject.o
-	$(CC) $(DEBUG) $(FILE) src/joctreedistancemap.cpp $(INCLUDE) $(LINK) -o build/joctreedistancemap.o
+	$(CC) $(CC_FLAGS) $(FILE) src/joctreedistancemap.cpp $(INCLUDE) $(LINK) -o build/joctreedistancemap.o
 	
 leafbbxiterator.o: iteratorinformation.o
-	$(CC) $(DEBUG) $(FILE) src/leafbbxiterator.cpp $(INCLUDE) $(LINK) -o build/leafbbxiterator.o
+	$(CC) $(CC_FLAGS) $(FILE) src/leafbbxiterator.cpp $(INCLUDE) $(LINK) -o build/leafbbxiterator.o
 
 ######################################################################################################
 # 									NATIVE OBJECTS DEPENDENT FILES 		 							 #
 ######################################################################################################	
 nativeobject.o: src/nativeobject.cpp include/nativeobject.h
-	$(CC) $(DEBUG) $(FILE) src/nativeobject.cpp $(INCLUDE) $(LINK) -o build/nativeobject.o
+	$(CC) $(CC_FLAGS) $(FILE) src/nativeobject.cpp $(INCLUDE) $(LINK) -o build/nativeobject.o
 	
 iteratorinformation.o: src/iteratorinformation.cpp include/iteratorinformation.h
-	$(CC) $(DEBUG) $(FILE) src/iteratorinformation.cpp $(INCLUDE) $(LINK) -o build/iteratorinformation.o
+	$(CC) $(CC_FLAGS) $(FILE) src/iteratorinformation.cpp $(INCLUDE) $(LINK) -o build/iteratorinformation.o
 	
 collisionchecker2d.o : src/collisionchecker2d.cpp include/collisionchecker2d.h
-	$(CC) $(DEBUG) $(FILE) src/collisionchecker2d.cpp $(INCLUDE) $(LINK) -o build/collisionchecker2d.o
+	$(CC) $(CC_FLAGS) $(FILE) src/collisionchecker2d.cpp $(INCLUDE) $(LINK) -o build/collisionchecker2d.o
 	
 joctreeutils.o : src/joctreeutils.cpp include/joctreeutils.h
-	$(CC) $(DEBUG) $(FILE) src/joctreeutils.cpp $(INCLUDE) $(LINK) -o build/joctreeutils.o
+	$(CC) $(CC_FLAGS) $(FILE) src/joctreeutils.cpp $(INCLUDE) $(LINK) -o build/joctreeutils.o
 	
 adjacencymap.o : src/adjacencymap.cpp include/adjacencymap.h
-	$(CC) $(DEBUG) $(FILE) src/adjacencymap.cpp $(INCLUDE) $(LINK) -o build/adjacencymap.o
+	$(CC) $(CC_FLAGS) $(FILE) src/adjacencymap.cpp $(INCLUDE) $(LINK) -o build/adjacencymap.o
 
 ######################################################################################################
 # 									OCTOMAP BUILD													 #
