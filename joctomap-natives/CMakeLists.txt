@@ -50,12 +50,19 @@ message(STATUS "Java SDK location: " ${JDK})
 
 include_directories(include)
 include_directories("${JDK}/include")
-include_directories("${JDK}/include/linux")
+if(UNIX AND NOT APPLE)
+    include_directories("${JDK}/include/linux")
+endif()
+if(APPLE)
+    set(CMAKE_MACOSX_RPATH 1)
+    include_directories("${JDK}/include/darwin")
+endif()
 include_directories(octomap/octomap/include)
 include_directories(octomap/dynamicEDT3D/include)
 
 add_subdirectory(octomap/octomap)
+add_subdirectory(octomap/dynamicEDT3D)
 
 add_library(joctomap_natives SHARED ${SOURCE_FILES})
 
-target_link_libraries(joctomap_natives octomap)
+target_link_libraries(joctomap_natives octomap octomath dynamicedt3d)
