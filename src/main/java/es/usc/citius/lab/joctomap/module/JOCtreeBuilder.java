@@ -83,7 +83,7 @@ public class JOCtreeBuilder extends Module{
         JOctree octree = JOctree.create(resolution);
         float resX = sizeX / (reader.getPixels().length - 1);
         float resY = sizeY / (reader.getPixels()[0].length - 1);
-        float sizeZ = octree.getNodeSize(octree.getTreeDepth() - maxDepthCell);
+        float sizeZ = octree.getNodeSize(maxDepthCell);
         JOctomapLogger.info("Generating octomap structure with following params:"
                 + "\n\t* Resolution: " + resolution
                 + "\n\t* Dimensions: [" + sizeX + ", " + sizeY + ", " + sizeZ + "]");

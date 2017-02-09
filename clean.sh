@@ -5,8 +5,11 @@ echo -e "[exec] C/C++ clean script begins"
 dir=`pwd`
 
 # remove octomap build
-cd src/main/resources/joctomap-natives
-make clean
+rm -rf joctomap-natives/build
+rm -rf joctomap-natives/lib
+rm -rf joctomap-natives/bin
+rm -rf src/main/resources/lib
+rm src/main/resources/libjoctomap.so
 
 
 echo -e "[exec] C/C++ clean script ends"

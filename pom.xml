@@ -126,6 +126,7 @@
                             <arguments>
                                 <argument>${basedir}/compile.sh</argument>
                                 <argument>${jdk}</argument>
+				<argument>${releaseType}</argument>
                             </arguments>
                             <successCodes>
                                 <successCode>0</successCode>
