@@ -129,7 +129,7 @@ bool checkCollision(point3d point, float radius, OcTree* octree){
             point3d border = relative_position_border_cell(it.getSize(), angle_cell, 0);
             distance[0] += border.x();
             distance[1] += border.y();
-            if(hypot(distance[0], distance[1]) <= radius){
+            if(hypot(distance[0], distance[1]) <= radius - 0.001){
                 return true;
             }
         }

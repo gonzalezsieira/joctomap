@@ -404,6 +404,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitio
             information, 
             state
     );
+    Point2D center_of_current_cell = info.coordinate;
+    Point2D state_2D_compare = Point2D(information->octree->keyToCoord(info.key, information->maxdepth));
     //know current adjacencies for this point
     jobject jcells = info.jadjacencies;
     jint jcells_size = env->CallIntMethod(jcells, information->method_size_arraylist);
@@ -439,20 +441,21 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitio
             }
             else{
                 Point2D upCenter = Point2D(information->octree->keyToCoord(currentkey, information->maxdepth));
-                if(fabs(upCenter.x() - state_2D.x()) < 0.001 && fabs(upCenter.y() - state_2D.y() < 0.001)){
-                    float directionNeighbor = atan2(center.y() - state_2D.y(), center.x() - state_2D.x());
+                if(fabs(upCenter.x() - state_2D_compare.x()) < 0.001 && fabs(upCenter.y() - state_2D_compare.y()) < 0.001){
+                    float directionNeighbor = atan2(center.y() - center_of_current_cell.y(), center.x() - center_of_current_cell.x());
                     float orientation_adapted = closestOrientationTo(information->neighbors_directions, directionNeighbor);
                     Point2D neighbor = information->neighbors[orientation_adapted];
                     upCenter = Point2D(upCenter.x() + neighbor.x(), upCenter.y() + neighbor.y());
                 }
                 //if current cell is occupied, try subsampling
-                if(information->octree->isNodeOccupied(information->octree->search(upCenter.x(), upCenter.y(), 0, information->maxdepth))){
-                    frontier_points(information->maxdepthsize, upCenter, queue_frontier_points);
-                }
+                //OcTreeNode *node = information->octree->search(upCenter.x(), upCenter.y(), 0, information->maxdepth);
+                //if(node != NULL && information->octree->isNodeOccupied(node)){
+                //    frontier_points(information->maxdepthsize, upCenter, queue_frontier_points);
+                //}
                 //only add center
-                else{
+                //else{
                     queue_frontier_points.push(point3d(upCenter.x(), upCenter.y(), 0));
-                }
+                //}
             }
             //Generate the transition to the couple of nearest frontier points of the adjacent cell
             int generated = 0;
