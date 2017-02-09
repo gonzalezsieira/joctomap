@@ -41,6 +41,7 @@ if [ "$result" == 0 ]; then
 		cd ..
 
 		# Copy target
+		mkdir ../src/main/resources/
 		if [[ "$OSTYPE" == "linux-gnu" ]]; then
             cp build/libjoctomap_natives.so ../src/main/resources/
         elif [[ "$OSTYPE" == "darwin"* ]]; then
