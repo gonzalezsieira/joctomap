@@ -14,15 +14,17 @@ public class CreateOctomapLab extends Module {
     static float size_box_x = 0.35f;
     static float size_box_y = 0.48f;
     static float resolution = 0.03f;
-    static Point2D min_position_flyarea = new Point2D(0, 0);
-    static Point2D max_position_flyarea = new Point2D(5, 4);
+    static Point2D min_position_flyarea = new Point2D(-0.4f, -0.4f);
+    static Point2D max_position_flyarea = new Point2D(5.4f, 4.4f);
     static Point2D min_position_map = new Point2D(-1, -1);
     static Point2D max_position_map = new Point2D(6, 5);
     static Point2D[] boxesCenter = new Point2D[]{
             new Point2D(0.49f, 0.44f),
             new Point2D( 0.51f, 2.19f),
             new Point2D(2.55f, 1.14f),
+            new Point2D(2.55f, 0.66f),
             new Point2D(2.57f, 2.82f),
+            new Point2D(2.57f, 3.30f),
             new Point2D(4.40f, 3.54f),
             new Point2D(4.36f, 1.60f)
     };
