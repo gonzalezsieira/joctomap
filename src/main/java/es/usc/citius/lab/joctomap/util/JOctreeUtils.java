@@ -17,6 +17,7 @@ package es.usc.citius.lab.joctomap.util;
 
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.impl.WeightedNode;
+import es.usc.citius.lab.joctomap.octree.Cell;
 import es.usc.citius.lab.joctomap.octree.JOctree;
 import es.usc.citius.lab.joctomap.octree.JOctreeKey;
 import es.usc.citius.lab.motionplanner.core.spatial.Point2D;
@@ -24,6 +25,7 @@ import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
 import es.usc.citius.lab.motionplanner.core.util.Pair;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,7 +56,7 @@ public class JOctreeUtils {
      * @param max maximum position of the range to check
      * @return collection of keys of the occupied cells in the range
      */
-    public native static Collection<JOctreeKey> getOccupiedKeysBetween(JOctree octree, Point3D min, Point3D max);
+    public native static List<JOctreeKey> getOccupiedKeysBetween(JOctree octree, Point3D min, Point3D max);
     
     /**
      * Retrieves a collection with the pairs: size of the occupied cells within
@@ -67,7 +69,7 @@ public class JOctreeUtils {
      * @param max maximum position of the range to check
      * @return collection of pair(coordinate, size) of the occupied cells in the range
      */
-    public native static Collection<Pair<Point3D, Float>> getOccupiedCoordinatesBetween(JOctree octree, Point3D min, Point3D max);
+    public native static List<Cell> getOccupiedCoordinatesBetween(JOctree octree, Point3D min, Point3D max);
     
     /**
      * Queries the resolution at a current point of the octree; retrieves Float.MAX_VALUE
