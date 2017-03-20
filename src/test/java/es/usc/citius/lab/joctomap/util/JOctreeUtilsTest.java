@@ -15,11 +15,13 @@
  */
 package es.usc.citius.lab.joctomap.util;
 
+import es.usc.citius.lab.joctomap.octree.Cell;
 import es.usc.citius.lab.joctomap.octree.JOctree;
 import es.usc.citius.lab.joctomap.octree.JOctreeKey;
 import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
-import es.usc.citius.lab.motionplanner.core.util.Pair;
 import java.util.Collection;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -55,7 +57,7 @@ public class JOctreeUtilsTest{
     
     @Test
     public void test02_Coordinates() {
-        Collection<Pair<Point3D, Float>> coordinatesOccupied = JOctreeUtils.getOccupiedCoordinatesBetween(octree, Point3D.ZERO, new Point3D(20, 20, 0));
+        Collection<Cell> coordinatesOccupied = JOctreeUtils.getOccupiedCoordinatesBetween(octree, Point3D.ZERO, new Point3D(20, 20, 0));
         assertTrue("list of occupied cells must be size 2", coordinatesOccupied.size() == 2);
         //assertTrue("position (5,5,0) not in the list of occupied", coordinatesOccupied.contains(octree.coordToKey(5, 5, 0)));
         //assertTrue("position (10,10,0) not in the list of occupied", coordinatesOccupied.contains(octree.coordToKey(10, 10, 0)));
