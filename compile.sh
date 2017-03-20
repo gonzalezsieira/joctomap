@@ -15,10 +15,10 @@ cd build
 release=$2
 if [ "$release" == "Debug" ]; then
 	echo "Release type: Debug"	
-	cmake ../ -DJDK:STRING="$1" -DCMAKE_BUILD_TYPE=Debug
+	cmake .. -DJDK:STRING="$1" -DCMAKE_BUILD_TYPE=Debug
 elif [ "$release" == "Release" ]; then
 	echo "Release type: Release" 
-	cmake ../ -DJDK:STRING="$1" -DCMAKE_BUILD_TYPE=Release
+	cmake .. -DJDK:STRING="$1" -DCMAKE_BUILD_TYPE=Release
 else
 	echo "Release type not recognized, must be Release or Debug"
 	exit 1
@@ -47,9 +47,6 @@ if [ "$result" == 0 ]; then
         elif [[ "$OSTYPE" == "darwin"* ]]; then
             cp build/libjoctomap_natives.dylib ../src/main/resources/libjoctomap_natives.so
         fi
-
-		mkdir ../src/main/resources/lib
-		cp lib/*.a ../src/main/resources/lib
 
 		# go to beginning directory
 		cd "$dir"

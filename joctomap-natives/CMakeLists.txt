@@ -65,6 +65,6 @@ add_subdirectory(octomap/dynamicEDT3D)
 
 add_library(joctomap_natives SHARED ${SOURCE_FILES})
 
-add_dependencies(joctomap_natives octomap dynamicedt3d)
+add_dependencies(joctomap_natives octomap dynamicEDT3D)
 
-target_link_libraries(joctomap_natives octomath octomap dynamicedt3d)
+target_link_libraries(joctomap_natives octomath octomap)
