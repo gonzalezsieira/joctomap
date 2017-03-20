@@ -48,8 +48,7 @@ public class JOCtreeBuilder extends Module{
                 inputArgs[0], 
                 Float.parseFloat(inputArgs[1]),
                 Float.parseFloat(inputArgs[2]),
-                Float.parseFloat(inputArgs[3]),
-                Integer.parseInt(inputArgs[4])
+                Integer.parseInt(inputArgs[3])
         );
         //write octree to file (.ot extension mandatory)
         String outputPath = args.getOptionValue("o");
@@ -63,11 +62,10 @@ public class JOCtreeBuilder extends Module{
      * @param input where the PPM file is located
      * @param resolution min size of the cells
      * @param sizeX max. size of the X dimension of the map
-     * @param sizeY max. size of the Y dimension of the map
      * @param maxDepthCell number of levels which a cell is allowed to compact
      * @return
      */
-    public static JOctree octreeFromPPM(String input, float resolution, float sizeX, float sizeY, int maxDepthCell){
+    public static JOctree octreeFromPPM(String input, float resolution, float sizeX, int maxDepthCell){
         //read the ppm file 
         PPMFileReader reader = null;
         //open file and read data from
@@ -81,8 +79,8 @@ public class JOCtreeBuilder extends Module{
         }
         //instantiate new octree
         JOctree octree = JOctree.create(resolution);
-        float resX = sizeX / (reader.getPixels().length - 1);
-        float resY = sizeY / (reader.getPixels()[0].length - 1);
+        float resolutionPPM = sizeX / (reader.getPixels().length - 1);
+        float sizeY = (reader.getPixels()[0].length - 1) * resolutionPPM;
         float sizeZ = octree.getNodeSize(maxDepthCell);
         JOctomapLogger.info("Generating octomap structure with following params:"
                 + "\n\t* Resolution: " + resolution
@@ -95,7 +93,7 @@ public class JOCtreeBuilder extends Module{
         for(float z = 0f; z < sizeZ; z += octree.getResolution() / 2f){
             for (float x = 0; x < sizeX; x += octree.getResolution() / 2f) {
                 for (float y = 0; y < sizeY; y += octree.getResolution() / 2f) {
-                    int[] rgb = reader.getPixels()[Math.round(x / resX)][Math.round(y / resY)];
+                    int[] rgb = reader.getPixels()[Math.round(x / resolutionPPM)][Math.round(y / resolutionPPM)];
                     //occupied case: one of the color components reaches the maximum value of the file
                     boolean occupied = rgb[0] < 10 && rgb[1] < 10 && rgb[2] < 10;
                     //update occupancy information until we get an absolute value for the occupancy (1 or 0)
@@ -125,10 +123,10 @@ public class JOCtreeBuilder extends Module{
         op.addOption(
             Option.builder("i")
                 .required()
-                .desc("Input .ppm file, resolution, size X (m), size Y (m) and max depth of cells")
-                .numberOfArgs(5)
+                .desc("Input .ppm file, resolution, size X (m), and max depth of cells. Size Y will be calculated automatically to maintain proportions.")
+                .numberOfArgs(4)
                 .longOpt("input")
-                .argName("ppmFile> <resolution> <sizeX> <sizeY> <maxDepthCell")
+                .argName("ppmFile> <resolution> <sizeX> <maxDepthCell")
                 .build()
         );
         op.addOption(
