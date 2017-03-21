@@ -109,32 +109,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.0.1</version>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <!-- here the phase you need -->
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/lib/</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>joctomap-natives/lib</directory>
-                                    <filtering>true</filtering>
-                                    <excludes>
-                                        <exclude>**/cmake/**</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.2.1</version>
@@ -152,7 +126,23 @@
                             <arguments>
                                 <argument>${basedir}/compile.sh</argument>
                                 <argument>${jdk}</argument>
-				<argument>${releaseType}</argument>
+				                <argument>${releaseType}</argument>
+                            </arguments>
+                            <successCodes>
+                                <successCode>0</successCode>
+                            </successCodes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>resources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>bash</executable>
+                            <arguments>
+                                <argument>${basedir}/copy-resources.sh</argument>
                             </arguments>
                             <successCodes>
                                 <successCode>0</successCode>
