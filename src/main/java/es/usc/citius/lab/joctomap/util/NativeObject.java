@@ -28,8 +28,9 @@ public abstract class NativeObject {
         static{
             try {
                 NativeUtils.loadLibraryFromJar("/libjoctomap_natives.so");
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
+            } catch (Throwable ex) {
+				JOctomapLogger.severe("Uncaught exception - " + ex.getMessage());
+				ex.printStackTrace(System.err);
             }
         }
     
