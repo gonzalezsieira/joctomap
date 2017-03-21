@@ -69,7 +69,7 @@ public class Main {
             throw new RuntimeException(ex);
         }
         //now obtain the options of the module
-        JOctomapLogger.info("Using module " + module.getClass().getSimpleName());
+        JOctomapLogger.fine("Using module " + module.getClass().getSimpleName());
         try{
             commands = parser.parse(module.getModuleOptions(), args);
         } catch (ParseException ex){

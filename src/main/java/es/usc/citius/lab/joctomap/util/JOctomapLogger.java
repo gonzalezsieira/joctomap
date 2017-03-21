@@ -15,6 +15,7 @@
  */
 package es.usc.citius.lab.joctomap.util;
 
+import java.io.Console;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,11 +43,20 @@ public enum JOctomapLogger {
 	 * Default constructor of the class. Initializes the Java logger and
 	 * the handler options to print in a readable format.
 	 */
-	private JOctomapLogger(){
+	JOctomapLogger(){
 		//retrieve logger
 		this.logger = Logger.getLogger("JOctomap");
+		//print to stdout
+		class ConsoleHandlerStdout extends ConsoleHandler {
+			public ConsoleHandlerStdout(){
+				super();
+				super.setOutputStream(System.out);
+			}
+		}
 		//add handler
-		this.setHandler(new ConsoleHandler());
+		this.setHandler(new ConsoleHandlerStdout());
+		//set logger level
+		this.logger.setLevel(Level.ALL);
 	}
 	
 	/**

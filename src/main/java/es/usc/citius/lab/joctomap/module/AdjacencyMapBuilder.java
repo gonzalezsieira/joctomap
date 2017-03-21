@@ -37,13 +37,13 @@ public class AdjacencyMapBuilder extends Module{
     @Override
     public void execute(CommandLine args) {
         //load octree
-        JOctomapLogger.info("Loading octree: " + args.getOptionValue("i"));
+        JOctomapLogger.fine("Loading octree: " + args.getOptionValue("i"));
         JOctree octree = JOctree.read(args.getOptionValue("i"));
         //Creating adjacency map
-        JOctomapLogger.info("Creating adjacency map...");
+        JOctomapLogger.fine("Creating adjacency map...");
         AdjacencyMap map = AdjacencyMap.create(octree);
         //store result
-        JOctomapLogger.info("Storing to file: " + args.getOptionValue("o"));
+        JOctomapLogger.fine("Storing to file: " + args.getOptionValue("o"));
         map.write(args.getOptionValue("o"));
         //release memory
         octree.dispose();

@@ -53,7 +53,7 @@ public class JOCtreeBuilder extends Module{
         //write octree to file (.ot extension mandatory)
         String outputPath = args.getOptionValue("o");
         if(!outputPath.endsWith(".ot")) { outputPath = outputPath.concat(".ot"); }
-        JOctomapLogger.info("Saving to " + outputPath);
+        JOctomapLogger.fine("Saving to " + outputPath);
         octree.write(outputPath);
     }
 
@@ -70,7 +70,7 @@ public class JOCtreeBuilder extends Module{
         PPMFileReader reader = null;
         //open file and read data from
         try {
-            JOctomapLogger.info("Reading file " + input + "...");
+            JOctomapLogger.fine("Reading file " + input + "...");
             reader = new PPMFileReader(input);
         } catch (FileNotFoundException ex) {
             JOctomapLogger.severe("Could not open the file specified: " + ex);
@@ -82,7 +82,7 @@ public class JOCtreeBuilder extends Module{
         float resolutionPPM = sizeX / (reader.getPixels().length - 1);
         float sizeY = (reader.getPixels()[0].length - 1) * resolutionPPM;
         float sizeZ = octree.getNodeSize(maxDepthCell);
-        JOctomapLogger.info("Generating octomap structure with following params:"
+        JOctomapLogger.fine("Generating octomap structure with following params:"
                 + "\n\t* Resolution: " + resolution
                 + "\n\t* Dimensions: [" + sizeX + ", " + sizeY + ", " + sizeZ + "]");
         //to show percentage of operation done
@@ -108,9 +108,9 @@ public class JOCtreeBuilder extends Module{
                 }
             }
             currentIteration++;
-            JOctomapLogger.info("\r" + formatter.format((float) currentIteration / (float) iterations));
+            JOctomapLogger.fine("\r" + formatter.format((float) currentIteration / (float) iterations));
         }
-        JOctomapLogger.info("Pruning octomap...");
+        JOctomapLogger.fine("Pruning octomap...");
         //prunes octree
         octree.updateInnerOccupancy();
         octree.prune();
