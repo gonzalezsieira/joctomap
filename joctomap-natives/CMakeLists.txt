@@ -36,6 +36,8 @@ set(SOURCE_FILES
     src/joctreedistancemap.cpp
     )
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 set_property(SOURCE ${SOURCES_CPP} PROPERTY COMPILE_FLAGS "-O3 -std=c++0x")
 set_property(SOURCE ${SOURCES_H} PROPERTY COMPILE_FLAGS "-O3 -std=c++0x")
 
@@ -65,6 +67,7 @@ add_subdirectory(octomap/dynamicEDT3D)
 
 add_library(joctomap_natives SHARED ${SOURCE_FILES})
 
-add_dependencies(joctomap_natives octomap dynamicEDT3D)
+add_dependencies(dynamicedt3d octomap)
+add_dependencies(joctomap_natives octomap octomapth dynamicedt3d)
 
-target_link_libraries(joctomap_natives octomath octomap)
+target_link_libraries(joctomap_natives octomath octomap dynamicedt3d)
