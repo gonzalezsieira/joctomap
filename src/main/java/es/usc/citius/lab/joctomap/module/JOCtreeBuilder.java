@@ -53,7 +53,7 @@ public class JOCtreeBuilder extends Module{
         //write octree to file (.ot extension mandatory)
         String outputPath = args.getOptionValue("o");
         if(!outputPath.endsWith(".ot")) { outputPath = outputPath.concat(".ot"); }
-        System.out.println("Saving to " + outputPath);
+        JOctomapLogger.info("Saving to " + outputPath);
         octree.write(outputPath);
     }
 
@@ -108,7 +108,7 @@ public class JOCtreeBuilder extends Module{
                 }
             }
             currentIteration++;
-            System.out.print("\r" + formatter.format((float) currentIteration / (float) iterations));
+            JOctomapLogger.info("\r" + formatter.format((float) currentIteration / (float) iterations));
         }
         JOctomapLogger.info("Pruning octomap...");
         //prunes octree
