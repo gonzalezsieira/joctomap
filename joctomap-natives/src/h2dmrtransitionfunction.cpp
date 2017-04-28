@@ -77,7 +77,9 @@ struct Point2D_Hash
 	std::size_t operator()(const Point2D &point) const
 	{
 		//already defined hash function for doubles
-		return std::hash<double>()(point.x()) + std::hash<double>()(point.y());
+        size_t h1 = std::hash<double>()(point.x());
+        size_t h2 = std::hash<double>()(point.y());
+		return  (h1 ^ (h2 << 1));
 	}
 
 };
