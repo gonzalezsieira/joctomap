@@ -15,7 +15,6 @@ set(SOURCE_FILES
     include/collisionchecker2d.h
     include/collisions.h
     include/definitions.h
-    include/h2dmrtransitionfunction.h
     include/iteratorinformation.h
     include/joctree.h
     include/joctreenode.h
@@ -26,7 +25,6 @@ set(SOURCE_FILES
     src/adjacencymap.cpp
     src/collisionchecker2d.cpp
     src/collisions.cpp
-    src/h2dmrtransitionfunction.cpp
     src/iteratorinformation.cpp
     src/joctree.cpp
     src/joctreenode.cpp
