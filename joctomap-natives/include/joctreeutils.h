@@ -25,7 +25,7 @@ extern "C" {
 /*
  * Class:     es_usc_citius_lab_joctomap_util_JOctreeUtils
  * Method:    getOccupiedKeysBetween
- * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;Les/usc/citius/lab/motionplanner/core/spatial/Point3D;Les/usc/citius/lab/motionplanner/core/spatial/Point3D;)Ljava/util/Collection;
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;Les/usc/citius/lab/motionplanner/core/spatial/Point3D;Les/usc/citius/lab/motionplanner/core/spatial/Point3D;)Ljava/util/List;
  */
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_getOccupiedKeysBetween
   (JNIEnv *, jclass, jobject, jobject, jobject);
@@ -33,7 +33,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_getO
 /*
  * Class:     es_usc_citius_lab_joctomap_util_JOctreeUtils
  * Method:    getOccupiedCoordinatesBetween
- * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;Les/usc/citius/lab/motionplanner/core/spatial/Point3D;Les/usc/citius/lab/motionplanner/core/spatial/Point3D;)Ljava/util/Collection;
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;Les/usc/citius/lab/motionplanner/core/spatial/Point3D;Les/usc/citius/lab/motionplanner/core/spatial/Point3D;)Ljava/util/List;
  */
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_getOccupiedCoordinatesBetween
   (JNIEnv *, jclass, jobject, jobject, jobject);
