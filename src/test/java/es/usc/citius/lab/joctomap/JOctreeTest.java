@@ -18,6 +18,7 @@ package es.usc.citius.lab.joctomap;
 import es.usc.citius.lab.joctomap.iterators.OctreeIterator;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
@@ -130,8 +131,7 @@ public class JOctreeTest{
 
 	/**
 	 * Unit test for retrieving a {@link JOctreeKey} from a position and depth
-	 * 
-	 * @param octree {@link JOctree} instance
+	 *
 	 * @return key that identifies the node
 	 */
 	@Test
@@ -165,8 +165,7 @@ public class JOctreeTest{
 	
 	/**
 	 * Test case to recover the depth of the octree.
-	 * 
-	 * @param octree {@link JOctree} instance
+	 *
 	 * @return octree maximum depth
 	 */
 	@Test
@@ -190,9 +189,6 @@ public class JOctreeTest{
 	/**
 	 * Test case to search a node in the octree, given its {@link JOctreeKey} (search
 	 * with depth = 0)
-	 * 
-	 * @param octree {@link JOctree} instance
-	 * @param key {@link JOctreeKey} instance
 	 */
 	@Test
 	public void test10_searchWithKeyTest(){
@@ -413,4 +409,57 @@ public class JOctreeTest{
             }
             assertEquals("Native and java methods to retrieve the size do not match", sizeJava, sizeNative);
         }
+
+        @Test
+		public void test28_changeDetection(){
+        	Point3D min = octree.getMetricMin();
+        	Point3D max = octree.getMetricMax();
+			Point3D endChanges = new Point3D(min.x + (max.x - min.x) / 10f, min.y + (max.y - min.y) / 10f, min.z + (max.z - min.z) / 10f);
+
+        	//enable change control
+			octree.enableChangeDetection(true);
+
+        	//introduce changes in the octree (first quarter of the map)
+			for(float x = min.x; x <= endChanges.x; x += octree.getResolution() / 2f){
+				for(float y = min.y; y <= endChanges.y; y += octree.getResolution() / 2f){
+					for(float z = min.z; z <= endChanges.z; z += octree.getResolution() / 2f) {
+						octree.updateNode(x, y, z, true);
+					}
+				}
+			}
+
+			//get list of changes
+			List<JOctreeKey> keysChanged = octree.keysChanged();
+
+			//check not empty
+			assertTrue("List of changed keys cannot be empty",keysChanged.size() > 0);
+
+			//all changes must belong to the first quarter of the map (which was the changed region)
+
+			for(JOctreeKey key : keysChanged){
+				Point3D coordinate = octree.keyToCoord(key);
+				assertTrue("Changed coordinate must be in the first quadrant of the map", coordinate.x >= min.x - octree.getResolution() && coordinate.y >= min.y - octree.getResolution() && coordinate.z >= min.z - octree.getResolution() && coordinate.x <= endChanges.x + octree.getResolution() && coordinate.y <= endChanges.y + octree.getResolution() && coordinate.z <= endChanges.z + octree.getResolution());
+			}
+
+			//reset changes detection
+			octree.resetChangeDetection();
+
+			//check empty
+			assertTrue("List of changed keys must be empty after reset", octree.keysChanged().isEmpty());
+
+			//disable changes detection
+			octree.enableChangeDetection(false);
+
+			//re-introduce changes in the octree (first quarter of the map)
+			for(float x = min.x; x <= endChanges.x; x += octree.getResolution() / 2f){
+				for(float y = min.y; y <= endChanges.y; y += octree.getResolution() / 2f){
+					for(float z = min.z; z <= endChanges.z; z += octree.getResolution() / 2f) {
+						octree.updateNode(x, y, z, false);
+					}
+				}
+			}
+
+			//check empty
+			assertTrue("List of changed keys must be empty when disabled", octree.keysChanged().isEmpty());
+		}
 }

@@ -310,6 +310,30 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_read
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_create
   (JNIEnv *, jclass, jfloat);
 
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    enableChangeDetection
+ * Signature: (Z)V
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_enableChangeDetection
+  (JNIEnv *, jobject, jboolean);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    resetChangeDetection
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_resetChangeDetection
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    keysChanged
+ * Signature: ()Ljava/util/List;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_keysChanged
+  (JNIEnv *, jobject);
+
 #ifdef __cplusplus
 }
 #endif

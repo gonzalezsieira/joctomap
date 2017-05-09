@@ -705,3 +705,55 @@ JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_updateInne
     //call method expand() of the octree
     octree->updateInnerOccupancy();
 }
+
+/*
+ * Enables changes detection.
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_enableChangeDetection
+  (JNIEnv *env, jobject jtree, jboolean enable){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//set flag
+	octree->enableChangeDetection(enable);
+  }
+
+/*
+ * Resets changes detection.
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_resetChangeDetection
+  (JNIEnv *env, jobject jtree){
+    //recover octree
+    OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//reset
+	octree->resetChangeDetection();
+  }
+
+/*
+ * Creates a list with changes since last reset.
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_keysChanged
+  (JNIEnv *env, jobject jtree){
+	//recover octree
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//create list to store changed keys
+	//find ArrayList class
+	jclass arrayListClass = env->FindClass("Ljava/util/ArrayList;");
+	//retrieve ArrayList constructor
+	jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
+	//retrieve ArrayList add method
+	jmethodID addArrayList = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
+	//new arraylist()
+	jobject arrayListObject = env->NewObject(arrayListClass, arrayListConstructor);
+	//iterate over changed keys
+	for(KeyBoolMap::const_iterator it = octree->changedKeysBegin(); it != octree->changedKeysEnd(); ++it){
+		//find class and constructor to instantiate JOCtreekey
+		jclass cls = env->FindClass(CLS_JOCTREEKEY);
+		jmethodID constructor = env->GetMethodID(cls, METHOD_CONSTRUCTOR, "(III)V");
+		//new JOctreeKey(x, y, z)
+		jobject joctreekey = env->NewObject(cls, constructor, static_cast<int>(it->first.k[0]), static_cast<int>(it->first.k[1]), static_cast<int>(it->first.k[2]));
+		//add object to the ArrayList
+		env->CallBooleanMethod(arrayListObject, addArrayList, joctreekey);
+	}
+	//return list
+	return arrayListObject;
+  }

@@ -19,6 +19,8 @@ import es.usc.citius.lab.joctomap.iterators.OctreeIterator;
 import es.usc.citius.lab.joctomap.util.NativeObject;
 import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
 
+import java.util.List;
+
 /**
  * This class wraps an octree object in the Octomap library to be used in 
  * java; native wrapped functions include the following:
@@ -422,5 +424,31 @@ public class JOctree extends NativeObject{
 	 * @return octree with the given resolution
 	 */
 	public static native JOctree create(float res);
-        
+
+
+	/*
+	 * *******************************************************************************
+	 * *							Changes detection                                *
+	 * *******************************************************************************
+	 */
+
+	/**
+	 * Enables/disables changes detection. If enabled, a list of changes can be retrieved from this
+	 * object when information in cells change over time.
+	 *
+	 * @param enable true for enable, false otherwise
+	 */
+	public native void enableChangeDetection(boolean enable);
+
+	/**
+	 * Clear the list of changes produced in the octree since the last reset.
+	 */
+	public native void resetChangeDetection();
+
+	/**
+	 * Retrieves the list of changed keys since the last reset.
+	 *
+	 * @return list of {@link JOctreeKey}, cells changed since the last reset.
+	 */
+	public native List<JOctreeKey> keysChanged();
 }
