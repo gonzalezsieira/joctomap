@@ -56,14 +56,14 @@ public class JOctree extends NativeObject{
 		super(pointer);
 	}
 
-        @Override
-        public native void dispose();
-        
-        @Override
-        protected void finalize() throws Throwable {
-            super.finalize(); //To change body of generated methods, choose Tools | Templates.
-            dispose();
-        }
+	@Override
+	public native void dispose();
+
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize(); //To change body of generated methods, choose Tools | Templates.
+		dispose();
+	}
         
 	/*
 	 * *******************************************************************************
@@ -255,12 +255,12 @@ public class JOctree extends NativeObject{
 	 * *				Octree information query functions                           *
 	 * *******************************************************************************
 	 */
-        /**
-         * Retrieves the number of leafs in the octree.
-         * 
-         * @return number of leafs in the tree
-         */
-        public native int size();
+	/**
+	 * Retrieves the number of leafs in the octree.
+	 *
+	 * @return number of leafs in the tree
+	 */
+	public native int size();
 	/**
 	 * Retrieves the maximum depth of the octree.
 	 * 
@@ -372,22 +372,22 @@ public class JOctree extends NativeObject{
 	 */
 	public native OctreeIterator leafBBXIterator(JOctreeKey min, JOctreeKey max, int maxDepth);
         
-        /**
-         * Prunes all the nodes in the octree (cuts all the children when they have the same
-         * value).
-         */
-        public native void prune();
-        
-        /**
-         * Expands all the nodes in the octree to the minimum resolution.
-         */
-        public native void expand();
-        
-        /**
-         * Updates the occupancy of inner nodes to reflect the children's occupancy; needed to
-         * correct the multi-resolution behavior when updated the occupancy with lazy evaluation enabled.
-         */
-        public native void updateInnerOccupancy();
+	/**
+	 * Prunes all the nodes in the octree (cuts all the children when they have the same
+	 * value).
+	 */
+	public native void prune();
+
+	/**
+	 * Expands all the nodes in the octree to the minimum resolution.
+	 */
+	public native void expand();
+
+	/**
+	 * Updates the occupancy of inner nodes to reflect the children's occupancy; needed to
+	 * correct the multi-resolution behavior when updated the occupancy with lazy evaluation enabled.
+	 */
+	public native void updateInnerOccupancy();
 	
 	/*
 	 * *******************************************************************************
