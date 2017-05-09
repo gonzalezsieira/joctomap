@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-2016 Adrián González Sieira (adrian.gonzalez@usc.es)
+ * Copyright (C) 2014-2017 Adrián González Sieira (adrian.gonzalez@usc.es)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -757,3 +757,126 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_keysCha
 	//return list
 	return arrayListObject;
   }
+
+/*
+* Retrieves a child from the node.
+*/
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getNodeChild
+	(JNIEnv *env, jobject jtree, jobject jnode, jint jchild){
+		//retrieve native pointer
+		OcTree *octree = (OcTree*) getPointer(env, jtree);
+		//retrieve native pointer
+		OcTreeNode *node = (OcTreeNode*) getPointer(env, jnode);
+		//check if the i-th node exist, return it if exist
+		if(octree->nodeChildExists(node, jchild)){
+			OcTreeNode *child = octree->getNodeChild(node, jchild);
+			//find class and constructor to instantiate joctreenode
+			jclass cls = env->FindClass(CLS_JOCTREENODE);
+			jmethodID constructor = env->GetMethodID(cls, METHOD_CONSTRUCTOR, "(J)V");
+			//return new instance
+			return env->NewObject(cls, constructor, child);
+		}
+		//return null if the child does not exist
+		else{
+			return NULL;
+		}
+}
+
+/*
+* Checks the existence of children in a node.
+*/
+JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_nodeHasChildren
+	(JNIEnv *env, jobject jtree, jobject jnode){
+	//retrieve native pointer
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//retrieve native pointer
+	OcTreeNode *node = (OcTreeNode*) getPointer(env, jnode);
+	//return result
+	return octree->nodeHasChildren(node);
+}
+
+/*
+* Checks if a node can be collapsed
+*/
+JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_isNodeCollapsible
+	(JNIEnv *env, jobject jtree, jobject jnode){
+	//retrieve native pointer
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//retrieve native pointer
+	OcTreeNode *node = (OcTreeNode*) getPointer(env, jnode);
+	//return result
+	return octree->isNodeCollapsible(node);
+}
+
+/*
+* Checks if a child exists.
+*/
+JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_nodeChildExists
+	(JNIEnv *env, jobject jtree, jobject jnode, jint jchild){
+	//retrieve native pointer
+	OcTree *octree = (OcTree*) getPointer(env, jtree);
+	//retrieve native pointer
+	OcTreeNode *node = (OcTreeNode*) getPointer(env, jnode);
+	//return result
+	return octree->nodeChildExists(node, jchild);
+}
+
+/*
+ * Retrieves the children of a node.
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getNodeChildren
+	(JNIEnv *env, jobject jtree, jobject jnode){
+		//retrieve native pointer
+		OcTree *octree = (OcTree*) getPointer(env, jtree);
+		//retrieve native pointer
+		OcTreeNode *node = (OcTreeNode*) getPointer(env, jnode);
+		//retrieve ArrayList class
+		jclass arrayListClass = env->FindClass(CLS_ARRAYLIST);
+		//retrieve ArrayList constructor
+		jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, METHOD_CONSTRUCTOR, "()V");
+		//retrieve ArrayList add method
+		jmethodID addArrayList = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
+		//retrieve JOctreeNode class
+		jclass nodeClass = env->FindClass(CLS_JOCTREENODE);
+		//retrieve JOctreeNode constructor
+		jmethodID nodeConstructor = env->GetMethodID(nodeClass, METHOD_CONSTRUCTOR, "(J)V");
+		//new arraylist()
+		jobject arrayListObject = env->NewObject(arrayListClass, arrayListConstructor);
+		int i = 0;
+		while(true){
+			//break when the i-th child does not exist, and return the i-th
+			if(!octree->nodeChildExists(node, i)){
+				break;
+			}
+			//increase counter
+			i++;
+			//instantiate current child
+			jobject currentChild = env->NewObject(nodeClass, nodeConstructor, octree->getNodeChild(node, i));
+			//add object to the ArrayList
+			env->CallBooleanMethod(arrayListObject, addArrayList, currentChild);
+		}
+		//return arraylist object
+		return arrayListObject;
+}
+
+/*
+ * Retrieves the number of children of a node
+ */
+JNIEXPORT jint JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_nodeNumChildren
+	(JNIEnv *env, jobject jtree, jobject jnode){
+		//retrieve native pointer
+		OcTree *octree = (OcTree*) getPointer(env, jtree);
+		//retrieve native pointer
+		OcTreeNode *node = (OcTreeNode*) getPointer(env, jnode);
+		int childs = 0;
+		while(true){
+			//break when the i-th child does not exist, and return the i-th
+			if(!octree->nodeChildExists(node, childs)){
+				break;
+			}
+			//increase counter
+			childs++;
+		}
+		//return number of childs
+		return childs;
+}

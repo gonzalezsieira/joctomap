@@ -19,6 +19,7 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import es.usc.citius.lab.joctomap.octree.JOctree;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -35,6 +36,7 @@ import es.usc.citius.lab.joctomap.octree.JOctreeNode;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class JOctreeNodeTest {
 
+	private static JOctree octree;
 	private static JOctreeNode octreeNode; //used in tests
 	private static boolean hasChildren; //used in tests
 	private static double occupancy; //used in tests
@@ -49,7 +51,8 @@ public class JOctreeNodeTest {
 	@BeforeClass
 	public static void initialize(){
 		//store node of the readed octree
-		octreeNode = JOctreeTest.getOctree().search(0, 0, 0, 0);
+		octree = JOctreeTest.getOctree();
+		octreeNode = octree.search(0, 0, 0, 0);
 	}
 	
 	/**
@@ -66,7 +69,7 @@ public class JOctreeNodeTest {
 	 */
 	@Test
 	public void test02_hasChildrenTest(){
-		hasChildren = octreeNode.hasChildren();
+		hasChildren = octree.nodeHasChildren(octreeNode);
 	}
 	
 	/**
@@ -74,7 +77,7 @@ public class JOctreeNodeTest {
 	 */
 	@Test
 	public void test03_numChildrenTest(){
-		numChildren = octreeNode.getNumChildren();
+		numChildren = octree.nodeNumChildren(octreeNode);
 		assertTrue("hasChildren = " + hasChildren + " but numchildren = " + numChildren, (!hasChildren && numChildren == 0) || (hasChildren && numChildren > 0));
 	}
 	
@@ -83,7 +86,7 @@ public class JOctreeNodeTest {
 	 */
 	@Test
 	public void test04_getChildrenTest(){
-		children = octreeNode.getChildren();
+		children = octree.getNodeChildren(octreeNode);
 		assertTrue("numchildren and children array size differ", children.size() == numChildren);
 		assertTrue("haschildren and numchildren with different information", (hasChildren && numChildren > 0) || (!hasChildren && numChildren == 0));
 	}
@@ -94,7 +97,7 @@ public class JOctreeNodeTest {
 	@Test
 	public void test05_childExistsTest(){
 		for(int i = 0; i < numChildren; i++){
-			boolean exists = octreeNode.childExists(i);
+			boolean exists = octree.nodeChildExists(octreeNode, i);
 			assertTrue("child " + i + " does not exist but numchildren=" + numChildren, exists);
 		}
 	}
@@ -106,7 +109,7 @@ public class JOctreeNodeTest {
 	@Test
 	public void test06_collapsibleTest(){
 		//retrieve collapsibility
-		boolean collapsible = octreeNode.collapsible();
+		boolean collapsible = octree.isNodeCollapsible(octreeNode);
 		//check equality of the nodes
 		boolean equals = true;
 		//check occupancy of the children

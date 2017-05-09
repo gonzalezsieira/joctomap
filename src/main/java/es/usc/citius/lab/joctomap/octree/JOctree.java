@@ -342,7 +342,64 @@ public class JOctree extends NativeObject{
 	 * @see #useBBXLimit(boolean)
 	 */
 	public native boolean isBBXApplied();
-	
+
+
+	/*
+	 * *******************************************************************************
+	 * *				Node interaction functions 		                             *
+	 * *******************************************************************************
+	 */
+	/**
+	 * Retrieve the i-th child of the node, if exists.
+	 *
+	 * @param node instance of {@link JOctreeNode} to query
+	 * @param i child number
+	 * @return corresponding {@link JOctreeNode} if child exists, null otherwise
+	 */
+	public native JOctreeNode getNodeChild(JOctreeNode node, int i);
+
+	/**
+	 * Queries if this is a leaf node.
+	 *
+	 * @param node instance of {@link JOctreeNode} to query
+	 * @return true if this is not a leaf node
+	 */
+	public native boolean nodeHasChildren(JOctreeNode node);
+
+	/**
+	 * Queries if this is a collapsible node.
+	 *
+	 * @param node instance of {@link JOctreeNode} to query
+	 * @return true if all childs of the node exist, and they have not children of their own
+	 */
+	public native boolean isNodeCollapsible(JOctreeNode node);
+
+	/**
+	 * Queries if the i-th child of the node exists.
+	 *
+	 * @param node instance of {@link JOctreeNode} to query
+	 * @param i i-th element
+	 * @return true if the i-th child of this node exists
+	 */
+	public native boolean nodeChildExists(JOctreeNode node, int i);
+
+	/**
+	 * Retrieves the list of children of the given node.
+	 *
+	 * @param node instance of {@link JOctreeNode} to query
+	 * @return list of children of the node
+	 */
+	public native List<JOctreeNode> getNodeChildren(JOctreeNode node);
+
+	/**
+	 * Queries the number of children of this node.
+	 *
+	 * @param node instance of {@link JOctreeNode} to query
+	 * @return number of children
+	 */
+	public native int nodeNumChildren(JOctreeNode node);
+
+
 	/*
 	 * *******************************************************************************
 	 * *				Iterator retrieval functions	                             *
