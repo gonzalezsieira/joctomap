@@ -56,22 +56,11 @@ namespace octomap {
 
     CountingOcTreeNode();
     ~CountingOcTreeNode();
-    bool createChild(unsigned int i);
-
-    inline CountingOcTreeNode* getChild(unsigned int i) {
-      return static_cast<CountingOcTreeNode*> (OcTreeDataNode<unsigned int>::getChild(i));
-    }
-
-    inline const CountingOcTreeNode* getChild(unsigned int i) const {
-      return static_cast<const CountingOcTreeNode*> (OcTreeDataNode<unsigned int>::getChild(i));
-    }
-
+    
     inline unsigned int getCount() const { return getValue(); }
     inline void increaseCount() { value++; }
     inline void setCount(unsigned c) {this->setValue(c); }
 
-    // overloaded:
-    void expandNode();
   };
 
 
@@ -82,14 +71,13 @@ namespace octomap {
    * Count is recursive, parent nodes have the summed count of their
    * children.
    *
-   * \note In our mapping system this data structure is used in
-   *       the sensor model only. Do not use, e.g., insertScan.
+   * \note Was only used internally, not used anymore
    */
   class CountingOcTree : public OcTreeBase <CountingOcTreeNode> {
 
   public:
     /// Default constructor, sets resolution of leafs
-    CountingOcTree(double resolution) : OcTreeBase<CountingOcTreeNode>(resolution) {};    
+    CountingOcTree(double resolution);
     virtual CountingOcTreeNode* updateNode(const point3d& value);
     CountingOcTreeNode* updateNode(const OcTreeKey& k);
     void getCentersMinHits(point3d_list& node_centers, unsigned int min_hits) const;
@@ -104,14 +92,25 @@ namespace octomap {
 
     /**
      * Static member object which ensures that this OcTree's prototype
-     * ends up in the classIDMapping only once
+     * ends up in the classIDMapping only once. You need this as a 
+     * static member in any derived octree class in order to read .ot
+     * files through the AbstractOcTree factory. You should also call
+     * ensureLinking() once from the constructor.
      */
     class StaticMemberInitializer{
        public:
          StaticMemberInitializer() {
            CountingOcTree* tree = new CountingOcTree(0.1);
+           tree->clearKeyRays();
            AbstractOcTree::registerTreeType(tree);
          }
+
+         /**
+         * Dummy function to ensure that MSVC does not drop the
+         * StaticMemberInitializer, causing this tree failing to register.
+         * Needs to be called from the constructor of this octree.
+         */
+         void ensureLinking() {};
     };
     /// static member to ensure static initialization (only once)
     static StaticMemberInitializer countingOcTreeMemberInit;

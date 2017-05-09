@@ -14,9 +14,6 @@ TARGET_LINK_LIBRARIES(test_changedkeys octomap)
 ADD_EXECUTABLE(test_scans test_scans.cpp)
 TARGET_LINK_LIBRARIES(test_scans octomap)
 
-ADD_EXECUTABLE(test_lut test_lut.cpp)
-TARGET_LINK_LIBRARIES(test_lut octomap)
-
 ADD_EXECUTABLE(test_color_tree test_color_tree.cpp)
 TARGET_LINK_LIBRARIES(test_color_tree octomap)
 
@@ -42,6 +39,7 @@ ADD_TEST (NAME InsertScan         COMMAND unit_tests InsertScan     )
 ADD_TEST (NAME ReadGraph          COMMAND unit_tests ReadGraph      )
 ADD_TEST (NAME StampedTree        COMMAND unit_tests StampedTree    )
 ADD_TEST (NAME OcTreeKey          COMMAND unit_tests OcTreeKey      )
+ADD_TEST (NAME test_scans         COMMAND test_scans ${PROJECT_SOURCE_DIR}/share/data/spherical_scan.graph)
 ADD_TEST (NAME test_raycasting    COMMAND test_raycasting)
 ADD_TEST (NAME test_io            COMMAND test_io ${PROJECT_SOURCE_DIR}/share/data/geb079.bt)
 ADD_TEST (NAME test_pruning       COMMAND test_pruning )

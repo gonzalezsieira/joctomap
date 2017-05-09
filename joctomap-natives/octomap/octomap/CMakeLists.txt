@@ -5,8 +5,8 @@ ENABLE_TESTING()
 
 # version (e.g. for packaging)
 set(OCTOMAP_MAJOR_VERSION 1)
-set(OCTOMAP_MINOR_VERSION 6)
-set(OCTOMAP_PATCH_VERSION 8)
+set(OCTOMAP_MINOR_VERSION 8)
+set(OCTOMAP_PATCH_VERSION 1)
 set(OCTOMAP_VERSION ${OCTOMAP_MAJOR_VERSION}.${OCTOMAP_MINOR_VERSION}.${OCTOMAP_PATCH_VERSION})
 set(OCTOMAP_SOVERSION ${OCTOMAP_MAJOR_VERSION}.${OCTOMAP_MINOR_VERSION})
 if(COMMAND cmake_policy)
@@ -35,6 +35,13 @@ SET( BASE_DIR ${CMAKE_SOURCE_DIR} )
 SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${BASE_DIR}/lib )
 SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${BASE_DIR}/lib )
 SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BASE_DIR}/bin )
+# output dirs for multi-config builds (MSVC)
+foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
+  STRING( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
+  SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${BASE_DIR}/lib )
+  SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${BASE_DIR}/lib )
+  SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${BASE_DIR}/bin )
+endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
 set(INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/include")
 INCLUDE_DIRECTORIES(${INCLUDE_DIRS})
@@ -69,7 +76,6 @@ configure_file(
 add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 
-
 # Export the package for use from the build-tree
 # (this registers the build-tree with a global CMake-registry)
 export(PACKAGE octomap)
@@ -77,6 +83,24 @@ export(PACKAGE octomap)
 # Create a octomap-config.cmake file for the use from the build tree
 set(OCTOMAP_INCLUDE_DIRS "${INCLUDE_DIRS}")
 set(OCTOMAP_LIB_DIR "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+# Set library names as absolute paths
+# Windows, spec. MSVC requires the .lib suffix for imported libs
+IF(WIN32)
+  set(OCTOMAP_LIBRARY
+    "${CMAKE_IMPORT_LIBRARY_PREFIX}octomap${CMAKE_IMPORT_LIBRARY_SUFFIX}"
+  )
+  set(OCTOMATH_LIBRARY
+    "${CMAKE_IMPORT_LIBRARY_PREFIX}octomath${CMAKE_IMPORT_LIBRARY_SUFFIX}"
+  )
+ELSE()
+  set(OCTOMAP_LIBRARY
+    "${CMAKE_SHARED_LIBRARY_PREFIX}octomap${CMAKE_SHARED_LIBRARY_SUFFIX}"
+  )
+  set(OCTOMATH_LIBRARY
+    "${CMAKE_SHARED_LIBRARY_PREFIX}octomath${CMAKE_SHARED_LIBRARY_SUFFIX}"
+  )
+ENDIF()
+
 # not used right now (export depends?)
 #set(OCTOMAP_CMAKE_DIR "${PROJECT_BINARY_DIR}")
 configure_file(octomap-config.cmake.in
@@ -84,16 +108,13 @@ configure_file(octomap-config.cmake.in
 configure_file(octomap-config-version.cmake.in
   "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/cmake/octomap/octomap-config-version.cmake" @ONLY)
 
-# Install the export set for use with the install-tree
-#install(EXPORT FooBarLibraryDepends DESTINATION
-#  "${INSTALL_DATA_DIR}/FooBar/CMake"
-#  COMPONENT dev)
- 
+
 # Create a octomap-config.cmake file for the use from the install tree
 # and install it
 set(OCTOMAP_INCLUDE_DIRS "${CMAKE_INSTALL_PREFIX}/include")
 set(OCTOMAP_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 #set(OCTOMAP_CMAKE_DIR "${INSTALL_DATA_DIR}/FooBar/CMake")
+
 configure_file(octomap-config.cmake.in
   "${PROJECT_BINARY_DIR}/InstallFiles/octomap-config.cmake" @ONLY)
 configure_file(octomap-config-version.cmake.in
