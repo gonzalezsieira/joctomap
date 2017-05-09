@@ -15,19 +15,12 @@
  */
 package es.usc.citius.lab.joctomap.util;
 
-import es.usc.citius.hipster.model.Transition;
-import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.lab.joctomap.octree.Cell;
 import es.usc.citius.lab.joctomap.octree.JOctree;
 import es.usc.citius.lab.joctomap.octree.JOctreeKey;
-import es.usc.citius.lab.motionplanner.core.spatial.Point2D;
 import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
-import es.usc.citius.lab.motionplanner.core.util.Pair;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-
 /**
  * Contains utilities implemented for the {@link JOctree}, but not included
  * in the C/C++ implementation of Octomap.
