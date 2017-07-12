@@ -49,6 +49,7 @@ import java.util.Map;
 public class AdjacencyMap implements Serializable{
 
     private Map<JOctreeKey, List<JOctreeKey>> adjacencies;
+    private JOctree octree;
     //contains the information of size and center of each leaf in the octree
     private Map<JOctreeKey, Pair<Float, Point3D>> nodesInfo;
     private double EPSILON = 1e-3;
@@ -62,6 +63,7 @@ public class AdjacencyMap implements Serializable{
      * @param octree current octree instance
      */
     private AdjacencyMap(JOctree octree){
+        this.octree = octree;
         this.adjacencies = new HashMap<JOctreeKey, List<JOctreeKey>>();
         this.nodesInfo = new HashMap<JOctreeKey, Pair<Float, Point3D>>();
         //create cache
@@ -323,5 +325,29 @@ public class AdjacencyMap implements Serializable{
             return object;
         }
 
+    }
+
+    /**
+     * This method retrieves the correct key and depth of the octree given the position in the map. This is
+     * checked agains the adjacency map, which stores the valid information about the keys that are contained
+     * in the octree.
+     *
+     * @param point 3D position in the map
+     * @return pair with the depth and the existing key in the map
+     */
+    public Pair<Integer, JOctreeKey> depthAndKeyOf(Point3D point){
+        //initialize exploration at max depth of the octree
+        int depth = octree.getTreeDepth() + 1;
+        JOctreeKey key;
+        //loop until the adjacency map contains the key
+        do {
+            depth--;
+            key  = octree.coordToKey(point.x, point.y, point.z, depth);
+        } while (depth > 0 && adjacency(key) == null);
+        // return valid result: as adjacency map is built by traversing the octree using the LeafBBXIterator,
+        // the information that contains is valid as it only contains existing keys in the octree (as nodes with
+        // information). Only calculating the key using the method coordToKey does not check if that key is
+        // contained in the octree or not, and there is no way to check that in a faster way than this.
+        return new Pair<Integer, JOctreeKey>(depth, key);
     }
 }
