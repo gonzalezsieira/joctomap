@@ -4,7 +4,7 @@
 
     <groupId>es.usc.citius.lab</groupId>
     <artifactId>joctomap</artifactId>
-    <version>1.7.2.2-SNAPSHOT</version>
+    <version>1.7.2.3-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>joctomap</name>
@@ -197,8 +197,8 @@
                     <includes>
                         <include>src/main/java/**</include>
                         <include>src/test/java/**</include>
-                        <include>src/main/resources/joctomap-natives/src/**</include>
-                        <include>src/main/resources/joctomap-natives/include/**</include>
+                        <include>joctomap-natives/src/**</include>
+                        <include>joctomap-natives/include/**</include>
                     </includes>
                 </configuration>
                 <executions>
