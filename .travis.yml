@@ -4,4 +4,4 @@ install:
   - mvn install
   - cd ..
 
-script: "mvn install -B -Djdk=$JAVA_HOME"
+script: mvn install -B -DreleaseType=Release -Djdk="$JAVA_HOME"
