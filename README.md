@@ -10,7 +10,16 @@ for planning and navigation problems.
 
 
 ## How do I use it?
-This project is compatible for JDK1.6+. Here is how you can compile it:
+This project depends on spatial-utils, a lightweight library for geometrical 
+operations in cartesian coordinate systems. This library has to be compiled first, since
+it is not uploaded to Maven Central yet:
+```bash
+git clone https://github.com/gonzalezsieira/spatial-utils
+cd spatial-utils
+mvn install
+```
+
+Joctomap is compatible for JDK1.6+. Here is how you can compile it:
 
 ```bash
 git clone https://github.com/gonzalezsieira/joctomap
@@ -25,6 +34,6 @@ project or, if you use maven, add the following dependency:
 <dependency>
     <groupId>es.usc.citius.lab</groupId>
     <artifactId>joctomap</artifactId>
-    <version>1.7.2.0</version>
+    <version>1.7.2.2</version>
 </dependency>
 ```
