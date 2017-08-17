@@ -34,6 +34,6 @@ project or, if you use maven, add the following dependency:
 <dependency>
     <groupId>es.usc.citius.lab</groupId>
     <artifactId>joctomap</artifactId>
-    <version>1.7.2.2</version>
+    <version>1.9.0.0</version>
 </dependency>
 ```
