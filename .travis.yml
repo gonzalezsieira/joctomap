@@ -1,0 +1,6 @@
+install:
+  - git clone https://github.com/gonzalezsieira/spatial-utils
+  - cd spatial-utils
+  - mvn install
+
+script: "mvn install -B -Djdk=$JAVA_HOME"
