@@ -1,0 +1,9 @@
+language: java
+
+install:
+  - git clone https://github.com/gonzalezsieira/spatial-utils
+  - cd spatial-utils
+  - mvn install
+  - cd ..
+
+script: mvn install -B -DreleaseType=Release -Djdk="$JAVA_HOME"
