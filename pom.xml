@@ -17,7 +17,7 @@
         <url>scm:git:https://forxa.citius.usc.es/adrian.gonzalez/joctomap.git</url>
     </scm>
 
-    <inceptionYear>2014-2016</inceptionYear>        
+    <inceptionYear>2014-2017</inceptionYear>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.class>es.usc.citius.lab.joctomap.Main</main.class>
@@ -31,10 +31,11 @@
             <artifactId>commons-cli</artifactId>
             <version>1.3.1</version>
         </dependency>
+        <!--Spatial utils-->
         <dependency>
-            <groupId>es.usc.citius.lab</groupId>
-            <artifactId>motionplanner-core</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <groupId>es.usc.citius</groupId>
+            <artifactId>spatial-utils</artifactId>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>es.usc.citius.hipster</groupId>
