@@ -8,6 +8,10 @@ of the library and makes possible its usage in Java/Android projects. It maintai
 the structure and philosophy of the parent project, also adding several functions which might be interesting
 for planning and navigation problems.
 
+## Build status 
+ - Branch 1.7.X [![Build Status](https://travis-ci.org/gonzalezsieira/joctomap.svg?branch=1.7.X)](https://travis-ci.org/gonzalezsieira/joctomap)
+ - Branch 1.8.X [![Build Status](https://travis-ci.org/gonzalezsieira/joctomap.svg?branch=1.8.X)](https://travis-ci.org/gonzalezsieira/joctomap)
+ - Branch 1.9.X [![Build Status](https://travis-ci.org/gonzalezsieira/joctomap.svg?branch=1.9.X)](https://travis-ci.org/gonzalezsieira/joctomap)
 
 ## How do I use it?
 This project depends on spatial-utils, a lightweight library for geometrical 
