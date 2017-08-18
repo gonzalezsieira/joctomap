@@ -18,6 +18,7 @@ package es.usc.citius.lab.joctomap;
 import es.usc.citius.lab.joctomap.iterators.OctreeIterator;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -57,18 +58,10 @@ public class JOctreeTest{
 	private static File fileRead;
 	private static File fileWrite;
 	
-	
-	/**
-	 * Initialize files to use with the tests in this class
-	 * 
-	 * @throws IOException when an I/O error occurs
-	 */
-	@BeforeClass
-	public static void initialize() throws IOException{
-		fileRead = new File("src/test/resources/".concat("fr_campus").concat(
-				".ot")).getCanonicalFile();
+	public JOctreeTest() throws URISyntaxException, IOException{
+		fileRead = new File(getClass().getClassLoader().getResource("fr_campus.ot").toURI());
 		fileWrite = new File("fr_campus".concat("_test").concat(".ot"))
-		.getCanonicalFile();
+				.getCanonicalFile();
 	}
 	
 	@AfterClass
@@ -100,7 +93,7 @@ public class JOctreeTest{
 	 */
 	@Test
 	public void test02_readFileOt() throws IOException {
-                String inputPath = fileRead.getAbsolutePath();
+		String inputPath = fileRead.getAbsolutePath();
 		octree = JOctree.read(inputPath);
 		assertTrue("Octree direction of memory not assigned",
 				octree.getPointer() != 0);
