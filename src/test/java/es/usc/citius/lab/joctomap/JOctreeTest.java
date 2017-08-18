@@ -19,11 +19,12 @@ import es.usc.citius.lab.joctomap.iterators.OctreeIterator;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -57,6 +58,8 @@ public class JOctreeTest{
 	private static Point3D metricMax; //used in tests
 	private static File fileRead;
 	private static File fileWrite;
+
+	private static int POINTS_TESTCHANGEDETECTION = 100;
 	
 	public JOctreeTest() throws URISyntaxException, IOException{
 		fileRead = new File(getClass().getClassLoader().getResource("fr_campus.ot").toURI());
@@ -412,13 +415,21 @@ public class JOctreeTest{
         	//enable change control
 			octree.enableChangeDetection(true);
 
-        	//introduce changes in the octree (first quarter of the map)
-			for(float x = min.x; x <= endChanges.x; x += octree.getResolution() / 2f){
-				for(float y = min.y; y <= endChanges.y; y += octree.getResolution() / 2f){
-					for(float z = min.z; z <= endChanges.z; z += octree.getResolution() / 2f) {
-						octree.updateNode(x, y, z, true);
-					}
-				}
+			//create list of positions to change
+			List<Point3D> listPositionsToChange = new ArrayList<Point3D>();
+			List<JOctreeKey> listKeysToChange = new ArrayList<JOctreeKey>();
+
+			Random random = new Random(System.nanoTime());
+			for(int i = 0; i < POINTS_TESTCHANGEDETECTION; i++){
+				float x = random.nextFloat() * (max.x - min.x) + min.x;
+				float y = random.nextFloat() * (max.y - min.y) + min.y;
+				float z = random.nextFloat() * (max.z - min.z) + min.z;
+				listPositionsToChange.add(new Point3D(x, y, z));
+			}
+
+			//introduce changes in the map
+			for (Point3D current : listPositionsToChange){
+				octree.updateNode(current.x, current.y, current.z, true);
 			}
 
 			//get list of changes
@@ -431,7 +442,14 @@ public class JOctreeTest{
 
 			for(JOctreeKey key : keysChanged){
 				Point3D coordinate = octree.keyToCoord(key);
-				assertTrue("Changed coordinate must be in the first quadrant of the map", coordinate.x >= min.x - octree.getResolution() && coordinate.y >= min.y - octree.getResolution() && coordinate.z >= min.z - octree.getResolution() && coordinate.x <= endChanges.x + octree.getResolution() && coordinate.y <= endChanges.y + octree.getResolution() && coordinate.z <= endChanges.z + octree.getResolution());
+				boolean isInChanges = false;
+				for(Point3D currentItemInList : listPositionsToChange){
+					if (currentItemInList.distance(coordinate) < octree.getResolution()){
+						isInChanges = true;
+						break;
+					}
+				}
+				assertTrue("Changed coordinate must be in the list of changes introduced", isInChanges);
 			}
 
 			//reset changes detection
@@ -444,12 +462,8 @@ public class JOctreeTest{
 			octree.enableChangeDetection(false);
 
 			//re-introduce changes in the octree (first quarter of the map)
-			for(float x = min.x; x <= endChanges.x; x += octree.getResolution() / 2f){
-				for(float y = min.y; y <= endChanges.y; y += octree.getResolution() / 2f){
-					for(float z = min.z; z <= endChanges.z; z += octree.getResolution() / 2f) {
-						octree.updateNode(x, y, z, false);
-					}
-				}
+			for(Point3D current : listPositionsToChange){
+				octree.updateNode(current.x, current.y, current.z, false);
 			}
 
 			//check empty
