@@ -84,7 +84,7 @@ public class AdjacencyMapTest {
         adjacencyMap.write(resourceOutput.getAbsolutePath());
         //load a new instance of the saved map
         Stopwatch timer = Stopwatch.createStarted();
-        AdjacencyMap loadedMap = AdjacencyMap.read(resourceOutput.getAbsolutePath());
+        AdjacencyMap loadedMap = AdjacencyMap.read(resourceOutput.getAbsolutePath(), adjacencyMap.getOctree());
         System.out.println("Created AdjacencyMap (loaded from file): " + timer.elapsed(TimeUnit.SECONDS) + " s");
         //remove file
         resourceOutput.delete();
