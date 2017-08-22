@@ -119,6 +119,7 @@ public class AdjacencyMap implements Serializable{
         AdjacencyMap map = new AdjacencyMap();
         //fill with JNI method
         map.initializeJNI(octree);
+        map.setOctree(octree);
         //retrieve result
         return map;
     }
@@ -218,9 +219,10 @@ public class AdjacencyMap implements Serializable{
      * Reads an instance of AdjacencyMap from file.
      * 
      * @param filename path to input file
+     * @param octree instance of octree the map is associated with
      * @return stored instance of AdjacencyMap
      */
-    public static AdjacencyMap read(String filename){
+    public static AdjacencyMap read(String filename, JOctree octree){
         //create new file
         File inputFile = new File(filename);
         //error if input file does not exist
@@ -229,6 +231,7 @@ public class AdjacencyMap implements Serializable{
             throw new RuntimeException("Specified file " + filename + " does not exist");
         }
         AdjacencyMap map = new AdjacencyMap();
+        map.setOctree(octree);
         //open input stream (will be closed after this statement)
         try{
             DataInputStream inputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(inputFile), BUFFER_SIZE));
@@ -349,5 +352,13 @@ public class AdjacencyMap implements Serializable{
         // information). Only calculating the key using the method coordToKey does not check if that key is
         // contained in the octree or not, and there is no way to check that in a faster way than this.
         return new Pair<Integer, JOctreeKey>(depth, key);
+    }
+
+    private void setOctree(JOctree octree) {
+        this.octree = octree;
+    }
+
+    public JOctree getOctree() {
+        return octree;
     }
 }
