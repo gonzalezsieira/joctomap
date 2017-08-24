@@ -8,7 +8,7 @@ classpath=~/.m2/repository/es/usc/citius/spatial-utils/1.1-SNAPSHOT/spatial-util
 cd src/main/java/es/usc/citius/lab/joctomap/octree
 
 # compile files
-javac -cp "$classpath" ../octree/Cell.java ../util/JOctomapLogger.java ../util/AdjacencyMap.java ../util/Obstacle.java ../util/JOctreeUtils.java ../util/NativeUtils.java  ../util/NativeObject.java ../iterators/OctreeIterator.java ../iterators/LeafBBXIterator.java JOctree.java JOctreeKey.java JOctreeNode.java ../distance/JOctreeDistanceMap.java ../util/CollisionChecker2D.java ../hipster/H2DMRTransitionFunction.java
+javac -cp "$classpath" ../octree/Cell.java ../util/JOctomapLogger.java ../util/AdjacencyMap.java ../util/Obstacle.java ../util/JOctreeUtils.java ../util/NativeUtils.java  ../util/NativeObject.java ../iterators/OctreeIterator.java ../iterators/LeafBBXIterator.java JOctree.java JOctreeKey.java JOctreeNode.java ../distance/JOctreeDistanceMap.java ../util/CollisionChecker2D.java ../hipster/H2DMRTransitionFunction.java ../hipster/H3DMRTransitionFunction.java
 
 
 # go to root of src
@@ -23,6 +23,7 @@ javah -classpath "$classpath" -jni es.usc.citius.lab.joctomap.util.CollisionChec
 javah -classpath "$classpath" -jni es.usc.citius.lab.joctomap.util.JOctreeUtils
 javah -classpath "$classpath" -jni es.usc.citius.lab.joctomap.util.AdjacencyMap
 javah -classpath "$classpath" -jni es.usc.citius.lab.joctomap.hipster.H2DMRTransitionFunction
+javah -classpath "$classpath" -jni es.usc.citius.lab.joctomap.hipster.H3DMRTransitionFunction
 
 mv *JOctree.h ../../../joctomap-natives/include/joctree.h
 mv *JOctreeNode.h ../../../joctomap-natives/include/joctreenode.h
@@ -32,6 +33,7 @@ mv *CollisionChecker2D.h ../../../joctomap-natives/include/collisionchecker2d.h
 mv *JOctreeUtils.h ../../../joctomap-natives/include/joctreeutils.h
 mv *AdjacencyMap.h ../../../joctomap-natives/include/adjacencymap.h
 mv *H2DMRTransitionFunction.h ../../../joctomap-natives/include/h2dmrtransitionfunction.h
+mv *H3DMRTransitionFunction.h ../../../joctomap-natives/include/h3dmrtransitionfunction.h
 rm *AdjacencyMap_Cache.h
 
 # remove current compiled files
