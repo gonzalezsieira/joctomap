@@ -17,6 +17,7 @@ set(SOURCE_FILES
     include/definitions.h
     include/transitionfunctionutils.h
     include/h2dmrtransitionfunction.h
+    include/h3dmrtransitionfunction.h
     include/iteratorinformation.h
     include/joctree.h
     include/joctreenode.h
@@ -29,6 +30,7 @@ set(SOURCE_FILES
     src/collisions.cpp
     src/transitionfunctionutils.cpp
     src/h2dmrtransitionfunction.cpp
+    src/h3dmrtransitionfunction.cpp
     src/iteratorinformation.cpp
     src/joctree.cpp
     src/joctreenode.cpp
