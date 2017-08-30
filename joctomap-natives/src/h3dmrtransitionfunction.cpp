@@ -17,10 +17,12 @@
 // Created by adrian.gonzalez on 24/08/17.
 //
 #include <map>
+#include <queue>
 #include <jni.h>
 #include <octomap/OcTree.h>
 #include "nativeobject.h"
 #include "definitions.h"
+#include "adjacencymap.h"
 #include "h3dmrtransitionfunction.h
 
 using namespace octomap;
@@ -246,6 +248,27 @@ struct StaticInformation{
 
 };
 
+/*
+ *  Comparison returns true when p1 > p2, doing this the priority queue
+ *  will return the lowest element at first
+ */
+struct ComparePoint3D {
+
+    //comparator argument
+    point3d reference;
+
+    //constructor
+    ComparePoint3D(point3d reference) { this->reference = reference; }
+
+    //comparison function
+    bool operator()(point3d const & p1, point3d const & p2){
+        return p1.distance(reference) > p2.distance(reference);
+    }
+};
+
+//define priority queue
+typedef std::priority_queue<point3d, std::vector<point3d>, ComparePoint3D> priorityqueue;
+
 
 /*
  * Class:     es_usc_citius_lab_joctomap_hipster_H3DMRTransitionFunction
@@ -263,8 +286,106 @@ JNIEXPORT jlong JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitionF
  * Signature: (Les/usc/citius/lab/motionplanner/core/spatial/Point3D;)Ljava/lang/Iterable;
  */
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitionFunction_transitionsFrom
-        (JNIEnv *env, jobject, jobject){
+        (JNIEnv *env, jobject jh3dmrtransitiongenerator, jobject jpoint3d){
 
+    StaticInformation* information = (StaticInformation*) getPointer(env, jh3dmrtransitiongenerator);
+
+    //retrieve argument-passed object field values
+    jfloat point3d_x = env->GetFloatField(jpoint3d, information->field_jpoint3d_x);
+    jfloat point3d_y = env->GetFloatField(jpoint3d, information->field_jpoint3d_y);
+    jfloat point3d_z = env->GetFloatField(jpoint3d, information->field_jpoint3d_z);
+
+    //create array of neighbors
+    jobject jarraylistneighbors = env->NewObject(information->cls_arraylist, information->method_constructor_arraylist);
+    //current state
+    point3d state = point3d(point3d_x, point3d_y, point3d_z);
+    Point3D state_3D = Point3D(state);
+    //define priority queue with custom comparator
+    ComparePoint3D comparator = ComparePoint3D(state);
+    priorityqueue queue_frontier_points(comparator);
+    //get min/max positions in octree
+    double octree_min_x, octree_min_y, octree_min_z, octree_max_x, octree_max_y, octree_max_z;
+    information->octree->getMetricMin(octree_min_x, octree_min_y, octree_min_z);
+    information->octree->getMetricMax(octree_max_x, octree_max_y, octree_max_z);
+    //get info for current node
+    NodeInfo_Adjacencies info = search_node(
+            information,
+            state
+    );
+    Point3D center_of_current_cell = info.coordinate;
+    Point3D state_3D_compare = Point3D(information->octree->keyToCoord(info.key, information->maxdepth));
+    //know current adjacencies for this point
+    jobject jcells = info.jadjacencies;
+    jint jcells_size = env->CallIntMethod(jcells, information->method_size_arraylist);
+    //variable to store the explored cells
+    for(int i = 0; i < jcells_size; i++){
+        //TODO: try converstion to jobjectarray outside loop?
+        //current java method
+        jobject jcurrentkey = env->CallObjectMethod(jcells, information->method_get_arraylist, i);
+        //retrieve field values
+        jint currentkey_x = env->GetIntField(jcurrentkey, information->field_joctreekey_x);
+        jint currentkey_y = env->GetIntField(jcurrentkey, information->field_joctreekey_y);
+        jint currentkey_z = env->GetIntField(jcurrentkey, information->field_joctreekey_z);
+        //transform current method to native one
+        OcTreeKey currentkey = OcTreeKey(currentkey_x, currentkey_y, currentkey_z);
+        //node info
+        NodeInfo current_node_info = node_info(
+                information,
+                currentkey,
+                jcurrentkey
+        );
+        //CENTER OF THE CELL CHECKING
+        point3d center = point3d(current_node_info.coordinate.x(), current_node_info.coordinate.y(), current_node_info.coordinate.z());
+        //compare this way to avoid precision problems
+        if(current_node_info.size - information->maxdepthsize > 0.001){
+            frontier_points(current_node_info.size, current_node_info.coordinate, queue_frontier_points);
+        }
+        else{
+            Point3D upCenter = Point3D(information->octree->keyToCoord(currentkey, information->maxdepth));
+            if(fabs(upCenter.x() - state_3D_compare.x()) < 0.001 && fabs(upCenter.y() - state_3D_compare.y()) < 0.001 && fabs(upCenter.z() - state_3D_compare.z()) < 0.001){
+                float yawNeighbor = atan2(center.y() - center_of_current_cell.y(), center.x() - center_of_current_cell.x());
+                float pitchNeighbor;
+                //adapt to available orientations
+                yawNeighbor = closestOrientationTo(information->neighbors_directions, yawNeighbor);
+                Point3D neighbor = information->neighbors[orientation_adapted];
+                upCenter = Point3D(upCenter.x() + neighbor.x(), upCenter.y() + neighbor.y(), upCenter.z() + neighbor.z());
+            }
+            if(!checkCollision_Cached){
+                frontier_points(information->maxdepthsize, upCenter, queue_frontier_points);
+            }
+            //only add center
+            else{
+                queue_frontier_points.push(point3d(upCenter.x(), upCenter.y(), 0));
+            }
+        }
+        //Generate the transition to the couple of nearest frontier points of the adjacent cell
+        int generated = 0;
+        while(queue_frontier_points.size() > 0 /*&& generated < information->POINTS_CONSIDERED*/){
+            //retrieve first
+            point3d current = queue_frontier_points.top();
+            //remove first
+            queue_frontier_points.pop();
+            if(current == state || !isInBounds(octree_min_x, octree_min_y, octree_max_x, octree_max_y, current)) continue;
+            if(!checkCollision_Cached(information, current)){
+                //create instance of Point2D
+                jobject jpoint2dneighbor = env->NewObject(information->cls_point2d, information->method_constructor_point2d, current.x(), current.y());
+                //create transition object
+                jobject transition = env->CallObjectMethod(information->cls_transition, information->method_create_transition, jpoint2d, jpoint2dneighbor);
+                //add to the arraylist
+                env->CallBooleanMethod(jarraylistneighbors, information->method_add_arraylist, transition);
+                generated++;
+                //delete local references used by instantiated objects
+                env->DeleteLocalRef(transition);
+                env->DeleteLocalRef(jpoint2dneighbor);
+            }
+        }
+        //clear content of the queue
+        priorityqueue empty(comparator);
+        queue_frontier_points.swap(empty);
+    }
+
+    //return result
+    return jarraylistneighbors;
 }
 
 /*
