@@ -23,70 +23,12 @@
 #include "nativeobject.h"
 #include "definitions.h"
 #include "adjacencymap.h"
+#include "transitionfunctionutils.h"
 #include "h3dmrtransitionfunction.h
 
 using namespace octomap;
 
-/**
- * Custom defined type for Point2D.
- */
-class Point3D
-{
-
-    double coord_x, coord_y, coord_z;
-
-public:
-    Point3D(){
-        coord_x = 0;
-        coord_y = 0;
-        coord_z = 0;
-    }
-
-    Point3D(point3d point_3d){
-        this->coord_x = point_3d.x();
-        this->coord_y = point_3d.y();
-        this->coord_z = point_3d.z();
-    }
-
-    Point3D(double x, double y, double z){
-        this->coord_x = x; this->coord_y = y; this->coord_z = z;
-    }
-
-    ~Point3D() { }
-
-    double x() const { return this->coord_x; }
-
-    double y() const { return this->coord_y; }
-
-    double z() const { return this->coord_z; }
-
-    bool operator== (const Point3D &other) const
-    {
-        return (this->coord_x == other.coord_x)
-               && (this->coord_y == other.coord_y)
-               && (this->coord_z == other.coord_z) ;
-    }
-
-};
-
-/**
- * Hash function for Point2D.
- */
-struct Point3D_Hash
-{
-
-    std::size_t operator()(const Point3D &point) const
-    {
-        //already defined hash function for doubles
-        size_t h1 = std::hash<double>()(point.x());
-        size_t h2 = std::hash<double>()(point.y());
-        size_t h3 = std::hash<double>()(point.z());
-        return  (h1 ^ (h2 << 1)) ^ h3;
-    }
-
-};
-
-struct StaticInformation{
+struct StaticInformation3D : StaticInformation{
     //environment (to release references later)
     JNIEnv *env;
 
@@ -247,27 +189,6 @@ struct StaticInformation{
     }
 
 };
-
-/*
- *  Comparison returns true when p1 > p2, doing this the priority queue
- *  will return the lowest element at first
- */
-struct ComparePoint3D {
-
-    //comparator argument
-    point3d reference;
-
-    //constructor
-    ComparePoint3D(point3d reference) { this->reference = reference; }
-
-    //comparison function
-    bool operator()(point3d const & p1, point3d const & p2){
-        return p1.distance(reference) > p2.distance(reference);
-    }
-};
-
-//define priority queue
-typedef std::priority_queue<point3d, std::vector<point3d>, ComparePoint3D> priorityqueue;
 
 
 /*
