@@ -21,22 +21,143 @@
 #include <iostream>
 #include <limits>
 #include <octomap/OcTree.h>
-#include "h2dmrtransitionfunction.h"
+#include <algorithm>
 #include "nativeobject.h"
+#include "h2dmrtransitionfunction.h"
 #include "transitionfunctionutils.h"
 
 using namespace octomap;
 
 
+struct StaticInformation2D : StaticInformation {
+
+    jclass cls_point2d;
+
+    jmethodID method_constructor_point2d;
+
+    jfieldID field_jpoint2d_x;
+    jfieldID field_jpoint2d_y;
+
+    std::list<float> neighbors_directions;
+    std::unordered_map<float, Point2D> neighbors2d;
+    //cache for collision check
+    std::unordered_map<Point2D, bool, Point2D_Hash> cache_collisions;
+    int POINTS_CONSIDERED = 2;
+
+    //constructor
+    StaticInformation2D(JNIEnv *env, long octree_pointer, jobject jadjacencymap, float radius_optimistic, float min_resolution_trajectories)
+    : StaticInformation(env, octree_pointer, jadjacencymap, radius_optimistic, min_resolution_trajectories) {
+
+        //LOCAL REFERENCES
+        jclass cls_point2d_local = env->FindClass(CLS_POINT2D);
+
+        //CONVERT TO GLOBAL REFERENCES
+        this->cls_point2d = (jclass) env->NewGlobalRef(cls_point2d_local);
+
+        //DELETE LOCAL REFERENCES (no longer used)
+        env->DeleteLocalRef(cls_point2d_local);
+
+        //retrieve constructors of classes used in this method
+        this->method_constructor_point2d = env->GetMethodID(cls_point2d, METHOD_CONSTRUCTOR, "(FF)V");
+
+        //retrieve argument-passed object fields
+        this->field_jpoint2d_x = env->GetFieldID(cls_point2d, FIELD_X, SIGNATURE_FLOAT);
+        this->field_jpoint2d_y = env->GetFieldID(cls_point2d, FIELD_Y, SIGNATURE_FLOAT);
+
+        //insert neighbors
+        int level = 1;
+        for (int i = -level; i <= level; i++) {
+            for (int j = -level; j <= level; j++) {
+                if (i == -level || i == level || j == -level || j == level) {
+                    Point2D point = Point2D(maxdepthsize * i, maxdepthsize * j);
+                    float direction = atan2(point.y(), point.x());
+                    this->neighbors_directions.push_back(direction);
+                    this->neighbors2d[direction] = point;
+                }
+            }
+        }
+    }
+
+    Point2D closestNeighborTo(float yaw){
+        float yaw_adapted = closestOrientationTo(neighbors_directions, yaw);
+        return neighbors2d[yaw_adapted];
+    }
+
+    bool checkCollision2D_Line(Point2D point1, Point2D point2){
+        float resolution = this->octree->getResolution();
+        float min_x = std::min(point1.x(), point2.x());
+        float min_y = std::min(point1.y(), point2.y());
+        float max_x = std::max(point1.x(), point2.x());
+        float max_y = std::max(point1.y(), point2.y());
+        //distance = positive infinity
+        float distance = std::numeric_limits<float>::max();
+        float diff_x = point2.x() - point1.x();
+        float diff_y = point2.y() - point1.y();
+        float hypot = hypotf(diff_y, diff_x);
+        //iterate over occupied cells
+        for(OcTree::leaf_bbx_iterator it=this->octree->begin_leafs_bbx(point3d(min_x, min_y, 0), point3d(max_x, max_y, 0)), end=this->octree->end_leafs_bbx(); it != end; ++it){
+            //transform current leaf_bbx_iterator to node
+            OcTreeNode *currentNode = (OcTreeNode*) it.operator ->();
+            if( this->octree->isNodeOccupied(currentNode)){
+                float new_distance = fabs(diff_y * it.getCoordinate().x() - diff_x * it.getCoordinate().y() + point2.x() * point1.y() - point2.y() * point1.x()) / hypot;
+                distance = std::min(distance, new_distance);
+                //collision detected
+                if(distance <= this->radius_optimistic + it.getSize()){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    bool checkCollision2d_Cached(point3d point){
+        Point2D point_2d = Point2D(point);
+        //not found, calculate and cache
+        bool result;
+        if(this->cache_collisions.find(point_2d) == this->cache_collisions.end()){
+            result = checkCollision(point, this->radius_optimistic, this->octree);
+            this->cache_collisions[point_2d] = result;
+        }
+        else{
+            result = this->cache_collisions[point_2d];
+        }
+        return result;
+    }
+
+    ~StaticInformation2D() {
+
+        env->DeleteGlobalRef(cls_point2d);
+
+    }
+
+};
+
+bool isInBounds(double octree_min_x, double octree_min_y, double octree_max_x, double octree_max_y, point3d point){
+    return point.x() > octree_min_x
+           && point.x() < octree_max_x
+           && point.y() > octree_min_y
+           && point.y() < octree_max_y;
+}
+
+//other methods
+void frontier_points2d(float size_cell, point3d center, priorityqueue &queue){
+    float diff = size_cell / 4.0;
+    queue.push(point3d(center.x() - diff, center.y() - diff, 0));
+    queue.push(point3d(center.x() - diff, center.y() + diff, 0));
+    queue.push(point3d(center.x() + diff, center.y() + diff, 0));
+    queue.push(point3d(center.x() + diff, center.y() - diff, 0));
+}
+
+
 JNIEXPORT jlong JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitionFunction_initialize
   (JNIEnv *env , jobject jh2dmrtransitiongenerator, jlong octree_pointer, jobject jadjacency_map, jfloat radius_optimistic, jfloat min_resolution_trajectories){
-        StaticInformation *information = new StaticInformation(env, octree_pointer, jadjacency_map, radius_optimistic, min_resolution_trajectories);
+        StaticInformation2D *information = new StaticInformation2D(env, octree_pointer, jadjacency_map, radius_optimistic, min_resolution_trajectories);
         return (long) information;
 }
 
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitionFunction_transitionsFrom
   (JNIEnv *env, jobject jh2dmrtransitiongenerator, jobject jpoint2d){
-    StaticInformation* information = (StaticInformation*) getPointer(env, jh2dmrtransitiongenerator);
+    StaticInformation2D* information = (StaticInformation2D*) getPointer(env, jh2dmrtransitiongenerator);
 
     //retrieve argument-passed object field values
     jfloat point2d_x = env->GetFloatField(jpoint2d, information->field_jpoint2d_x);
@@ -59,8 +180,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitio
             information,
             state
     );
-    Point2D center_of_current_cell = info.coordinate;
-    Point2D state_2D_compare = Point2D(information->octree->keyToCoord(info.key, information->maxdepth));
+    point3d center_of_current_cell = info.coordinate;
+    point3d state_2D_compare = information->octree->keyToCoord(info.key, information->maxdepth);
     //know current adjacencies for this point
     jobject jcells = info.jadjacencies;
     jint jcells_size = env->CallIntMethod(jcells, information->method_size_arraylist);
@@ -83,8 +204,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitio
                 jcurrentkey
         );
         //CENTER OF THE CELL CHECKING
-        point3d center = point3d(current_node_info.coordinate.x(), current_node_info.coordinate.y(), 0);
-        Point2D center_2d = current_node_info.coordinate;
+        point3d center = current_node_info.coordinate;
+        Point2D center_2d = Point2D(current_node_info.coordinate.x(), current_node_info.coordinate.y());
         //Check if the key was already explored. If it was, then skip
         if(points_considered.find(center_2d) == points_considered.end()){
             //add to the list of explored keys
@@ -96,15 +217,14 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitio
             else{
                 Point2D upCenter = Point2D(information->octree->keyToCoord(currentkey, information->maxdepth));
                 if(fabs(upCenter.x() - state_2D_compare.x()) < 0.001 && fabs(upCenter.y() - state_2D_compare.y()) < 0.001){
-                    float directionNeighbor = atan2(center.y() - center_of_current_cell.y(), center.x() - center_of_current_cell.x());
-                    float orientation_adapted = closestOrientationTo(information->neighbors_directions, directionNeighbor);
-                    Point2D neighbor = information->neighbors[orientation_adapted];
+                    float yaw_neighbor = atan2(center.y() - center_of_current_cell.y(), center.x() - center_of_current_cell.x());
+                    Point2D neighbor = information->closestNeighborTo(yaw_neighbor);
                     upCenter = Point2D(upCenter.x() + neighbor.x(), upCenter.y() + neighbor.y());
                 }
                 //if current cell is occupied, try subsampling
                 point3d upCenter3d = point3d(upCenter.x(), upCenter.y(), 0);
-                if(checkCollision2d_Cached(information, upCenter3d)){
-                    frontier_points2d(information->maxdepthsize, upCenter, queue_frontier_points);
+                if(information->checkCollision2D_Line(state, upCenter3d)){
+                    frontier_points2d(information->maxdepthsize, upCenter3d, queue_frontier_points);
                 }
                 //only add center
                 else{
@@ -118,8 +238,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitio
                 point3d current = queue_frontier_points.top();
                 //remove first
                 queue_frontier_points.pop();
-                if(current == state || !isInBounds(octree_min_x, octree_min_y, octree_min_z, octree_max_x, octree_max_y, octree_max_z, current)) continue;
-                if(!checkCollision2d_Cached(information, current)){
+                if(current == state || !isInBounds(octree_min_x, octree_min_y, octree_max_x, octree_max_y, current)) continue;
+                if(!information->checkCollision2D_Line(state, current)){
                     //create instance of Point2D
                     jobject jpoint2dneighbor = env->NewObject(information->cls_point2d, information->method_constructor_point2d, current.x(), current.y());
                     //create transition object
@@ -145,7 +265,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitio
 
 JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitionFunction_dispose
   (JNIEnv *env, jobject jh2dmrtransitiongenerator){
-    StaticInformation* information = (StaticInformation*) getPointer(env, jh2dmrtransitiongenerator);
+    StaticInformation2D* information = (StaticInformation2D*) getPointer(env, jh2dmrtransitiongenerator);
     delete information;
 }
 
