@@ -18,174 +18,249 @@
 //
 #include <map>
 #include <queue>
+#include <unordered_set>
 #include <jni.h>
 #include <octomap/OcTree.h>
+#include <octomap/math/Vector3.h>
 #include "nativeobject.h"
 #include "definitions.h"
 #include "adjacencymap.h"
 #include "transitionfunctionutils.h"
-#include "h3dmrtransitionfunction.h
+#include "h3dmrtransitionfunction.h"
 
 using namespace octomap;
+using namespace octomath;
+
+/**
+ * Computes the shortest distance between the segment and a given point
+ *
+ * @param point given point
+ * @param point1 segment - point A
+ * @param point2 segment - point B
+ * @return shortest distance
+ */
+float distance_to_segment(point3d point, point3d point1, point3d point2){
+    Vector3 v = Vector3(point2.x() - point1.x(), point2.y() - point1.y(), point2.z() - point1.z());
+    Vector3 w = Vector3(point.x() - point1.x(), point.y() - point1.y(), point.z() - point1.z());
+    float c1 = w.dot(v);
+    if(c1 <= 0){
+        return point.distance(point1);
+    } else {
+        float c2 = v.dot(v);
+        if(c2 <= c1){
+            return point.distance(point2);
+        }
+        else{
+            float b = c1 / c2;
+            point3d result = point3d(point1.x() + b * v.x(), point1.y() + b * v.y(), point1.z() + b * v.z());
+            return point.distance(result);
+        }
+    }
+}
+
+/**
+ * Returns pair of angles : yaw, pitch, between two points (origin, dest).
+ * @param point1 origin point
+ * @param point2 destination point
+ * @return view to point1 to point2
+ */
+std::pair<float, float> angles_to(point3d point1, point3d point2){
+    float dx = point2.x() - point1.x();
+    float dy = point2.y() - point1.y();
+    float dz = point2.z() - point1.z();
+    return std::pair<float, float>(atan2(dy, dx), atan2(dz, sqrt(dx * dx + dy * dy)));
+}
+
+/**
+ * Computes the frontier points in 3D.
+ *
+ * @param size_cell
+ * @param center
+ * @param queue
+ */
+void frontier_points(float size_cell, point3d center, point3d_priorityqueue &queue){
+    //add four positions within each cell
+    float diff = size_cell / 4;
+    float centerXMinuDiff = center.x() - diff;
+    float centerYMinuDiff = center.y() - diff;
+    float centerZMinuDiff = center.z() - diff;
+    float centerXPlusDiff = center.x() + diff;
+    float centerYPlusDiff = center.y() + diff;
+    float centerZPlusDiff = center.z() + diff;
+    queue.push(point3d(centerXMinuDiff, centerYMinuDiff, centerZMinuDiff));
+    queue.push(point3d(centerXMinuDiff, centerYPlusDiff, centerZMinuDiff));
+    queue.push(point3d(centerXPlusDiff, centerYMinuDiff, centerZMinuDiff));
+    queue.push(point3d(centerXPlusDiff, centerYPlusDiff, centerZMinuDiff));
+    queue.push(point3d(centerXMinuDiff, centerYMinuDiff, centerZPlusDiff));
+    queue.push(point3d(centerXMinuDiff, centerYPlusDiff, centerZPlusDiff));
+    queue.push(point3d(centerXPlusDiff, centerYMinuDiff, centerZPlusDiff));
+    queue.push(point3d(centerXPlusDiff, centerYPlusDiff, centerZPlusDiff));
+}
 
 struct StaticInformation3D : StaticInformation{
-    //environment (to release references later)
-    JNIEnv *env;
 
-    //other information used by the transition function
-    jobject jadjacencymap;
-    float radius_optimistic;
-    float min_resolution_trajectories;
+    //classes
+    jclass cls_set;
+    jclass cls_iterator;
 
-    //static information
-    OcTree* octree;
-
-    //Java classes
-    jclass cls_adjacencymap;
-    jclass cls_point3d;
-    jclass cls_float;
-    jclass cls_joctreekey;
-    jclass cls_arraylist;
-    jclass cls_transition;
-    jclass cls_pair;
-    jclass cls_map;
-
-    //java method
-    jmethodID method_adjacency;
-    jmethodID method_nodeinfo;
-    jmethodID method_constructor_arraylist;
-    jmethodID method_constructor_joctreekey;
-    jmethodID method_create_transition;
-    jmethodID method_constructor_point3d;
-    jmethodID method_constructor_float;
-    jmethodID method_get;
-    jmethodID method_get_arraylist;
-    jmethodID method_size_arraylist;
-    jmethodID method_add_arraylist;
-
-    //java fields ID
-    jfieldID field_joctreekey_x;
-    jfieldID field_joctreekey_y;
-    jfieldID field_joctreekey_z;
-    jfieldID field_pair_first;
-    jfieldID field_pair_second;
-    jfieldID field_float_value;
+    //field IDs
     jfieldID field_jpoint3d_x;
     jfieldID field_jpoint3d_y;
     jfieldID field_jpoint3d_z;
 
+    //constructor
+    jmethodID method_constructor_point3d;
+    jmethodID method_iterator_next;
+    jmethodID method_iterator_hasnext;
+
+    //other methods
+    jmethodID method_map_keyset;
+    jmethodID method_set_iterator;
+
     //auxiliary information
-    int maxdepth;
-    float maxdepthsize;
-    std::list<float> neighbors_directions;
-    std::unordered_map<float, Point3D> neighbors;
-    int POINTS_CONSIDERED = 2;
+    std::list<float> directions_yaw;
+    std::list<float> directions_pitch;
+    std::unordered_map<std::pair<float, float>, Point3D, Pair_Hash> neighbors;
 
     //cache for collision check
-    std::unordered_map<Point2D, bool, Point3D_Hash> cache_collisions;
+    std::unordered_map<std::pair<Point3D, Point3D>, bool, Pair_Hash> cache_collisions;
 
 
-    StaticInformation(JNIEnv *env, long octree_pointer, jobject jadjacencymap, float radius_optimistic, float min_resolution_trajectories){
-        //java java excution environment
-        this->env = env;
-        //variables
-        this->jadjacencymap = (jobject) env->NewGlobalRef(jadjacencymap);
-        this->radius_optimistic = radius_optimistic;
-        this->min_resolution_trajectories = min_resolution_trajectories;
+    StaticInformation3D(JNIEnv *env, long octree_pointer, jobject jadjacencymap, float radius_optimistic, float min_resolution_trajectories, jobject h3dmr_neighbors_information) : StaticInformation(env, octree_pointer, jadjacencymap, radius_optimistic, min_resolution_trajectories){
 
-        //retrieve native objects
-        this->octree = (OcTree*) octree_pointer;
-        //retrieve orientations
-        //jsize len_jorientationneighbors = env->GetArrayLength(jorientationsneighbors);
-        //jfloat* orientationneighbors = env->GetFloatArrayElements(jorientationsneighbors, 0);
-        //retrieve argument-passed types and retrieve classes used in this method
-        //LOCAL REFERENCES
-        jclass cls_adjacencymap_local = env->FindClass(CLS_JADJACENCYMAP);
-        jclass cls_point3d_local = env->FindClass(CLS_POINT3D);
-        jclass cls_float_local = env->FindClass(CLS_FLOAT);
-        jclass cls_joctreekey_local = env->FindClass(CLS_JOCTREEKEY);
-        jclass cls_arraylist_local = env->FindClass(CLS_ARRAYLIST);
-        jclass cls_transition_local = env->FindClass(CLS_TRANSITION);
-        jclass cls_pair_local = env->FindClass(CLS_PAIR);
-        jclass cls_map_local = env->FindClass(CLS_MAP);
-        //CONVERT TO GLOBAL REFERENCES
-        this->cls_adjacencymap = (jclass) env->NewGlobalRef(cls_adjacencymap_local);
-        this->cls_point3d = (jclass) env->NewGlobalRef(cls_point3d_local);
-        this->cls_float = (jclass) env->NewGlobalRef(cls_float_local);
-        this->cls_joctreekey = (jclass) env->NewGlobalRef(cls_joctreekey_local);
-        this->cls_arraylist = (jclass) env->NewGlobalRef(cls_arraylist_local);
-        this->cls_transition = (jclass) env->NewGlobalRef(cls_transition_local);
-        this->cls_pair = (jclass) env->NewGlobalRef(cls_pair_local);
-        this->cls_map = (jclass) env->NewGlobalRef(cls_map_local);
+        //classes
+        jclass cls_set_local = env->FindClass(CLS_SET);
+        jclass cls_iterator_local = env->FindClass(CLS_ITERATOR);
+
+        //convert to global references
+        this->cls_set = (jclass) env->NewGlobalRef(cls_set_local);
+        this->cls_iterator = (jclass) env->NewGlobalRef(cls_iterator_local);
+
         //DELETE LOCAL REFERENCES (no longer used)
-        env->DeleteLocalRef(cls_adjacencymap_local);
-        env->DeleteLocalRef(cls_arraylist_local);
-        env->DeleteLocalRef(cls_joctreekey_local);
-        env->DeleteLocalRef(cls_pair_local);
-        env->DeleteLocalRef(cls_point3d_local);
-        env->DeleteLocalRef(cls_transition_local);
-        env->DeleteLocalRef(cls_map_local);
-        env->DeleteLocalRef(cls_float_local);
+        env->DeleteLocalRef(cls_set_local);
+        env->DeleteGlobalRef(cls_iterator_local);
 
-        //retrieve argument-passed object methods
-        this->method_adjacency = env->GetMethodID(cls_adjacencymap, "adjacency", "(Les/usc/citius/lab/joctomap/octree/JOctreeKey;)Ljava/util/List;");
-        this->method_nodeinfo = env->GetMethodID(cls_adjacencymap, "nodeInfo", "(Les/usc/citius/lab/joctomap/octree/JOctreeKey;)Les/usc/citius/lab/motionplanner/core/util/Pair;");
-        //retrieve constructors of classes used in this method
-        this->method_constructor_arraylist = env->GetMethodID(cls_arraylist, METHOD_CONSTRUCTOR, "()V");
-        this->method_constructor_joctreekey = env->GetMethodID(cls_joctreekey, METHOD_CONSTRUCTOR, "(III)V");
-        this->method_create_transition = env->GetStaticMethodID(cls_transition, "create", "(Ljava/lang/Object;Ljava/lang/Object;)Les/usc/citius/hipster/model/Transition;");
+        //constructor methods
         this->method_constructor_point3d = env->GetMethodID(cls_point3d, METHOD_CONSTRUCTOR, "(FFF)V");
-        this->method_constructor_float = env->GetMethodID(cls_float, METHOD_CONSTRUCTOR, "(F)V");
-        this->method_get = env->GetMethodID(cls_map, "get", "(Ljava/lang/Object;)Ljava/lang/Object;");
-        //retrieve fields used by classes in this method
-        this->field_joctreekey_x = env->GetFieldID(cls_joctreekey, FIELD_X, SIGNATURE_INT);
-        this->field_joctreekey_y = env->GetFieldID(cls_joctreekey, FIELD_Y, SIGNATURE_INT);
-        this->field_joctreekey_z = env->GetFieldID(cls_joctreekey, FIELD_Z, SIGNATURE_INT);
-        this->field_pair_first = env->GetFieldID(cls_pair, FIELD_PAIR_KEY, CLS_OBJECT);
-        this->field_pair_second = env->GetFieldID(cls_pair, FIELD_PAIR_CONTENT, CLS_OBJECT);
-        this->field_float_value = env->GetFieldID(cls_float, FIELD_VALUE, SIGNATURE_FLOAT);
-        //retrieve methods of classes used in this code
-        this->method_get_arraylist = env->GetMethodID(cls_arraylist, "get", "(I)Ljava/lang/Object;");
-        this->method_size_arraylist = env->GetMethodID(cls_arraylist, "size", "()I");
-        this->method_add_arraylist = env->GetMethodID(cls_arraylist, "add", "(Ljava/lang/Object;)Z");
+
+        //other methods
+        this->method_set_iterator = env->GetMethodID(cls_set, "iterator", "()Ljava/util/Iterator;");
+        this->method_iterator_next = env->GetMethodID(cls_iterator, "next", "()Ljava/lang/Object;");
+        this->method_iterator_hasnext = env->GetMethodID(cls_iterator, "hasNext", "()Z");
+
         //retrieve argument-passed object fields
         this->field_jpoint3d_x = env->GetFieldID(cls_point3d, FIELD_X, SIGNATURE_FLOAT);
         this->field_jpoint3d_y = env->GetFieldID(cls_point3d, FIELD_Y, SIGNATURE_FLOAT);
         this->field_jpoint3d_z = env->GetFieldID(cls_point3d, FIELD_Z, SIGNATURE_FLOAT);
 
-        //calculate max depth
-        this->maxdepth = octree->getTreeDepth();
-        this->maxdepthsize = this->octree->getNodeSize(maxdepth);
-        while(maxdepthsize < min_resolution_trajectories){
-            maxdepth--;
-            maxdepthsize = octree->getNodeSize(maxdepth);
+        //get neighbor information and put in C++ structs
+        jclass cls_h3dmr_neighbors_information = env->FindClass("Les/usc/citius/lab/motionplanner/tridimensional/hipster/heuristic/H3DMR/Neighbors;");
+        jfieldID field_neighbors_information = env->GetFieldID(cls_h3dmr_neighbors_information, "neighborsByDirection", "Ljava/util/Map;");
+        jobject map_neighbors = env->GetObjectField(h3dmr_neighbors_information, field_neighbors_information);
+        jobject map_neighbors_set = env->CallObjectMethod(map_neighbors, method_map_keyset);
+        jobject map_neighbors_set_iterator = env->CallObjectMethod(map_neighbors_set, method_set_iterator);
+        std::unordered_set<float> set_yaw;
+        std::unordered_set<float> set_pitch;
+        //get elements of the key
+        //hasNext()
+        while(env->CallBooleanMethod(map_neighbors_set_iterator, method_iterator_hasnext)){
+            //next()
+            jobject current_key = env->CallObjectMethod(map_neighbors_set_iterator, method_iterator_next);
+            //get first/second values
+            float current_key_first = env->GetFloatField(current_key, field_pair_first);
+            float current_key_second = env->GetFloatField(current_key, field_pair_second);
+            //get jpoint3d
+            jobject current_value = env->CallObjectMethod(map_neighbors, method_map_get, current_key);
+            float current_value_x = env->GetFloatField(current_value, field_point3d_x);
+            float current_value_y = env->GetFloatField(current_value, field_point3d_y);
+            float current_value_z = env->GetFloatField(current_value, field_point3d_z);
+            //put information in C++ map
+            this->neighbors[std::pair<float, float>(current_key_first, current_key_second)] = Point3D(current_value_x, current_value_y, current_value_z);
+            //put values in the arrays of values (yaw/pitch)
+            set_yaw.insert(current_key_first);
+            set_pitch.insert(current_key_second);
         }
 
-        //TODO: REVIEW FROM HERE
-        //insert neighbors
-        int level = 1;
-        for (int i = -level; i <= level; i++) {
-            for (int j = -level; j <= level; j++) {
-                if (i == -level || i == level || j == -level || j == level) {
-                    Point3D point = Point3D(maxdepthsize * i, maxdepthsize * j);
-                    float direction = atan2(point.y(), point.x());
-                    this->neighbors_directions.push_back(direction);
-                    this->neighbors[direction] = point;
+    }
+
+    Point3D closestNeighborTo(float yaw, float pitch){
+        float yaw_adapted = closestOrientationTo(this->directions_yaw, yaw);
+        float_priorityqueue pitch_ordered = closestOrientations(this->directions_pitch, pitch);
+        while(!pitch_ordered.empty()){
+            //get first
+            float pitch_adapted = pitch_ordered.top();
+            //query neighbors
+            std::unordered_map<std::pair<float, float>, Point3D, Pair_Hash>::const_iterator query_result = this->neighbors.find(std::pair<float, float>(yaw_adapted, pitch_adapted));
+            //found, so return
+            if(query_result != this->neighbors.end()){
+                return query_result->second;
+            }
+            //remove from the queue
+            pitch_ordered.pop();
+        }
+        //not found - throw exception
+        throw;
+    }
+
+    bool checkCollision3D_Line(const point3d point1, const point3d point2){
+        float resolution = this->octree->getResolution();
+        float min_x = std::min(point1.x(), point2.x());
+        float min_y = std::min(point1.y(), point2.y());
+        float min_z = std::min(point1.z(), point2.z());
+        float max_x = std::max(point1.x(), point2.x());
+        float max_y = std::max(point1.y(), point2.y());
+        float max_z = std::max(point1.z(), point2.z());
+        //distance = positive infinity
+        float distance = std::numeric_limits<float>::max();
+        //iterate over occupied cells
+        for(OcTree::leaf_bbx_iterator it=this->octree->begin_leafs_bbx(point3d(min_x, min_y, min_z), point3d(max_x, max_y, max_z)), end=this->octree->end_leafs_bbx(); it != end; ++it){
+            //transform current leaf_bbx_iterator to node
+            OcTreeNode *currentNode = (OcTreeNode*) it.operator ->();
+            if( this->octree->isNodeOccupied(currentNode)){
+                float new_distance = distance_to_segment(it.getCoordinate(), point1, point2);
+                distance = std::min(distance, new_distance);
+                //collision detected
+                if(distance <= this->radius_optimistic + it.getSize()){
+                    return true;
                 }
             }
         }
     }
 
-    ~StaticInformation(){
-        env->DeleteGlobalRef(cls_adjacencymap);
-        env->DeleteGlobalRef(cls_arraylist);
-        env->DeleteGlobalRef(cls_joctreekey);
-        env->DeleteGlobalRef(cls_pair);
-        env->DeleteGlobalRef(cls_point3d);
-        env->DeleteGlobalRef(cls_transition);
-        env->DeleteGlobalRef(cls_map);
-        env->DeleteGlobalRef(cls_float);
-        env->DeleteGlobalRef(jadjacencymap);
+    bool checkCollision3D_Cached(point3d point1, point3d point2){
+        Point3D point1_query = Point3D(point1);
+        Point3D point2_query = Point3D(point2);
+        //create query
+        std::pair<Point3D, Point3D> query1 = std::pair<Point3D, Point3D>(point1_query, point2_query);
+        bool result;
+        //not found in cache
+        if(this->cache_collisions.find(query1) == this->cache_collisions.end()){
+            //try reversed query
+            std::pair<Point3D, Point3D> query2 = std::pair<Point3D, Point3D>(point2_query, point1_query);
+            if(this->cache_collisions.find(query2) == this->cache_collisions.end()) {
+                result = checkCollision3D_Line(point1, point2);
+                //update cache with both entries
+                this->cache_collisions[query1] = result;
+                this->cache_collisions[query2] = result;
+            }
+            else{
+                //retrieve result from query2
+                result = this->cache_collisions[query2];
+                //update cache with first entry
+                this->cache_collisions[query1] = result;
+            }
+            //retrieve result from query1
+            this->cache_collisions[query1] = result;
+        }
+        else{
+            result = this->cache_collisions[query1];
+        }
+        return result;
+    }
+
+    ~StaticInformation3D(){
+        env->DeleteGlobalRef(this->cls_set);
+        env->DeleteGlobalRef(this->cls_iterator);
     }
 
 };
@@ -209,7 +284,7 @@ JNIEXPORT jlong JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitionF
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitionFunction_transitionsFrom
         (JNIEnv *env, jobject jh3dmrtransitiongenerator, jobject jpoint3d){
 
-    StaticInformation* information = (StaticInformation*) getPointer(env, jh3dmrtransitiongenerator);
+    StaticInformation3D* information = (StaticInformation3D*) getPointer(env, jh3dmrtransitiongenerator);
 
     //retrieve argument-passed object field values
     jfloat point3d_x = env->GetFloatField(jpoint3d, information->field_jpoint3d_x);
@@ -220,10 +295,9 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitio
     jobject jarraylistneighbors = env->NewObject(information->cls_arraylist, information->method_constructor_arraylist);
     //current state
     point3d state = point3d(point3d_x, point3d_y, point3d_z);
-    Point3D state_3D = Point3D(state);
     //define priority queue with custom comparator
     ComparePoint3D comparator = ComparePoint3D(state);
-    priorityqueue queue_frontier_points(comparator);
+    point3d_priorityqueue queue_frontier_points(comparator);
     //get min/max positions in octree
     double octree_min_x, octree_min_y, octree_min_z, octree_max_x, octree_max_y, octree_max_z;
     information->octree->getMetricMin(octree_min_x, octree_min_y, octree_min_z);
@@ -233,8 +307,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitio
             information,
             state
     );
-    Point3D center_of_current_cell = info.coordinate;
-    Point3D state_3D_compare = Point3D(information->octree->keyToCoord(info.key, information->maxdepth));
+    point3d center_of_current_cell = info.coordinate;
+    point3d state_3D_compare = information->octree->keyToCoord(info.key, information->maxdepth);
     //know current adjacencies for this point
     jobject jcells = info.jadjacencies;
     jint jcells_size = env->CallIntMethod(jcells, information->method_size_arraylist);
@@ -262,21 +336,19 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitio
             frontier_points(current_node_info.size, current_node_info.coordinate, queue_frontier_points);
         }
         else{
-            Point3D upCenter = Point3D(information->octree->keyToCoord(currentkey, information->maxdepth));
+            point3d upCenter = information->octree->keyToCoord(currentkey, information->maxdepth);
             if(fabs(upCenter.x() - state_3D_compare.x()) < 0.001 && fabs(upCenter.y() - state_3D_compare.y()) < 0.001 && fabs(upCenter.z() - state_3D_compare.z()) < 0.001){
-                float yawNeighbor = atan2(center.y() - center_of_current_cell.y(), center.x() - center_of_current_cell.x());
-                float pitchNeighbor;
-                //adapt to available orientations
-                yawNeighbor = closestOrientationTo(information->neighbors_directions, yawNeighbor);
-                Point3D neighbor = information->neighbors[orientation_adapted];
-                upCenter = Point3D(upCenter.x() + neighbor.x(), upCenter.y() + neighbor.y(), upCenter.z() + neighbor.z());
+                std::pair<float, float> angles = angles_to(center_of_current_cell, center);
+                //get closest neighbor (yaw, pitch)
+                Point3D neighbor = information->closestNeighborTo(angles.first, angles.second);
+                upCenter = point3d(upCenter.x() + neighbor.x(), upCenter.y() + neighbor.y(), upCenter.z() + neighbor.z());
             }
-            if(!checkCollision_Cached){
+            if(!information->checkCollision3D_Cached(state, upCenter)){
                 frontier_points(information->maxdepthsize, upCenter, queue_frontier_points);
             }
             //only add center
             else{
-                queue_frontier_points.push(point3d(upCenter.x(), upCenter.y(), 0));
+                queue_frontier_points.push(point3d(upCenter.x(), upCenter.y(), upCenter.z()));
             }
         }
         //Generate the transition to the couple of nearest frontier points of the adjacent cell
@@ -286,22 +358,22 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitio
             point3d current = queue_frontier_points.top();
             //remove first
             queue_frontier_points.pop();
-            if(current == state || !isInBounds(octree_min_x, octree_min_y, octree_max_x, octree_max_y, current)) continue;
-            if(!checkCollision_Cached(information, current)){
+            if(current == state || !isInBounds(octree_min_x, octree_min_y, octree_min_z, octree_max_x, octree_max_y, octree_max_z, current)) continue;
+            if(!information->checkCollision3D_Cached(state, current)){
                 //create instance of Point2D
-                jobject jpoint2dneighbor = env->NewObject(information->cls_point2d, information->method_constructor_point2d, current.x(), current.y());
+                jobject jpoint3dneighbor = env->NewObject(information->cls_point3d, information->method_constructor_point3d, current.x(), current.y(), current.z());
                 //create transition object
-                jobject transition = env->CallObjectMethod(information->cls_transition, information->method_create_transition, jpoint2d, jpoint2dneighbor);
+                jobject transition = env->CallObjectMethod(information->cls_transition, information->method_create_transition, jpoint3d, jpoint3dneighbor);
                 //add to the arraylist
                 env->CallBooleanMethod(jarraylistneighbors, information->method_add_arraylist, transition);
                 generated++;
                 //delete local references used by instantiated objects
                 env->DeleteLocalRef(transition);
-                env->DeleteLocalRef(jpoint2dneighbor);
+                env->DeleteLocalRef(jpoint3dneighbor);
             }
         }
         //clear content of the queue
-        priorityqueue empty(comparator);
+        point3d_priorityqueue empty(comparator);
         queue_frontier_points.swap(empty);
     }
 
@@ -315,6 +387,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitio
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitionFunction_dispose
-(JNIEnv *env, jobject){
-
+    (JNIEnv *env, jobject j3dmrtransitiongenerator){
+    StaticInformation3D* information = (StaticInformation3D*) getPointer(env, j3dmrtransitiongenerator);
+    delete information;
 }

@@ -37,6 +37,8 @@
 #define CLS_JOCTREENODE "Les/usc/citius/lab/joctomap/octree/JOctreeNode;"
 #define CLS_JOCTREEKEY "Les/usc/citius/lab/joctomap/octree/JOctreeKey;"
 #define CLS_JOCTREE "Les/usc/citius/lab/joctomap/octree/JOctree;"
+#define CLS_SET "Ljava/util/Set;"
+#define CLS_ITERATOR "Ljava/util/Iterator;"
 #define CLS_JADJACENCYMAP "Les/usc/citius/lab/joctomap/util/AdjacencyMap;"
 #define CLS_NATIVEOBJECT "Les/usc/citius/lab/joctomap/util/NativeObject;"
 #define CLS_MAP "Ljava/util/Map;"

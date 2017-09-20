@@ -50,22 +50,6 @@ public:
 };
 
 /**
- * Hash function for Point2D.
- */
-struct Point2D_Hash
-{
-
-    std::size_t operator()(const Point2D &point) const
-    {
-        //already defined hash function for doubles
-        size_t h1 = std::hash<double>()(point.x());
-        size_t h2 = std::hash<double>()(point.y());
-        return  (h1 ^ (h2 << 1));
-    }
-
-};
-
-/**
  * Custom defined type for Point3D.
  */
 class Point3D
@@ -102,28 +86,57 @@ public:
     {
         return (this->coord_x == other.coord_x)
                && (this->coord_y == other.coord_y)
-               && (this->coord_z == other.coord_z) ;
+               && (this->coord_z == other.coord_z);
     }
 
 };
 
+//hash for std::pair
+struct Pair_Hash {
+
+    template <typename T, typename U>
+    std::size_t operator()(const std::pair<T, U> &x) const
+    {
+        return std::hash<T>()(x.first) ^ std::hash<U>()(x.second);
+    }
+
+};
 
 /**
- * Hash function for Point2D.
+ * Hash definition for Point2D & Point3D
  */
-struct Point3D_Hash
-{
+namespace std {
 
-    std::size_t operator()(const Point3D &point) const
+    template <>
+    struct hash<Point3D>
     {
-        //already defined hash function for doubles
-        size_t h1 = std::hash<double>()(point.x());
-        size_t h2 = std::hash<double>()(point.y());
-        size_t h3 = std::hash<double>()(point.z());
-        return  (h1 ^ (h2 << 1)) ^ h3;
-    }
 
-};
+        size_t operator()(const Point3D& point) const
+        {
+            //already defined hash function for doubles
+            size_t h1 = std::hash<double>()(point.x());
+            size_t h2 = std::hash<double>()(point.y());
+            size_t h3 = std::hash<double>()(point.z());
+            return  (h1 ^ (h2 << 1)) ^ h3;
+        }
+
+    };
+
+    template <>
+    struct hash<Point2D>
+    {
+
+        std::size_t operator()(const Point2D &point) const
+        {
+            //already defined hash function for doubles
+            size_t h1 = std::hash<double>()(point.x());
+            size_t h2 = std::hash<double>()(point.y());
+            return  (h1 ^ (h2 << 1));
+        }
+
+    };
+
+}
 
 struct NodeInfo {
 
@@ -162,6 +175,21 @@ struct ComparePoint3D {
     }
 };
 
+struct CompareValues {
+
+    //comparator argument
+    float value;
+
+    //constructor
+    CompareValues(float value) {this->value = value; }
+
+    //comparison function
+    bool operator()(float const & v1, float const & v2){
+        return abs(v1 - value) > abs(v2 - value);
+    }
+
+};
+
 
 struct StaticInformation{
     //environment (to release references later)
@@ -192,7 +220,7 @@ struct StaticInformation{
     jmethodID method_constructor_joctreekey;
     jmethodID method_create_transition;
     jmethodID method_constructor_float;
-    jmethodID method_get;
+    jmethodID method_map_get;
     jmethodID method_get_arraylist;
     jmethodID method_size_arraylist;
     jmethodID method_add_arraylist;
@@ -263,7 +291,7 @@ struct StaticInformation{
         this->method_constructor_joctreekey = env->GetMethodID(cls_joctreekey, METHOD_CONSTRUCTOR, "(III)V");
         this->method_create_transition = env->GetStaticMethodID(cls_transition, "create", "(Ljava/lang/Object;Ljava/lang/Object;)Les/usc/citius/hipster/model/Transition;");
         this->method_constructor_float = env->GetMethodID(cls_float, METHOD_CONSTRUCTOR, "(F)V");
-        this->method_get = env->GetMethodID(cls_map, "get", "(Ljava/lang/Object;)Ljava/lang/Object;");
+        this->method_map_get = env->GetMethodID(cls_map, "get", "(Ljava/lang/Object;)Ljava/lang/Object;");
 
         //retrieve fields used by classes in this method
         this->field_joctreekey_x = env->GetFieldID(cls_joctreekey, FIELD_X, SIGNATURE_INT);
@@ -308,9 +336,13 @@ struct StaticInformation{
 };
 
 //define priority queue
-typedef std::priority_queue<point3d, std::vector<point3d>, ComparePoint3D> priorityqueue;
+typedef std::priority_queue<point3d, std::vector<point3d>, ComparePoint3D> point3d_priorityqueue;
+
+typedef std::priority_queue<float, std::vector<float>, CompareValues> float_priorityqueue;
 
 float closestOrientationTo(std::list<float> neighbors_orientations, float value);
+
+float_priorityqueue closestOrientations(std::list<float> neighbors_orientations, float value);
 
 bool isInBounds(double octree_min_x, double octree_min_y, double octree_min_z, double octree_max_x, double octree_max_y, double octree_max_z, point3d point);
 

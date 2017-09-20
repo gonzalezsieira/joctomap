@@ -59,3 +59,15 @@ float closestOrientationTo(std::list<float> neighbors_orientations, float value)
     }
     return closestori;
 }
+
+float_priorityqueue closestOrientations(std::list<float> neighbors_orientations, float value){
+
+    //create priority queue (float)
+    float_priorityqueue ordered_values = float_priorityqueue(CompareValues(value));
+
+    for(std::list<float>::iterator list_iterator = neighbors_orientations.begin(); list_iterator != neighbors_orientations.end(); list_iterator++){
+        ordered_values.push(*list_iterator);
+    }
+    return ordered_values;
+
+}

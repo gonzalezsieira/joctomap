@@ -41,7 +41,7 @@ struct StaticInformation2D : StaticInformation {
     std::list<float> neighbors_directions;
     std::unordered_map<float, Point2D> neighbors2d;
     //cache for collision check
-    std::unordered_map<Point2D, bool, Point2D_Hash> cache_collisions;
+    std::unordered_map<Point2D, bool> cache_collisions;
     int POINTS_CONSIDERED = 2;
 
     //constructor
@@ -140,7 +140,7 @@ bool isInBounds(double octree_min_x, double octree_min_y, double octree_max_x, d
 }
 
 //other methods
-void frontier_points2d(float size_cell, point3d center, priorityqueue &queue){
+void frontier_points2d(float size_cell, point3d center, point3d_priorityqueue &queue){
     float diff = size_cell / 4.0;
     queue.push(point3d(center.x() - diff, center.y() - diff, 0));
     queue.push(point3d(center.x() - diff, center.y() + diff, 0));
@@ -170,7 +170,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitio
     Point2D state_2D = Point2D(state);
     //define priority queue with custom comparator
     ComparePoint3D comparator = ComparePoint3D(state);
-    priorityqueue queue_frontier_points(comparator);
+    point3d_priorityqueue queue_frontier_points(comparator);
     //get min/max positions in octree
     double octree_min_x, octree_min_y, octree_min_z, octree_max_x, octree_max_y, octree_max_z;
     information->octree->getMetricMin(octree_min_x, octree_min_y, octree_min_z);
@@ -186,7 +186,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitio
     jobject jcells = info.jadjacencies;
     jint jcells_size = env->CallIntMethod(jcells, information->method_size_arraylist);
     //variable to store the explored cells
-    std::unordered_set<Point2D, Point2D_Hash> points_considered;
+    std::unordered_set<Point2D> points_considered;
     for(int i = 0; i < jcells_size; i++){
         //TODO: try converstion to jobjectarray outside loop?
         //current java method
@@ -253,7 +253,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H2DMRTransitio
                 }
             }
             //clear content of the queue
-            priorityqueue empty(comparator);
+            point3d_priorityqueue empty(comparator);
             queue_frontier_points.swap(empty);
         }
     }
