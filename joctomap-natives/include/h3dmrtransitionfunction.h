@@ -25,10 +25,10 @@ extern "C" {
 /*
  * Class:     es_usc_citius_lab_joctomap_hipster_H3DMRTransitionFunction
  * Method:    initialize
- * Signature: ()J
+ * Signature: (JLes/usc/citius/lab/joctomap/util/AdjacencyMap;FFLjava/lang/Object;)J
  */
 JNIEXPORT jlong JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitionFunction_initialize
-  (JNIEnv *, jobject);
+  (JNIEnv *, jobject, jlong, jobject, jfloat, jfloat, jobject);
 
 /*
  * Class:     es_usc_citius_lab_joctomap_hipster_H3DMRTransitionFunction

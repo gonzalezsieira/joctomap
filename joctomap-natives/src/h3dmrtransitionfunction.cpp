@@ -58,6 +58,15 @@ float distance_to_segment(point3d point, point3d point1, point3d point2){
     }
 }
 
+bool isInBounds(double octree_min_x, double octree_min_y, double octree_min_z, double octree_max_x, double octree_max_y, double octree_max_z, point3d point){
+    return point.x() > octree_min_x
+           && point.x() < octree_max_x
+           && point.y() > octree_min_y
+           && point.y() < octree_max_y
+           && point.z() > octree_min_z
+           && point.z() < octree_max_z;
+}
+
 /**
  * Returns pair of angles : yaw, pitch, between two points (origin, dest).
  * @param point1 origin point
@@ -144,6 +153,7 @@ struct StaticInformation3D : StaticInformation{
         this->method_constructor_point3d = env->GetMethodID(cls_point3d, METHOD_CONSTRUCTOR, "(FFF)V");
 
         //other methods
+        this->method_map_keyset = env->GetMethodID(cls_map, "keySet", "()Ljava/util/Set;");
         this->method_set_iterator = env->GetMethodID(cls_set, "iterator", "()Ljava/util/Iterator;");
         this->method_iterator_next = env->GetMethodID(cls_iterator, "next", "()Ljava/lang/Object;");
         this->method_iterator_hasnext = env->GetMethodID(cls_iterator, "hasNext", "()Z");
@@ -154,7 +164,7 @@ struct StaticInformation3D : StaticInformation{
         this->field_jpoint3d_z = env->GetFieldID(cls_point3d, FIELD_Z, SIGNATURE_FLOAT);
 
         //get neighbor information and put in C++ structs
-        jclass cls_h3dmr_neighbors_information = env->FindClass("Les/usc/citius/lab/motionplanner/tridimensional/hipster/heuristic/H3DMR/Neighbors;");
+        jclass cls_h3dmr_neighbors_information = env->FindClass("Les/usc/citius/lab/motionplanner/tridimensional/hipster/heuristic/H3DMR$Neighbors;");
         jfieldID field_neighbors_information = env->GetFieldID(cls_h3dmr_neighbors_information, "neighborsByDirection", "Ljava/util/Map;");
         jobject map_neighbors = env->GetObjectField(h3dmr_neighbors_information, field_neighbors_information);
         jobject map_neighbors_set = env->CallObjectMethod(map_neighbors, method_map_keyset);
@@ -167,18 +177,21 @@ struct StaticInformation3D : StaticInformation{
             //next()
             jobject current_key = env->CallObjectMethod(map_neighbors_set_iterator, method_iterator_next);
             //get first/second values
-            float current_key_first = env->GetFloatField(current_key, field_pair_first);
-            float current_key_second = env->GetFloatField(current_key, field_pair_second);
+            jobject current_key_first = env->GetObjectField(current_key, field_pair_first);
+            jobject current_key_second = env->GetObjectField(current_key, field_pair_second);
+            //get float values
+            float current_key_first_floatvalue = env->GetFloatField(current_key_first, field_float_value);
+            float current_key_second_floatvalue = env->GetFloatField(current_key_second, field_float_value);
             //get jpoint3d
             jobject current_value = env->CallObjectMethod(map_neighbors, method_map_get, current_key);
             float current_value_x = env->GetFloatField(current_value, field_point3d_x);
             float current_value_y = env->GetFloatField(current_value, field_point3d_y);
             float current_value_z = env->GetFloatField(current_value, field_point3d_z);
             //put information in C++ map
-            this->neighbors[std::pair<float, float>(current_key_first, current_key_second)] = Point3D(current_value_x, current_value_y, current_value_z);
+            this->neighbors[std::pair<float, float>(current_key_first_floatvalue, current_key_second_floatvalue)] = Point3D(current_value_x, current_value_y, current_value_z);
             //put values in the arrays of values (yaw/pitch)
-            set_yaw.insert(current_key_first);
-            set_pitch.insert(current_key_second);
+            set_yaw.insert(current_key_first_floatvalue);
+            set_pitch.insert(current_key_second_floatvalue);
         }
 
     }
@@ -272,8 +285,9 @@ struct StaticInformation3D : StaticInformation{
  * Signature: ()J
  */
 JNIEXPORT jlong JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitionFunction_initialize
-        (JNIEnv *env, jobject){
-
+        (JNIEnv *env, jobject h3dmrtransitionfunction, jlong octree_pointer, jobject jadjacency_map, jfloat radius_optimistic, jfloat min_resolution_trajectories, jobject h3dmr_neighbor_information){
+        StaticInformation3D *information = new StaticInformation3D(env, octree_pointer, jadjacency_map, radius_optimistic, min_resolution_trajectories, h3dmr_neighbor_information);
+        return (long) information;
 }
 
 /*
@@ -330,7 +344,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitio
                 jcurrentkey
         );
         //CENTER OF THE CELL CHECKING
-        point3d center = point3d(current_node_info.coordinate.x(), current_node_info.coordinate.y(), current_node_info.coordinate.z());
+        point3d center = current_node_info.coordinate;
         //compare this way to avoid precision problems
         if(current_node_info.size - information->maxdepthsize > 0.001){
             frontier_points(current_node_info.size, current_node_info.coordinate, queue_frontier_points);
