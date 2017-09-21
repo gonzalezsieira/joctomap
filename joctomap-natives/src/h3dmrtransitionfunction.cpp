@@ -216,13 +216,13 @@ struct StaticInformation3D : StaticInformation{
     }
 
     bool checkCollision3D_Line(const point3d point1, const point3d point2){
-        float resolution = this->octree->getResolution();
-        float min_x = std::min(point1.x(), point2.x());
-        float min_y = std::min(point1.y(), point2.y());
-        float min_z = std::min(point1.z(), point2.z());
-        float max_x = std::max(point1.x(), point2.x());
-        float max_y = std::max(point1.y(), point2.y());
-        float max_z = std::max(point1.z(), point2.z());
+        float resolutionPlusRadius = this->octree->getResolution() + this->radius_optimistic;
+        float min_x = std::min(point1.x(), point2.x()) - resolutionPlusRadius;
+        float min_y = std::min(point1.y(), point2.y()) - resolutionPlusRadius;
+        float min_z = std::min(point1.z(), point2.z()) - resolutionPlusRadius;
+        float max_x = std::max(point1.x(), point2.x()) + resolutionPlusRadius;
+        float max_y = std::max(point1.y(), point2.y()) + resolutionPlusRadius;
+        float max_z = std::max(point1.z(), point2.z()) + resolutionPlusRadius;
         //distance = positive infinity
         float distance = std::numeric_limits<float>::max();
         //iterate over occupied cells
@@ -238,6 +238,7 @@ struct StaticInformation3D : StaticInformation{
                 }
             }
         }
+        return false;
     }
 
     bool checkCollision3D_Cached(point3d point1, point3d point2){
@@ -357,12 +358,12 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitio
                 Point3D neighbor = information->closestNeighborTo(angles.first, angles.second);
                 upCenter = point3d(upCenter.x() + neighbor.x(), upCenter.y() + neighbor.y(), upCenter.z() + neighbor.z());
             }
-            if(!information->checkCollision3D_Cached(state, upCenter)){
+            if(information->checkCollision3D_Cached(state, upCenter)){
                 frontier_points(information->maxdepthsize, upCenter, queue_frontier_points);
             }
             //only add center
             else{
-                queue_frontier_points.push(point3d(upCenter.x(), upCenter.y(), upCenter.z()));
+                queue_frontier_points.push(upCenter);
             }
         }
         //Generate the transition to the couple of nearest frontier points of the adjacent cell
