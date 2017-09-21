@@ -17,7 +17,10 @@ package es.usc.citius.lab.joctomap.hipster;
 
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.TransitionFunction;
+import es.usc.citius.lab.joctomap.octree.JOctree;
+import es.usc.citius.lab.joctomap.util.AdjacencyMap;
 import es.usc.citius.lab.joctomap.util.NativeObject;
+import es.usc.citius.lab.motionplanner.core.shapes.Shape3D;
 import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
 
 public class H3DMRTransitionFunction extends NativeObject implements TransitionFunction<Void, Point3D> {
@@ -32,12 +35,15 @@ public class H3DMRTransitionFunction extends NativeObject implements TransitionF
     }
 
 
-    public H3DMRTransitionFunction(){
+    public H3DMRTransitionFunction(JOctree octree, AdjacencyMap map, Shape3D optimisticShape, float minResolutionTrajectories, Object neighborsInformation){
+        //create with invalid pointer
         super(0);
-        this.pointer = initialize();
+
+        //replace pointer with initialization
+        this.pointer = initialize(octree.getPointer(), map, optimisticShape.getMinRadius(), minResolutionTrajectories, neighborsInformation);
     }
 
-    public native long initialize();
+    public native long initialize(long octreePointer, AdjacencyMap map, float radiusOptimisticShape, float minimumResolutionTrajectories, Object neighborsInformation);
 
     @Override
     public native Iterable<Transition<Void, Point3D>> transitionsFrom(Point3D point3D);
