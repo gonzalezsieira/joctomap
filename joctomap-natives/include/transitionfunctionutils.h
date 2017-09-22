@@ -129,9 +129,24 @@ namespace std {
         size_t operator()(const Point3D& point) const
         {
             //already defined hash function for doubles
-            size_t h1 = std::hash<double>()(point.x());
-            size_t h2 = std::hash<double>()(point.y());
-            size_t h3 = std::hash<double>()(point.z());
+            size_t h1 = 2 * std::hash<double>()(point.x());
+            size_t h2 = 3 * std::hash<double>()(point.y());
+            size_t h3 = 5 * std::hash<double>()(point.z());
+            return  (h1 ^ (h2 << 1)) ^ h3;
+        }
+
+    };
+
+    template <>
+    struct hash<point3d>
+    {
+
+        size_t operator()(const point3d& point) const
+        {
+            //already defined hash function for doubles
+            size_t h1 = 2 * std::hash<double>()(point.x());
+            size_t h2 = 3 * std::hash<double>()(point.y());
+            size_t h3 = 5 * std::hash<double>()(point.z());
             return  (h1 ^ (h2 << 1)) ^ h3;
         }
 
@@ -144,8 +159,8 @@ namespace std {
         std::size_t operator()(const Point2D &point) const
         {
             //already defined hash function for doubles
-            size_t h1 = std::hash<double>()(point.x());
-            size_t h2 = std::hash<double>()(point.y());
+            size_t h1 = 2 * std::hash<double>()(point.x());
+            size_t h2 = 3 * std::hash<double>()(point.y());
             return  (h1 ^ (h2 << 1));
         }
 

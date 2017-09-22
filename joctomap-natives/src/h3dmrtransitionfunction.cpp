@@ -193,11 +193,19 @@ struct StaticInformation3D : StaticInformation{
             set_yaw.insert(current_key_first_floatvalue);
             set_pitch.insert(current_key_second_floatvalue);
         }
+        //populate arrays with values (from sets)
+        for(std::unordered_set<float>::const_iterator iterator_yaw = set_yaw.begin(); iterator_yaw != set_yaw.end(); ++iterator_yaw){
+            this->directions_yaw.push_back(*iterator_yaw);
+        }
+        for(std::unordered_set<float>::const_iterator iterator_pitch = set_pitch.begin(); iterator_pitch != set_pitch.end(); ++iterator_pitch){
+            this->directions_pitch.push_back(*iterator_pitch);
+        }
 
     }
 
     Point3D closestNeighborTo(float yaw, float pitch){
         float yaw_adapted = closestOrientationTo(this->directions_yaw, yaw);
+        //TODO: REVIEW HERE, does not enter the loop
         float_priorityqueue pitch_ordered = closestOrientations(this->directions_pitch, pitch);
         while(!pitch_ordered.empty()){
             //get first
@@ -322,6 +330,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitio
             information,
             state
     );
+    //set of tested points
+    std::unordered_set<point3d> tested;
     point3d center_of_current_cell = info.coordinate;
     point3d state_3D_compare = information->octree->keyToCoord(info.key, information->maxdepth);
     //know current adjacencies for this point
@@ -350,20 +360,27 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitio
         if(current_node_info.size - information->maxdepthsize > 0.001){
             frontier_points(current_node_info.size, current_node_info.coordinate, queue_frontier_points);
         }
-        else{
+        else {
             point3d upCenter = information->octree->keyToCoord(currentkey, information->maxdepth);
-            if(fabs(upCenter.x() - state_3D_compare.x()) < 0.001 && fabs(upCenter.y() - state_3D_compare.y()) < 0.001 && fabs(upCenter.z() - state_3D_compare.z()) < 0.001){
-                std::pair<float, float> angles = angles_to(center_of_current_cell, center);
-                //get closest neighbor (yaw, pitch)
-                Point3D neighbor = information->closestNeighborTo(angles.first, angles.second);
-                upCenter = point3d(upCenter.x() + neighbor.x(), upCenter.y() + neighbor.y(), upCenter.z() + neighbor.z());
-            }
-            if(information->checkCollision3D_Cached(state, upCenter)){
-                frontier_points(information->maxdepthsize, upCenter, queue_frontier_points);
-            }
-            //only add center
-            else{
-                queue_frontier_points.push(upCenter);
+            //avoid testing the same upscaled cell more than once
+            if (tested.find(upCenter) == tested.end()) {
+                tested.insert(upCenter);
+                if (fabs(upCenter.x() - state_3D_compare.x()) < 0.001 &&
+                    fabs(upCenter.y() - state_3D_compare.y()) < 0.001 &&
+                    fabs(upCenter.z() - state_3D_compare.z()) < 0.001) {
+                    std::pair<float, float> angles = angles_to(center_of_current_cell, center);
+                    //get closest neighbor (yaw, pitch)
+                    Point3D neighbor = information->closestNeighborTo(angles.first, angles.second);
+                    upCenter = point3d(upCenter.x() + neighbor.x(), upCenter.y() + neighbor.y(),
+                                       upCenter.z() + neighbor.z());
+                }
+                if (information->checkCollision3D_Cached(state, upCenter)) {
+                    frontier_points(information->maxdepthsize, upCenter, queue_frontier_points);
+                }
+                //only add center
+                else {
+                    queue_frontier_points.push(upCenter);
+                }
             }
         }
         //Generate the transition to the couple of nearest frontier points of the adjacent cell
