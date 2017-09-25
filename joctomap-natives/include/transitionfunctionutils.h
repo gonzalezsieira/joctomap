@@ -215,7 +215,7 @@ struct CompareValues {
 
     //comparison function
     bool operator()(float const & v1, float const & v2){
-        return abs(v1 - value) > abs(v2 - value);
+        return fabs(v1 - value) > fabs(v2 - value);
     }
 
 };
