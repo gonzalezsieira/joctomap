@@ -18,11 +18,21 @@ package es.usc.citius.lab.joctomap.hipster;
 import es.usc.citius.hipster.model.Transition;
 import es.usc.citius.hipster.model.function.TransitionFunction;
 import es.usc.citius.lab.joctomap.octree.JOctree;
+import es.usc.citius.lab.joctomap.octree.JOctreeKey;
 import es.usc.citius.lab.joctomap.util.AdjacencyMap;
 import es.usc.citius.lab.joctomap.util.NativeObject;
 import es.usc.citius.lab.motionplanner.core.shapes.Shape3D;
 import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
 
+import java.util.Queue;
+
+/**
+ * Native implementation of H3DMRTransitionFunction. Performance is much better using
+ * this class than the counterpart implementation in pure Java making use of the
+ * JOctomap API.
+ *
+ * @since 05/10/2017
+ */
 public class H3DMRTransitionFunction extends NativeObject implements TransitionFunction<Void, Point3D> {
 
     /**
@@ -44,6 +54,15 @@ public class H3DMRTransitionFunction extends NativeObject implements TransitionF
     }
 
     public native long initialize(long octreePointer, AdjacencyMap map, float radiusOptimisticShape, float minimumResolutionTrajectories, Object neighborsInformation);
+
+    /**
+     * Native implementation for generating the inner samples of a cell.
+     *
+     * @param point center of cell
+     * @param size size of cell
+     * @param queue queue to add the resulting points
+     */
+    public static native void innerSamplesOfCell(Point3D point, float size, Queue<Point3D> queue);
 
     @Override
     public native Iterable<Transition<Void, Point3D>> transitionsFrom(Point3D point3D);
