@@ -32,6 +32,14 @@ JNIEXPORT jlong JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitionF
 
 /*
  * Class:     es_usc_citius_lab_joctomap_hipster_H3DMRTransitionFunction
+ * Method:    innerSamplesOfCell
+ * Signature: (Les/usc/citius/lab/motionplanner/core/spatial/Point3D;FLjava/util/Queue;)V
+ */
+JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitionFunction_innerSamplesOfCell
+  (JNIEnv *, jclass, jobject, jfloat, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_hipster_H3DMRTransitionFunction
  * Method:    transitionsFrom
  * Signature: (Les/usc/citius/lab/motionplanner/core/spatial/Point3D;)Ljava/lang/Iterable;
  */
