@@ -421,7 +421,37 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitio
 JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitionFunction_innerSamplesOfCell
   (JNIEnv *env, jclass cls_h3dmrtransitionfunction, jobject jpoint3d, jfloat jsize, jobject jqueue){
 
-        env->FindClass(CLS_QUEUE);
+        jclass cls_queue = env->FindClass(CLS_QUEUE);
+        jmethodID method_add = env->GetMethodID(cls_queue, "add", "(Ljava/lang/Object;)Z");
+
+        jclass cls_point3d = env->FindClass(CLS_POINT3D);
+        jfieldID field_point3d_x = env->GetFieldID(cls_point3d, FIELD_X, SIGNATURE_FLOAT);
+        jfieldID field_point3d_y = env->GetFieldID(cls_point3d, FIELD_Y, SIGNATURE_FLOAT);
+        jfieldID field_point3d_z = env->GetFieldID(cls_point3d, FIELD_Z, SIGNATURE_FLOAT);
+        jmethodID constructor_point3d = env->GetMethodID(cls_point3d, METHOD_CONSTRUCTOR, "(FFF)V");
+
+        //retrieve argument-passed object field values
+        jfloat point3d_x = env->GetFloatField(jpoint3d, field_point3d_x);
+        jfloat point3d_y = env->GetFloatField(jpoint3d, field_point3d_y);
+        jfloat point3d_z = env->GetFloatField(jpoint3d, field_point3d_z);
+
+        //origin point
+        point3d origin(point3d_x, point3d_y, point3d_z);
+        //comparator
+        ComparePoint3D comparator(origin);
+        point3d_priorityqueue queue_frontier_points(comparator);
+        //create points
+        frontier_points(jsize, origin, queue_frontier_points);
+        while(queue_frontier_points.size() > 0){
+            //retrieve point
+            point3d top = queue_frontier_points.top();
+            //remove from queue
+            queue_frontier_points.pop();
+            //create jpoint3d
+            jobject jpoint3d = env->NewObject(cls_point3d, constructor_point3d, top.x(), top.y(), top.z());
+            //insert in queue
+            env->CallBooleanMethod(jqueue, method_add, jpoint3d);
+        }
 
   }
 

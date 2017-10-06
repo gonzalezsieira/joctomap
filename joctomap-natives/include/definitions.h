@@ -47,6 +47,7 @@
 #define CLS_ARRAYLIST "Ljava/util/ArrayList;"
 #define CLS_TRANSITION "Les/usc/citius/hipster/model/Transition;"
 #define CLS_OBJECT "Ljava/lang/Object;"
+#define CLS_QUEUE "Ljava/util/Queue;"
 
 //Fields
 #define FIELD_PATH "path"
