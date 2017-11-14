@@ -36,12 +36,14 @@ using namespace octomap;
 /* 
  * Returns if there is a collision in a given pose using a 2D circular robot shape.
  */
-JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_util_CollisionChecker2D_collides__Les_usc_citius_lab_joctomap_octree_JOctree_2Les_usc_citius_lab_motionplanner_core_spatial_Point2D_2F
+JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_util_CollisionChecker2D_collides__Les_usc_citius_lab_joctomap_octree_JOctree_2Les_usc_citius_lab_motionplanner_core_spatial_Point_2F
   (JNIEnv *env, jclass cls, jobject joctree, jobject jpoint, jfloat radius){
     //get values of the Pose2D object
-    jclass clsPoint2D = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point2D");
-    float pointX = env->GetFloatField(jpoint, env->GetFieldID(clsPoint2D, "x", "F"));
-    float pointY = env->GetFloatField(jpoint, env->GetFieldID(clsPoint2D, "y", "F"));
+    jclass cls_point = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point");
+    jmethodID methodGetX = env->GetMethodID(cls_point, "getX", "()F");
+    jmethodID methodGetY = env->GetMethodID(cls_point, "getY", "()F");
+    float pointX = env->CallFloatMethod(jpoint, methodGetX);
+    float pointY = env->CallFloatMethod(jpoint, methodGetY);
     //get octree object
     OcTree *octree = (OcTree*) getPointer(env, joctree);
     return checkCollision(point3d(pointX, pointY, 0), radius, octree);
@@ -50,13 +52,16 @@ JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_util_CollisionChecker
 /* 
  * Returns if there is a collision in a given pose using a 2D rectangular robot shape.
  */
-JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_util_CollisionChecker2D_collides__Les_usc_citius_lab_joctomap_octree_JOctree_2Les_usc_citius_lab_motionplanner_core_spatial_Pose2D_2FF
+JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_util_CollisionChecker2D_collides__Les_usc_citius_lab_joctomap_octree_JOctree_2Les_usc_citius_lab_motionplanner_core_spatial_Pose_2FF
   (JNIEnv *env, jclass cls, jobject joctree, jobject jpose, jfloat dx, jfloat dy){
     //get values of the Pose2D object
-    jclass clsPose2D = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Pose2D");
-    float poseX = env->GetFloatField(jpose, env->GetFieldID(clsPose2D, "x", "F"));
-    float poseY = env->GetFloatField(jpose, env->GetFieldID(clsPose2D, "y", "F"));
-    float poseYaw = env->GetFloatField(jpose, env->GetFieldID(clsPose2D, "yaw", "F"));
+    jclass cls_pose = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Pose");
+    jmethodID methodGetX = env->GetMethodID(cls_pose, "getX", "()F");
+    jmethodID methodGetY = env->GetMethodID(cls_pose, "getY", "()F");
+    jmethodID methodGetYaw = env->GetMethodID(cls_pose, "getYaw", "()F");
+    float poseX = env->CallFloatMethod(jpose, methodGetX);
+    float poseY = env->CallFloatMethod(jpose, methodGetY);
+    float poseYaw = env->CallFloatMethod(jpose, methodGetYaw);
     //determine current pose from jpose fields
     point3d pose = point3d(poseX, poseY, 0);
     //determine pessimistic radius of the robot
