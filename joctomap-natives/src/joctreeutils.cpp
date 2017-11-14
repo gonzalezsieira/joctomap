@@ -35,23 +35,25 @@ using namespace octomap;
 int POINTS_CONSIDERED = 2;
 
 /*
- *
+ * Class:     es_usc_citius_lab_joctomap_util_JOctreeUtils
+ * Method:    getOccupiedKeysBetween
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;Les/usc/citius/lab/motionplanner/core/spatial/Point;Les/usc/citius/lab/motionplanner/core/spatial/Point;)Ljava/util/List;
  */
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_getOccupiedKeysBetween
   (JNIEnv *env, jclass cls, jobject joctree, jobject jpointmin, jobject jpointmax){
     //get fields of Point3D object
-    jclass clsPoint3D = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point3D");
-    jfieldID fieldX = env->GetFieldID(clsPoint3D, "x", "F");
-    jfieldID fieldY = env->GetFieldID(clsPoint3D, "y", "F");
-    jfieldID fieldZ = env->GetFieldID(clsPoint3D, "z", "F");
+    jclass cls_point = env->FindClass("es/usc/citius/lab/motionplanner/core/spatial/Point");
+    jmethodID methodGetX = env->GetMethodID(cls_point, "getX", "()F");
+    jmethodID methodGetY = env->GetMethodID(cls_point, "getY", "()F");
+    jmethodID methodGetZ = env->GetMethodID(cls_point, "getZ", "()F");
     
     //get values of the Point3D objects
-    float pointminX = env->GetFloatField(jpointmin, fieldX);
-    float pointminY = env->GetFloatField(jpointmin, fieldY);
-    float pointminZ = env->GetFloatField(jpointmin, fieldZ);
-    float pointmaxX = env->GetFloatField(jpointmax, fieldX);
-    float pointmaxY = env->GetFloatField(jpointmax, fieldY);
-    float pointmaxZ = env->GetFloatField(jpointmax, fieldZ);
+    float pointminX = env->CallFloatMethod(jpointmin, methodGetX);
+    float pointminY = env->CallFloatMethod(jpointmin, methodGetY);
+    float pointminZ = env->CallFloatMethod(jpointmin, methodGetZ);
+    float pointmaxX = env->CallFloatMethod(jpointmax, methodGetX);
+    float pointmaxY = env->CallFloatMethod(jpointmax, methodGetY);
+    float pointmaxZ = env->CallFloatMethod(jpointmax, methodGetZ);
     
     //define min/max points to iterate
     point3d min = point3d(pointminX, pointminY, pointminZ);
@@ -88,36 +90,39 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_getO
 }
 
 /*
- *
+ * Class:     es_usc_citius_lab_joctomap_util_JOctreeUtils
+ * Method:    getOccupiedCoordinatesBetween
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;Les/usc/citius/lab/motionplanner/core/spatial/Point;Les/usc/citius/lab/motionplanner/core/spatial/Point;)Ljava/util/List;
  */
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_getOccupiedCoordinatesBetween
   (JNIEnv *env, jclass cls, jobject joctree, jobject jpointmin, jobject jpointmax){
     //get fields of Point3D object
-    jclass clsPoint3D = env->FindClass("Les/usc/citius/lab/motionplanner/core/spatial/Point3D;");
+    jclass cls_point3d = env->FindClass("Les/usc/citius/lab/motionplanner/core/spatial/Point3D;");
+    jclass cls_point = env->FindClass("Les/usc/citius/lab/motionplanner/core/spatial/Point;");
     //find Pair class
     jclass clsCell = env->FindClass("Les/usc/citius/lab/joctomap/octree/Cell;");
     //find ArrayList class
     jclass arrayListClass = env->FindClass("Ljava/util/ArrayList;");
     //retrieve Point3D constructor
-    jmethodID constructorPoint3D = env->GetMethodID(clsPoint3D, "<init>", "(FFF)V");
+    jmethodID constructorPoint3D = env->GetMethodID(cls_point3d, "<init>", "(FFF)V");
     //retrieve Pair constructor
     jmethodID constructorCell = env->GetMethodID(clsCell, "<init>", "(Les/usc/citius/lab/motionplanner/core/spatial/Point3D;F)V");
     //retrieve ArrayList constructor
     jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
     //retrieve ArrayList add method
     jmethodID addArrayList = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
-    //get field IDs
-    jfieldID fieldX = env->GetFieldID(clsPoint3D, "x", "F");
-    jfieldID fieldY = env->GetFieldID(clsPoint3D, "y", "F");
-    jfieldID fieldZ = env->GetFieldID(clsPoint3D, "z", "F");
+    //get method ID
+    jmethodID methodGetX = env->GetMethodID(cls_point, "getX", "()F");
+    jmethodID methodGetY = env->GetMethodID(cls_point, "getY", "()F");
+    jmethodID methodGetZ = env->GetMethodID(cls_point, "getZ", "()F");
 
     //get values of the Point3D objects
-    float pointminX = env->GetFloatField(jpointmin, fieldX);
-    float pointminY = env->GetFloatField(jpointmin, fieldY);
-    float pointminZ = env->GetFloatField(jpointmin, fieldZ);
-    float pointmaxX = env->GetFloatField(jpointmax, fieldX);
-    float pointmaxY = env->GetFloatField(jpointmax, fieldY);
-    float pointmaxZ = env->GetFloatField(jpointmax, fieldZ);
+    float pointminX = env->CallFloatMethod(jpointmin, methodGetX);
+    float pointminY = env->CallFloatMethod(jpointmin, methodGetY);
+    float pointminZ = env->CallFloatMethod(jpointmin, methodGetZ);
+    float pointmaxX = env->CallFloatMethod(jpointmax, methodGetX);
+    float pointmaxY = env->CallFloatMethod(jpointmax, methodGetY);
+    float pointmaxZ = env->CallFloatMethod(jpointmax, methodGetZ);
 
     //define min/max points to iterate
     point3d min = point3d(pointminX, pointminY, pointminZ);
@@ -135,7 +140,7 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_getO
         //check colliding obstacles only
         if(octree->isNodeOccupied(currentNode)){
             point3d coordinate = it.getCoordinate();
-            jobject currentPoint3D = env->NewObject(clsPoint3D, constructorPoint3D, static_cast<float>(coordinate.x()), static_cast<float>(coordinate.y()), static_cast<float>(coordinate.z()));
+            jobject currentPoint3D = env->NewObject(cls_point3d, constructorPoint3D, static_cast<float>(coordinate.x()), static_cast<float>(coordinate.y()), static_cast<float>(coordinate.z()));
             jobject currentPair = env->NewObject(clsCell, constructorCell, currentPoint3D, static_cast<float>(it.getSize()));
             //add object to the ArrayList
             env->CallBooleanMethod(arrayListObject, addArrayList, currentPair);
@@ -148,21 +153,22 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_getO
 /*
  * Class:     es_usc_citius_lab_joctomap_util_JOctreeUtils
  * Method:    resolutionAt
- * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;Les/usc/citius/lab/motionplanner/core/spatial/Point3D;)F
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;Les/usc/citius/lab/motionplanner/core/spatial/Point;)F
  */
 JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_resolutionAt
   (JNIEnv *env, jclass cls, jobject jtree, jobject jpoint){
     //recover octree
     OcTree *octree = (OcTree*) getPointer(env, jtree);
     //get fields of Point3D object
-    jclass clsPoint3D = env->FindClass("Les/usc/citius/lab/motionplanner/core/spatial/Point3D;");
-    jfieldID fieldX = env->GetFieldID(clsPoint3D, "x", "F");
-    jfieldID fieldY = env->GetFieldID(clsPoint3D, "y", "F");
-    jfieldID fieldZ = env->GetFieldID(clsPoint3D, "z", "F");
+    jclass cls_point = env->FindClass("Les/usc/citius/lab/motionplanner/core/spatial/Point;");
+    //get method ID
+    jmethodID methodGetX = env->GetMethodID(cls_point, "getX", "()F");
+    jmethodID methodGetY = env->GetMethodID(cls_point, "getY", "()F");
+    jmethodID methodGetZ = env->GetMethodID(cls_point, "getZ", "()F");
     //get values of the Point3D objects
-    float pointX = env->GetFloatField(jpoint, fieldX);
-    float pointY = env->GetFloatField(jpoint, fieldY);
-    float pointZ = env->GetFloatField(jpoint, fieldZ);
+    float pointX = env->CallFloatMethod(jpoint, methodGetX);
+    float pointY = env->CallFloatMethod(jpoint, methodGetY);
+    float pointZ = env->CallFloatMethod(jpoint, methodGetZ);
     //query resolution of the octree
     OcTree::leaf_bbx_iterator it = octree->begin_leafs_bbx(point3d(pointX, pointY, pointZ), point3d(pointX, pointY, pointZ), 0);
     float resolution = FLT_MAX;
@@ -175,24 +181,25 @@ JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_resol
 /*
  * Class:     es_usc_citius_lab_joctomap_util_JOctreeUtils
  * Method:    resolutionAddedIn
- * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;Les/usc/citius/lab/motionplanner/core/spatial/Point3D;Les/usc/citius/lab/motionplanner/core/spatial/Point3D;)F
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;Les/usc/citius/lab/motionplanner/core/spatial/Point;Les/usc/citius/lab/motionplanner/core/spatial/Point;)F
  */
 JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_util_JOctreeUtils_resolutionAddedIn
   (JNIEnv *env, jclass cls, jobject jtree, jobject jpoint1, jobject jpoint2){
     //recover octree
     OcTree *octree = (OcTree*) getPointer(env, jtree);
     //get fields of Point3D object
-    jclass clsPoint3D = env->FindClass("Les/usc/citius/lab/motionplanner/core/spatial/Point3D;");
-    jfieldID fieldX = env->GetFieldID(clsPoint3D, "x", "F");
-    jfieldID fieldY = env->GetFieldID(clsPoint3D, "y", "F");
-    jfieldID fieldZ = env->GetFieldID(clsPoint3D, "z", "F");
+    jclass cls_point = env->FindClass("Les/usc/citius/lab/motionplanner/core/spatial/Point;");
+    //get method ID
+    jmethodID methodGetX = env->GetMethodID(cls_point, "getX", "()F");
+    jmethodID methodGetY = env->GetMethodID(cls_point, "getY", "()F");
+    jmethodID methodGetZ = env->GetMethodID(cls_point, "getZ", "()F");
     //get values of the Point3D objects
-    float point1X = env->GetFloatField(jpoint1, fieldX);
-    float point1Y = env->GetFloatField(jpoint1, fieldY);
-    float point1Z = env->GetFloatField(jpoint1, fieldZ);
-    float point2X = env->GetFloatField(jpoint2, fieldX);
-    float point2Y = env->GetFloatField(jpoint2, fieldY);
-    float point2Z = env->GetFloatField(jpoint2, fieldZ);
+    float point1X = env->CallFloatMethod(jpoint1, methodGetX);
+    float point1Y = env->CallFloatMethod(jpoint1, methodGetY);
+    float point1Z = env->CallFloatMethod(jpoint1, methodGetZ);
+    float point2X = env->CallFloatMethod(jpoint2, methodGetX);
+    float point2Y = env->CallFloatMethod(jpoint2, methodGetY);
+    float point2Z = env->CallFloatMethod(jpoint2, methodGetZ);
     //query first resolution of the octree
     OcTree::leaf_bbx_iterator it1 = octree->begin_leafs_bbx(point3d(point1X, point1Y, point1Z), point3d(point1X, point1Y, point1Z), 0);
     float resolution1 = FLT_MAX;
