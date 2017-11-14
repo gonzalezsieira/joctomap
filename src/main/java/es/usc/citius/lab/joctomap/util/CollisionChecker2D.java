@@ -16,8 +16,8 @@
 package es.usc.citius.lab.joctomap.util;
 
 import es.usc.citius.lab.joctomap.octree.JOctree;
-import es.usc.citius.lab.motionplanner.core.spatial.Point2D;
-import es.usc.citius.lab.motionplanner.core.spatial.Pose2D;
+import es.usc.citius.lab.motionplanner.core.spatial.Point;
+import es.usc.citius.lab.motionplanner.core.spatial.Pose;
 import java.io.IOException;
 
 /**
@@ -47,7 +47,7 @@ public class CollisionChecker2D {
      * @param radius radius of the circular shape
      * @return true if there is a collision with the obstacles in the map
      */
-    public static native boolean collides(JOctree octree, Point2D pose, float radius);
+    public static native boolean collides(JOctree octree, Point pose, float radius);
     
     /**
      * Checks if there is a collision given an octree and a curren pose, 
@@ -61,6 +61,6 @@ public class CollisionChecker2D {
      * @param dy distance in y from the rotation center to the borders
      * @return true if there is a collision with the obstacles in the map
      */
-    public static native boolean collides(JOctree octree, Pose2D pose, float dx, float dy);
+    public static native boolean collides(JOctree octree, Pose pose, float dx, float dy);
     
 }
