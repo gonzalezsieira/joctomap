@@ -164,7 +164,7 @@ struct StaticInformation3D : StaticInformation{
         this->field_jpoint3d_z = env->GetFieldID(cls_point3d, FIELD_Z, SIGNATURE_FLOAT);
 
         //get neighbor information and put in C++ structs
-        jclass cls_h3dmr_neighbors_information = env->FindClass("Les/usc/citius/lab/motionplanner/tridimensional/hipster/heuristic/H3DMR$Neighbors;");
+        jclass cls_h3dmr_neighbors_information = env->FindClass("Les/usc/citius/lab/motionplanner/planner/tridimensional/hipster/heuristic/H3DMR$Neighbors;");
         jfieldID field_neighbors_information = env->GetFieldID(cls_h3dmr_neighbors_information, "neighborsByDirection", "Ljava/util/Map;");
         jobject map_neighbors = env->GetObjectField(h3dmr_neighbors_information, field_neighbors_information);
         jobject map_neighbors_set = env->CallObjectMethod(map_neighbors, method_map_keyset);
