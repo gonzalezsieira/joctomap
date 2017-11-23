@@ -452,7 +452,8 @@ JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_hipster_H3DMRTransitionFu
             //insert in queue
             env->CallBooleanMethod(jqueue, method_add, jpoint3d);
         }
-
+        env->DeleteLocalRef(cls_point3d);
+        env->DeleteLocalRef(cls_queue);
   }
 
 /*
