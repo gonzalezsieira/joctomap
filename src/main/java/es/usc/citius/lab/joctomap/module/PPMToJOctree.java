@@ -18,6 +18,7 @@ package es.usc.citius.lab.joctomap.module;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import es.usc.citius.lab.motionplanner.core.util.Triple;
 import org.apache.commons.cli.CommandLine;
 
 import es.usc.citius.lab.joctomap.octree.JOctree;
@@ -37,7 +38,13 @@ import org.apache.commons.cli.Options;
  * 
  * @author Adrián González Sieira <adrian.gonzalez@usc.es>
  */
-public class JOCtreeBuilder extends Module{
+public class PPMToJOctree extends Module{
+
+    private static Triple<Integer, Integer, Integer> RGB_BLACK = new Triple<Integer, Integer, Integer>(0, 0, 0);
+    private static Triple<Integer, Integer, Integer> RGB_RED = new Triple<Integer, Integer, Integer>(255, 0, 0);
+    private static Triple<Integer, Integer, Integer> RGB_GREEN = new Triple<Integer, Integer, Integer>(0, 255, 0);
+    private static Triple<Integer, Integer, Integer> RGB_BLUE = new Triple<Integer, Integer, Integer>(0, 0, 255);
+
 
     @Override
     public void execute(CommandLine args) {
@@ -95,16 +102,18 @@ public class JOCtreeBuilder extends Module{
                 for (float y = 0; y < sizeY; y += octree.getResolution() / 2f) {
                     int[] rgb = reader.getPixels()[Math.round(x / resolutionPPM)][Math.round(y / resolutionPPM)];
                     //occupied case: one of the color components reaches the maximum value of the file
-                    boolean occupied = rgb[0] < 10 && rgb[1] < 10 && rgb[2] < 10;
-                    //update occupancy information until we get an absolute value for the occupancy (1 or 0)
-                    Double previousOccupancy = null;
-                    do {
-                        JOctreeNode node = octree.updateNode(x, sizeY - y, z, occupied);
-                        if(previousOccupancy != null && Double.compare(node.getOccupancy(), previousOccupancy) == 0){
-                            break;
-                        }
-                        previousOccupancy = node.getOccupancy();
-                    } while (true);
+                    Triple<Integer, Integer, Integer> currentRGB = new Triple<Integer, Integer, Integer>(rgb[0], rgb[1], rgb[2]);
+                    //set as occupied according to the color code
+                    if(isOccupiedPPM(x, y, z, currentRGB)) {
+                        Double previousOccupancy = null;
+                        do {
+                            JOctreeNode node = octree.updateNode(x, sizeY - y, z, true);
+                            if (previousOccupancy != null && Double.compare(node.getOccupancy(), previousOccupancy) == 0) {
+                                break;
+                            }
+                            previousOccupancy = node.getOccupancy();
+                        } while (true);
+                    }
                 }
             }
             currentIteration++;
@@ -115,6 +124,15 @@ public class JOCtreeBuilder extends Module{
         octree.updateInnerOccupancy();
         octree.prune();
         return octree;
+    }
+
+    private static boolean isOccupiedPPM(float x, float y, float z, Triple<Integer, Integer, Integer> currentRGB){
+        return (
+                currentRGB.equals(RGB_BLACK)
+                || currentRGB.equals(RGB_GREEN) && z <= 0.5
+                || currentRGB.equals(RGB_BLUE) && z <= 1.0
+                || currentRGB.equals(RGB_RED) && z <= 2.0
+                );
     }
 
     @Override
