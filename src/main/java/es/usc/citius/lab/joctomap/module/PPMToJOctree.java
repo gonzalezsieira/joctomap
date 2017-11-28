@@ -103,17 +103,16 @@ public class PPMToJOctree extends Module{
                     int[] rgb = reader.getPixels()[Math.round(x / resolutionPPM)][Math.round(y / resolutionPPM)];
                     //occupied case: one of the color components reaches the maximum value of the file
                     Triple<Integer, Integer, Integer> currentRGB = new Triple<Integer, Integer, Integer>(rgb[0], rgb[1], rgb[2]);
+                    boolean occupied = isOccupiedPPM(x, y, z, currentRGB);
                     //set as occupied according to the color code
-                    if(isOccupiedPPM(x, y, z, currentRGB)) {
-                        Double previousOccupancy = null;
-                        do {
-                            JOctreeNode node = octree.updateNode(x, sizeY - y, z, true);
-                            if (previousOccupancy != null && Double.compare(node.getOccupancy(), previousOccupancy) == 0) {
-                                break;
-                            }
-                            previousOccupancy = node.getOccupancy();
-                        } while (true);
-                    }
+                    Double previousOccupancy = null;
+                    do {
+                        JOctreeNode node = octree.updateNode(x, sizeY - y, z, occupied);
+                        if (previousOccupancy != null && Double.compare(node.getOccupancy(), previousOccupancy) == 0) {
+                            break;
+                        }
+                        previousOccupancy = node.getOccupancy();
+                    } while (true);
                 }
             }
             currentIteration++;
