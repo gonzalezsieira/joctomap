@@ -4,7 +4,7 @@
 
     <groupId>es.usc.citius.lab</groupId>
     <artifactId>joctomap</artifactId>
-    <version>1.7.2.3-SNAPSHOT</version>
+    <version>1.7.2.3-H2DMR</version>
     <packaging>jar</packaging>
 
     <name>joctomap</name>
@@ -35,7 +35,7 @@
         <dependency>
             <groupId>es.usc.citius</groupId>
             <artifactId>spatial-utils</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>1.1</version>
         </dependency>
         <dependency>
             <groupId>es.usc.citius.hipster</groupId>
