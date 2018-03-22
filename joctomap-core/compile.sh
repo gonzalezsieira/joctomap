@@ -1,10 +1,10 @@
 #!bin/sh
-echo -e "[exec] C/C++ build script begins"
 # save current directory
 dir=`pwd`
+echo -e "[exec] C/C++ build script begins. Base dir is $dir"
 
 # enter in native packages to compile .c and .cpp sources
-cd joctomap-natives
+cd ../joctomap-natives
 
 # Start compiling
 echo "[exec] Building libjoctomap.so... (JAVA_JDK="$1")"
@@ -30,6 +30,8 @@ failure=0; [ $result -ne 0 ] && failure=1
 
 if [ "$result" == 0 ]; then
 
+    echo "Building shared library: libjoctomap_natives"
+
 	# Make native library
 	make
 
@@ -37,25 +39,9 @@ if [ "$result" == 0 ]; then
 	result=$?
 	failure=0; [ $result -ne 0 ] && failure=1
 
-	if [ "$result" == 0 ]; then
-		cd ..
-
-		# Copy target
-		mkdir ../src/main/resources/
-		if [[ "$OSTYPE" == "linux-gnu" ]]; then
-            cp build/libjoctomap_natives.so ../src/main/resources/
-        elif [[ "$OSTYPE" == "darwin"* ]]; then
-            cp build/libjoctomap_natives.dylib ../src/main/resources/libjoctomap_natives.so
-        fi
-
-		# go to beginning directory
-		cd "$dir"
-
-		echo -e "[exec] C/C++ build script ends"
-		result=0
-	fi
-
 fi
+
+cd $dir
 
 exit $failure
 
