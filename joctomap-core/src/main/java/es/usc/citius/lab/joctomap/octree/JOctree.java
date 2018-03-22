@@ -451,4 +451,11 @@ public class JOctree extends NativeObject{
 	 * @return list of {@link JOctreeKey}, cells changed since the last reset.
 	 */
 	public native List<JOctreeKey> keysChanged();
+
+	/**
+	 * Retrieves the tree type.
+	 *
+	 * @return C/C++ class name.
+	 */
+	public native String getTreeType();
 }

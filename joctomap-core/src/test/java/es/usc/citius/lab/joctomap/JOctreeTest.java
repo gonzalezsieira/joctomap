@@ -469,4 +469,10 @@ public class JOctreeTest{
 			//check empty
 			assertTrue("List of changed keys must be empty when disabled", octree.keysChanged().isEmpty());
 		}
+
+		@Test
+		public void test29_getTreeType(){
+        	String type = JOctree.create(0.1f).getTreeType();
+        	assertTrue(!type.isEmpty());
+		}
 }

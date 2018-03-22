@@ -673,6 +673,19 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_create
 	return env->NewObject(cls, constructor, octree);
 }
 
+JNIEXPORT jstring JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getTreeType
+        (JNIEnv *env, jobject jtree){
+    //recover pointer
+    OcTree *octree = (OcTree*) getPointer(env, jtree);
+    //get classname
+    string classname = octree->getTreeType();
+    //convert to jstring
+    const char * charclassname = classname.c_str();
+    jstring jclassname = env->NewStringUTF(charclassname);
+    //result
+    return jclassname;
+}
+
 /*
  * Prunes all the nodes of the tree which has the same value to higher resolution nodes.
  */
