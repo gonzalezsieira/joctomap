@@ -8,7 +8,7 @@ dir=`pwd`
 classpath="$dir"/classes:~/.m2/repository/es/usc/citius/spatial-utils/1.1-SNAPSHOT/spatial-utils-1.1-SNAPSHOT.jar:~/.m2/repository/es/usc/citius/hipster/hipster-core/1.0.1/hipster-core-1.0.1.jar:~/.m2/repository/org/ros/rosjava_messages/octomap_msgs/0.3.1/octomap_msgs-0.3.1.jar:~/.m2/repository/org/ros/rosjava_bootstrap/message_generation/0.3.0/message_generation-0.3.0.jar:~/.m2/repository/io/netty/netty/3.10.6.Final/netty-3.10.6.Final.jar:.
 
 # enter in directory where the native methods are
-cd src/main/java/es/usc/citius/lab/joctomap/
+cd "$dir"/joctomap-core/src/main/java/es/usc/citius/lab/joctomap/
 
 # compile files
 javac -d "$dir"/classes -cp "$classpath" octree/Cell.java util/JOctomapLogger.java util/AdjacencyMap.java util/Obstacle.java util/JOctreeUtils.java util/NativeUtils.java  util/NativeObject.java iterators/OctreeIterator.java iterators/LeafBBXIterator.java octree/JOctree.java octree/JOctreeKey.java octree/JOctreeNode.java distance/JOctreeDistanceMap.java util/CollisionChecker2D.java
