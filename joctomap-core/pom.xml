@@ -22,7 +22,7 @@
         <dependency>
             <groupId>es.usc.citius</groupId>
             <artifactId>spatial-utils</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>[1.1, )</version>
         </dependency>
         <dependency>
             <groupId>org.reflections</groupId>
