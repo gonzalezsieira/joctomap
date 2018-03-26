@@ -26,7 +26,7 @@
         <dependency>
             <groupId>es.usc.citius.lab</groupId>
             <artifactId>joctomap-core</artifactId>
-            <version>1.7.2.3-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
