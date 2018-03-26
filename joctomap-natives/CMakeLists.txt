@@ -24,6 +24,7 @@ set(SOURCE_FILES
     include/leafbbxiterator.h
     include/nativeobject.h
     include/joctreedistancemap.h
+    include/messages.h
     src/adjacencymap.cpp
     src/collisionchecker2d.cpp
     src/collisions.cpp
@@ -36,6 +37,7 @@ set(SOURCE_FILES
     src/leafbbxiterator.cpp
     src/nativeobject.cpp
     src/joctreedistancemap.cpp
+    src/messages.cpp
     )
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
