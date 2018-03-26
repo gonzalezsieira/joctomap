@@ -15,7 +15,7 @@
         <dependency>
             <groupId>es.usc.citius.hipster</groupId>
             <artifactId>hipster-core</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
+            <version>[1.0.1, )</version>
         </dependency>
         <!-- Apache commons CLI -->
         <dependency>
