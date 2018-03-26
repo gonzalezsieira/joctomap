@@ -382,6 +382,14 @@ JNIEXPORT void JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_resetChang
 JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_keysChanged
   (JNIEnv *, jobject);
 
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    getTreeType
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getTreeType
+  (JNIEnv *, jobject);
+
 #ifdef __cplusplus
 }
 #endif
