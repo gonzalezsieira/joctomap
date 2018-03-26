@@ -19,6 +19,7 @@
 
 #include "messages.h"
 #include "definitions.h"
+#include "nativeobject.h"
 #include <sstream>
 #include <octomap/AbstractOcTree.h>
 #include <octomap/ColorOcTree.h>
@@ -33,7 +34,6 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_ros_Messages_convert
         (JNIEnv *env, jclass jclassMessages, jstring jid, jdouble resolution, jboolean binary, jbyteArray bytes){
 
     //find class
-    jclass jclassMsg = env->FindClass("octomap_msgs/Octomap");
     jclass jclassJoctree = env->FindClass(CLS_JOCTREE);
     //find constructor to instantiate the result
     jmethodID constructor = env->GetMethodID(jclassJoctree, METHOD_CONSTRUCTOR, "(J)V");
@@ -76,7 +76,37 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_ros_Messages_convert
         // exception?
     }
     //release references
-    env->DeleteLocalRef(jclassMsg);
     env->DeleteLocalRef(jclassJoctree);
     env->ReleaseStringUTFChars(jid, idchars);
+}
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_ros_Messages
+ * Method:    getJOctreeBytes
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;Z)[B
+ */
+JNIEXPORT jbyteArray JNICALL Java_es_usc_citius_lab_joctomap_ros_Messages_getJOctreeBytes
+        (JNIEnv *env, jclass jclassMessages, jobject jtree, jboolean jbinary){
+
+    //get octree
+    octomap::OcTree *octree = (octomap::OcTree*) getPointer(env, jtree);
+    std::stringstream stream;
+    if(jbinary){
+        //get binary data
+        octree->writeBinaryData(stream);
+    }
+    else{
+        //get regular data
+        octree->writeData(stream);
+    }
+    //get lenght of stream
+    stream.seekp(0, std::ios::end);
+    std::stringstream::pos_type size = stream.tellp();
+    //create buffer
+    char *buf = new char[size];
+    stream.read(buf, size);
+    //create jbyteArray
+    jbyteArray array = env->NewByteArray(size);
+    env->SetByteArrayRegion(array, 0, size, reinterpret_cast<jbyte *>(buf));
+    return array;
 }

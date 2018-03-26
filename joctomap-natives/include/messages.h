@@ -24,6 +24,14 @@ extern "C" {
 #endif
 /*
  * Class:     es_usc_citius_lab_joctomap_ros_Messages
+ * Method:    getJOctreeBytes
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctree;Z)[B
+ */
+JNIEXPORT jbyteArray JNICALL Java_es_usc_citius_lab_joctomap_ros_Messages_getJOctreeBytes
+  (JNIEnv *, jclass, jobject, jboolean);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_ros_Messages
  * Method:    convert
  * Signature: (Ljava/lang/String;DZ[B)Les/usc/citius/lab/joctomap/octree/JOctree;
  */
