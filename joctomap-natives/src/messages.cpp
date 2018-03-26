@@ -70,6 +70,8 @@ JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_ros_Messages_convert
             }
         }
         jobject jtree = env->NewObject(jclassJoctree, constructor, tree);
+        //clear memory
+        delete [] buf;
         return jtree;
     }
     else{
