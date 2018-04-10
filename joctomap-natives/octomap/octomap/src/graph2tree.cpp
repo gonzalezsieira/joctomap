@@ -57,6 +57,7 @@ void printUsage(char* self){
             "  -m <maxrange> (optional) \n"
             "  -n <max scan no.> (optional) \n"
             "  -log (enable a detailed log file with statistics) \n"
+            "  -g (nodes are already in global coordinates and no transformation is required) \n"
             "  -compressML (enable maximum-likelihood compression (lossy) after every scan)\n"
             "  -simple (simple scan insertion ray by ray instead of optimized) \n"
             "  -discretize (approximate raycasting on discretized coordinates, speeds up insertion) \n"
@@ -112,6 +113,7 @@ int main(int argc, char** argv) {
   bool detailedLog = false;
   bool simpleUpdate = false;
   bool discretize = false;
+  bool dontTransformNodes = false;
   unsigned char compression = 1;
 
   // get default sensor model values:
@@ -137,6 +139,8 @@ int main(int argc, char** argv) {
       res = atof(argv[++arg]);
     else if (! strcmp(argv[arg], "-log"))
       detailedLog = true;
+    else if (! strcmp(argv[arg], "-g"))
+      dontTransformNodes = true;
     else if (! strcmp(argv[arg], "-simple"))
       simpleUpdate = true;
     else if (! strcmp(argv[arg], "-discretize"))
@@ -194,7 +198,7 @@ int main(int argc, char** argv) {
   if (!graph->readBinary(graphFilename))
     exit(2);
 
-  unsigned int num_points_in_graph = 0;
+  size_t num_points_in_graph = 0;
   if (max_scan_no > 0) {
     num_points_in_graph = graph->getNumPoints(max_scan_no-1);
     cout << "\n Data points in graph up to scan " << max_scan_no << ": " << num_points_in_graph << endl;
@@ -205,15 +209,17 @@ int main(int argc, char** argv) {
   }
 
   // transform pointclouds first, so we can directly operate on them later
-  for (ScanGraph::iterator scan_it = graph->begin(); scan_it != graph->end(); scan_it++) {
+  if (!dontTransformNodes) {
+    for (ScanGraph::iterator scan_it = graph->begin(); scan_it != graph->end(); scan_it++) {
 
-    pose6d frame_origin = (*scan_it)->pose;
-    point3d sensor_origin = frame_origin.inv().transform((*scan_it)->pose.trans());
+      pose6d frame_origin = (*scan_it)->pose;
+      point3d sensor_origin = frame_origin.inv().transform((*scan_it)->pose.trans());
 
-    (*scan_it)->scan->transform(frame_origin);
-    point3d transformed_sensor_origin = frame_origin.transform(sensor_origin);
-    (*scan_it)->pose = pose6d(transformed_sensor_origin, octomath::Quaternion());
+      (*scan_it)->scan->transform(frame_origin);
+      point3d transformed_sensor_origin = frame_origin.transform(sensor_origin);
+      (*scan_it)->pose = pose6d(transformed_sensor_origin, octomath::Quaternion());
 
+    }
   }
 
 
@@ -237,8 +243,8 @@ int main(int argc, char** argv) {
 
 
   gettimeofday(&start, NULL);  // start timer
-  unsigned int numScans = graph->size();
-  unsigned int currentScan = 1;
+  size_t numScans = graph->size();
+  size_t currentScan = 1;
   for (ScanGraph::iterator scan_it = graph->begin(); scan_it != graph->end(); scan_it++) {
     if (max_scan_no > 0) cout << "("<<currentScan << "/" << max_scan_no << ") " << flush;
     else cout << "("<<currentScan << "/" << numScans << ") " << flush;

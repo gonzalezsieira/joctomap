@@ -57,8 +57,8 @@ public class LeafBBXIteratorTest {
 			assertEquals("sizeAtDepth has different values", octree.getNodeSize(depth), size, octree.getResolution() / 100000);
 			JOctreeNode node = iterator.node();
 			//test methods of node
-			assertTrue("numChildren must be > 0", node.getNumChildren() >= 0);
-			assertEquals("numChildren and children.size() has not the same value", node.getNumChildren(), node.getChildren().size());
+			assertTrue("numChildren must be > 0", octree.nodeNumChildren(node) >= 0);
+			assertEquals("numChildren and children.size() has not the same value", octree.nodeNumChildren(node), octree.getNodeChildren(node).size());
 			assertTrue("occupancy must be > 0", node.getOccupancy() >= 0);
 			//advance iterator (last thing to do)
 			iterator.next();

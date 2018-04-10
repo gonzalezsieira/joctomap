@@ -46,54 +46,6 @@ JNIEXPORT jdouble JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctreeNode_get
 JNIEXPORT jfloat JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctreeNode_getValue
   (JNIEnv *, jobject);
 
-/*
- * Class:     es_usc_citius_lab_joctomap_octree_JOctreeNode
- * Method:    getChildren
- * Signature: ()Ljava/util/List;
- */
-JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctreeNode_getChildren
-  (JNIEnv *, jobject);
-
-/*
- * Class:     es_usc_citius_lab_joctomap_octree_JOctreeNode
- * Method:    getChild
- * Signature: (I)Les/usc/citius/lab/joctomap/octree/JOctreeNode;
- */
-JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctreeNode_getChild
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     es_usc_citius_lab_joctomap_octree_JOctreeNode
- * Method:    getNumChildren
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctreeNode_getNumChildren
-  (JNIEnv *, jobject);
-
-/*
- * Class:     es_usc_citius_lab_joctomap_octree_JOctreeNode
- * Method:    childExists
- * Signature: (I)Z
- */
-JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctreeNode_childExists
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     es_usc_citius_lab_joctomap_octree_JOctreeNode
- * Method:    hasChildren
- * Signature: ()Z
- */
-JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctreeNode_hasChildren
-  (JNIEnv *, jobject);
-
-/*
- * Class:     es_usc_citius_lab_joctomap_octree_JOctreeNode
- * Method:    collapsible
- * Signature: ()Z
- */
-JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctreeNode_collapsible
-  (JNIEnv *, jobject);
-
 #ifdef __cplusplus
 }
 #endif

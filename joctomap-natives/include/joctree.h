@@ -248,6 +248,54 @@ JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_isBBXA
 
 /*
  * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    getNodeChild
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctreeNode;I)Les/usc/citius/lab/joctomap/octree/JOctreeNode;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getNodeChild
+  (JNIEnv *, jobject, jobject, jint);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    nodeHasChildren
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctreeNode;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_nodeHasChildren
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    isNodeCollapsible
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctreeNode;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_isNodeCollapsible
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    nodeChildExists
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctreeNode;I)Z
+ */
+JNIEXPORT jboolean JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_nodeChildExists
+  (JNIEnv *, jobject, jobject, jint);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    getNodeChildren
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctreeNode;)Ljava/util/List;
+ */
+JNIEXPORT jobject JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_getNodeChildren
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
+ * Method:    nodeNumChildren
+ * Signature: (Les/usc/citius/lab/joctomap/octree/JOctreeNode;)I
+ */
+JNIEXPORT jint JNICALL Java_es_usc_citius_lab_joctomap_octree_JOctree_nodeNumChildren
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     es_usc_citius_lab_joctomap_octree_JOctree
  * Method:    leafBBXIterator
  * Signature: (Les/usc/citius/lab/motionplanner/core/spatial/Point3D;Les/usc/citius/lab/motionplanner/core/spatial/Point3D;I)Les/usc/citius/lab/joctomap/iterators/OctreeIterator;
  */

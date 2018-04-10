@@ -4,7 +4,7 @@
 
     <groupId>es.usc.citius.lab</groupId>
     <artifactId>joctomap</artifactId>
-    <version>1.7.2.3-H3DMR</version>
+    <version>1.8.1.1-H3DMR</version>
     <modules>
         <module>joctomap-ros</module>
         <module>joctomap-core</module>
