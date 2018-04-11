@@ -4,7 +4,7 @@
 
     <groupId>es.usc.citius.lab</groupId>
     <artifactId>joctomap</artifactId>
-    <version>1.9.0.1-SNAPSHOT</version>
+    <version>1.9.0.1</version>
     <modules>
         <module>joctomap-ros</module>
         <module>joctomap-core</module>
