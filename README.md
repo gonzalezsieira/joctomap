@@ -29,30 +29,38 @@ for planning and navigation problems, like:
  - Branch 1.9.X [![Build Status](https://travis-ci.org/gonzalezsieira/joctomap.svg?branch=1.9.X)](https://travis-ci.org/gonzalezsieira/joctomap)
 
 ## How do I use it?
+#### Compiling Joctomap
 This project depends on spatial-utils, a lightweight library for geometrical
-operations in cartesian coordinate systems. This library has to be compiled first, since
-it is not uploaded to Maven Central yet:
+operations in cartesian coordinate systems. This library has to be compiled first:
 ```bash
 git clone https://github.com/gonzalezsieira/spatial-utils
 cd spatial-utils
 mvn install
 ```
 
-Joctomap is compatible for JDK1.6+. Here is how you can compile it:
+Joctomap is compatible for JDK1.6+. Compile it as follows:
 
 ```bash
 git clone https://github.com/gonzalezsieira/joctomap
 cd joctomap
-mvn install
+mvn install -DreleaseType=Release -Djdk=$JDK_HOME
 ```
 
-When compilation and installation finishes you can import the jar file into your
-project or, if you use maven, add the following dependency:
+ - `-DreleaseType` can be *Release* or *Debug* according to your needs.
+ - `-Djdk` must point to the directory where your JDK is installed. (e.g. */usr/lib/jvm/java-8-oracle*)
+
+#### Maven/Gradle
+Afterwards you can import the generated jar file into your
+project or, if you use **maven**, add the following dependency:
 
 ```xml
 <dependency>
     <groupId>es.usc.citius.lab</groupId>
     <artifactId>joctomap</artifactId>
-    <version>1.9.0.0</version>
 </dependency>
+```
+
+For **gradle**, it would be:
+```
+compile 'es.usc.citius.lab:joctomap'
 ```
