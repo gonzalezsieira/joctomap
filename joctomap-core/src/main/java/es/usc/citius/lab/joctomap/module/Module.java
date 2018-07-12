@@ -27,7 +27,7 @@ import org.reflections.Reflections;
  * Definition of an executable module for the application. The
  * program will find all the subclasses of Module and re
  *
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  */
 public abstract class Module {
 	
@@ -55,13 +55,13 @@ public abstract class Module {
 	 * Executes the functions of the module based on the {@link CommandLine} parsed
 	 * arguments.
 	 * 
-	 * @param args
+	 * @param args parsed {@link CommandLine} arguments
 	 */
 	public abstract void execute(CommandLine args);
 	
 	/**
 	 * Register all available modules in the application.
-	 * @return
+	 * @return map with the string/class modules found in the source code
 	 */
     private static Map<String, Class<?>> registerModules(){
         Map<String, Class<?>> modulesMap = new HashMap<String, Class<?>>();

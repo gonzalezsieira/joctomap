@@ -50,7 +50,7 @@ public class JOctree extends NativeObject{
 	 * Initializes the JOctree with a pointer to the native OcTree object of
 	 * the Octomap library. Used by native methods.
 	 * 
-	 * @param pointer pointer to the native OcTree object.
+	 * @param pointer pointer to the native OcTree object (JNI global reference)
 	 */
 	private JOctree(long pointer) {
 		super(pointer);
@@ -73,10 +73,10 @@ public class JOctree extends NativeObject{
 	/**
 	 * Retrieves the position of the cell at a current 
 	 * location.
-	 * 
-	 * @param x
-	 * @param y
-	 * @param z
+	 *
+	 * @param x query point, coordinate X
+	 * @param y query point, coordinate Y
+	 * @param z query point, coordinate Z
 	 * @return key of the node at the given position
 	 */
 	public native JOctreeKey coordToKey(float x, float y, float z);
@@ -84,10 +84,10 @@ public class JOctree extends NativeObject{
 	/**
 	 * Retrieves the position of the cell at a current 
 	 * location, at a given depth.
-	 * 
-	 * @param x
-	 * @param y
-	 * @param z
+	 *
+	 * @param x query point, coordinate X
+	 * @param y query point, coordinate Y
+	 * @param z query point, coordinate Z
 	 * @param depth level to search (depth=0 means search in the full octree)
 	 * @return key of the node at the given position and depth
 	 */
@@ -117,7 +117,7 @@ public class JOctree extends NativeObject{
 	 * 
 	 * @param point coordinate to query the key of the node at that position
 	 * @param depth of the {@link JOctreeKey} in the octree
-	 * @return
+	 * @return {@link JOctreeKey} of cell which contains the given point at a given depth
 	 */
 	public native JOctreeKey coordToKey(Point3D point, int depth);
 	
@@ -172,10 +172,10 @@ public class JOctree extends NativeObject{
 	/**
 	 * Retrieves a node of the {@link JOctree} in a given position of the 3D space and a depth level
 	 * of the octree.
-	 * 
-	 * @param x 
-	 * @param y
-	 * @param z
+	 *
+	 * @param x query point, coordinate X
+	 * @param y query point, coordinate Y
+	 * @param z query point, coordinate Z
 	 * @param depth level to search (depth=0 means search in the full octree)
 	 * @return node of the octree, if found, null otherwhise
 	 */
@@ -185,9 +185,9 @@ public class JOctree extends NativeObject{
 	 * Calls the method {@link #search(float, float, float, int)} with the default value of 
 	 * depth=0. Default values in argument methods are not supported by Java, so this method overload
 	 * tries to emulate the call with the default value depth = 0;
-	 * @param x
-	 * @param y
-	 * @param z
+	 * @param x query point, coordinate X
+	 * @param y query point, coordinate Y
+	 * @param z query point, coordinate Z
 	 * @return node of the octree, if found, null otherwise
 	 */
 	public JOctreeNode search(float x, float y, float z){
@@ -211,11 +211,11 @@ public class JOctree extends NativeObject{
 	/**
 	 * Updates the occupancy information of a {@link JOctreeNode}, retrieving the node 
 	 * instance affected.
-	 * 
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @param occupied
+	 *
+	 * @param x query point, coordinate X
+	 * @param y query point, coordinate Y
+	 * @param z query point, coordinate Z
+	 * @param occupied occupancy value to set
 	 * @return {@link JOctreeNode} affected
 	 */
 	public native JOctreeNode updateNode(float x, float y, float z, boolean occupied);

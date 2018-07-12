@@ -25,7 +25,7 @@ import es.usc.citius.lab.joctomap.util.PPMFileReaderTest;
 /**
  * Order the execution of all java tests in the library.
  * 
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  */
 @RunWith(Suite.class)
 @SuiteClasses({ 

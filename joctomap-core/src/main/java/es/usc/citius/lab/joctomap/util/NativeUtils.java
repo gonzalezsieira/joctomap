@@ -25,9 +25,8 @@ import java.io.OutputStream;
 /**
  * Simple library class for working with JNI (Java Native Interface)
  * 
- * @see {@url http://frommyplayground.com/how-to-load-native-jni-library-from-jar}
- *
- * @author Adam Heirnich &lt;adam@adamh.cz&gt;, http://www.adamh.cz
+ * @see <a href="http://frommyplayground.com/how-to-load-native-jni-library-from-jar">http://frommyplayground.com/how-to-load-native-jni-library-from-jar</a>
+ * @author Adam Heirnich {@literal <adam@adamh.cz>}, <a href="http://adamh.cz">adamh.cz</a>
  */
 public class NativeUtils {
  
@@ -46,7 +45,7 @@ public class NativeUtils {
      * @param path The filename inside JAR as absolute path (beginning with '/'), e.g. /package/File.ext
      * @throws IOException If temporary file creation or read/write operation fails
      * @throws IllegalArgumentException If source file (param path) does not exist
-     * @throws IllegalArgumentException If the path is not absolute or if the filename is shorter than three characters (restriction of {@see File#createTempFile(java.lang.String, java.lang.String)}).
+     * @throws IllegalArgumentException If the path is not absolute or if the filename is shorter than three characters (restriction of {@link File#createTempFile(java.lang.String, java.lang.String)}).
      */
     public static void loadLibraryFromJar(String path) throws IOException {
  

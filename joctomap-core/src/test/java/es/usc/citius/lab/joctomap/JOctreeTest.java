@@ -43,7 +43,7 @@ import static org.junit.Assert.*;
  * that the static parameters of the class (that store values used in 
  * later tests) are filled properly.
  * 
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class JOctreeTest{

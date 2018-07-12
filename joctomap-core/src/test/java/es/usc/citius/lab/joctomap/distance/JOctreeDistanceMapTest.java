@@ -27,7 +27,7 @@ import es.usc.citius.lab.joctomap.octree.JOctree;
  * Executes tests over the {@link JOctreeDistanceMap} class. Tests
  * are executed in ascending order given their name.
  *
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class JOctreeDistanceMapTest {

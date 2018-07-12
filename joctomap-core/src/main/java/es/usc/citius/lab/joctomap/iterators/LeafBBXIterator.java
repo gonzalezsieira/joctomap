@@ -21,10 +21,9 @@ import es.usc.citius.lab.joctomap.octree.JOctreeNode;
 import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
 
 /**
- * Implements an iterator for the {@link JOctreeNode} of a
- * given {@link JOctree}, which  
+ * Implements an iterator for navigating the {@link JOctreeNode} of a {@link JOctree}, which only traverses the leaves in a given bounding box.
  *
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  */
 public class LeafBBXIterator extends OctreeIterator{
 	
@@ -32,7 +31,7 @@ public class LeafBBXIterator extends OctreeIterator{
 	 * Default constructor for this class, that takes the native pointer to the iterator and
 	 * the native pointer to the end point of the created iterator.
 	 * 
-	 * @param pointer
+	 * @param pointer pointer to the native object (JNI global reference)
 	 */
 	private LeafBBXIterator(long pointer) {
 		super(pointer);

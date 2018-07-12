@@ -31,7 +31,7 @@ import es.usc.citius.lab.joctomap.octree.JOctreeNode;
  * Test case over the methods in {@link JOctreeNode}. The tests are executing in
  * ascending order to guarantee dependencies between them, if exist.
  * 
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class JOctreeNodeTest {

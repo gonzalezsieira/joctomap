@@ -24,15 +24,15 @@ import es.usc.citius.lab.joctomap.util.Obstacle;
  * Represents a map distance based in a {@link JOctree} structure,
  * allowing queries as "nearest obstacle to".
  *
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  */
 public class JOctreeDistanceMap extends NativeObject{
 	
 	/**
 	 * Initializes this object with the pointer to the native object
 	 * of the library.
-	 * 
-	 * @param pointer
+	 *
+	 * @param pointer pointer to the native object (JNI global reference)
 	 */
 	private JOctreeDistanceMap(long pointer) {
 		super(pointer);
@@ -46,10 +46,11 @@ public class JOctreeDistanceMap extends NativeObject{
 	/**
 	 * Retrieves the distance to the nearest obstacle, if there is one
 	 * in the radius of the "maxDistance" of this distance max.
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @return
+	 *
+	 * @param x query point, coordinate X
+	 * @param y query point, coordinate Y
+	 * @param z query point, coordinate Z
+	 * @return distance to the nearest obstacle
 	 */
 	public native double getDistance(double x, double y, double z);
 	
@@ -57,8 +58,8 @@ public class JOctreeDistanceMap extends NativeObject{
 	 * Retrieves the distance to the nearest obstacle given the
 	 * {@link JOctreeKey} of a node as origin.
 	 * 
-	 * @param key
-	 * @return
+	 * @param key {@link JOctreeKey} of the cell to query
+	 * @return distance to the nearest obstacle
 	 */
 	public native double getDistance(JOctreeKey key);
 	
@@ -66,10 +67,10 @@ public class JOctreeDistanceMap extends NativeObject{
 	 * Retrieves the distance and location of the nearest obstacle to the given
 	 * 3D point. If this method does not find any obstacle in the maximum
 	 * distance (specified at the creation of the distance map), this method returns null.
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @return <distance, location> of the nearest obstacle, null if no obstacle found at the maximum distance of this map
+	 * @param x query point, coordinate X
+	 * @param y query point, coordinate Y
+	 * @param z query point, coordinate Z
+	 * @return {@literal <distance, location>} of the nearest obstacle, null if no obstacle found at the maximum distance of this map
 	 */
 	public native Obstacle getDistanceAndClosestObstacle(double x, double y, double z);
 	

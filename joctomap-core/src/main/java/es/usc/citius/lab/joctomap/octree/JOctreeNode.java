@@ -28,7 +28,7 @@ import es.usc.citius.lab.joctomap.util.NativeObject;
  * Since this is a native object, it extends to {@link NativeObject}
  * to store the pointer properly.
  *
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  */
 public class JOctreeNode extends NativeObject{
 

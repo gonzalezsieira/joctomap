@@ -29,7 +29,7 @@ import org.junit.Test;
  * Tests the reader of PPM files with an example file, testing if the reader information matches
  * with the header of the file.
  * 
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  */
 public class PPMFileReaderTest {
 
@@ -56,14 +56,6 @@ public class PPMFileReaderTest {
 	}
 	
 	/**
-	 * Tests the max value of the map file.
-	 */
-	@Test
-	public void maxValueTest(){
-		assertTrue("Max value does not match with the header of the file", reader.getMaxValue() == 255);
-	}
-	
-	/**
 	 * Tests the dimension of the matrix of pixels.
 	 */
 	@Test
@@ -74,7 +66,7 @@ public class PPMFileReaderTest {
 		for(int x = 0; x < reader.getPixels().length; x++){
 			for(int y = 0; y < reader.getPixels()[x].length; y++){
 				for(int z = 0; z < reader.getPixels()[x][y].length; z++){
-					assertTrue("Pixel must be between 0 and the max value", reader.getPixels()[x][y][z] >= 0 && reader.getPixels()[x][y][z] <= reader.getMaxValue());
+					assertTrue("Pixel must be between 0 and the max value", reader.getPixels()[x][y][z] >= 0);
 				}	
 			}	
 		}

@@ -15,12 +15,10 @@
  */
 package es.usc.citius.lab.joctomap.util;
 
-import java.io.IOException;
-
 /**
  * Represents an object that supports native calls.
  * 
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  */
 public abstract class NativeObject {
 
@@ -42,7 +40,7 @@ public abstract class NativeObject {
 	 * Initializes a native object with the pointer
 	 * to the native object.
 	 * 
-	 * @param pointer
+	 * @param pointer pointer to the native OcTree object (JNI global reference)
 	 */
 	public NativeObject(long pointer){
 		this.pointer = pointer;

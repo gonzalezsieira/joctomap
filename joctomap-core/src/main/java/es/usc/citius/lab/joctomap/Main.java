@@ -34,7 +34,7 @@ import org.apache.commons.cli.DefaultParser;
  * <li>-ppmot -i input -o output</li>
  * </ul>
  *
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  */
 public class Main {
 

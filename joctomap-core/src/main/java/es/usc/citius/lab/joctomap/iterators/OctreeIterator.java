@@ -29,7 +29,7 @@ import es.usc.citius.lab.motionplanner.core.spatial.Point3D;
  * current element using the methods {@link #key()}, {@link #coordinate()}, {@link #depth()},
  * {@link #node()}, {@link #x()} and {@link #y()}.
  *
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  */
 public abstract class OctreeIterator extends NativeObject implements Iterator<JOctreeKey>{
 

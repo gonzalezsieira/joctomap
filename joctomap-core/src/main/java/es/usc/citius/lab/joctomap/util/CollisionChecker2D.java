@@ -24,7 +24,7 @@ import java.io.IOException;
  * This class implements a collision checker which uses native methods to determine
  * the collision in a 2D octree using 2D shapes (circular and rectangular).
  *
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  */
 public class CollisionChecker2D {
     

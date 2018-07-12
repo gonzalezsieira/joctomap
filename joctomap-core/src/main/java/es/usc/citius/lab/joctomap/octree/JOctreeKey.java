@@ -23,7 +23,7 @@ import java.io.Serializable;
  * used to store the nodes in the data structure. This is not a native
  * object wrapper since it has not associated functions.
  * 
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  */
 public class JOctreeKey implements Serializable{
 
@@ -34,10 +34,10 @@ public class JOctreeKey implements Serializable{
 	/**
 	 * Default constructor that initializes the 3D coordinates
 	 * of the key.
-	 * 
-	 * @param x
-	 * @param y
-	 * @param z
+	 *
+	 * @param x key, coordinate X
+	 * @param y key, coordinate Y
+	 * @param z key, coordinate Z
 	 */
 	public JOctreeKey(int x, int y, int z) {
 		this.x = x;
@@ -77,15 +77,24 @@ public class JOctreeKey implements Serializable{
 	public String toString() {
 		return "{" + x + ", " + y + ", " + z + "}";
 	}
-	
+
+	/**
+	 * @return key, coordinate X
+	 */
 	public int getX() {
 		return x;
 	}
-	
+
+	/**
+	 * @return key, coordinate Y
+	 */
 	public int getY() {
 		return y;
 	}
-	
+
+	/**
+	 * @return key, coordinate Z
+	 */
 	public int getZ() {
 		return z;
 	}

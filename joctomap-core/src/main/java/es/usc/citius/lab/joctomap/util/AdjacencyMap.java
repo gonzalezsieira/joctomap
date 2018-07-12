@@ -43,7 +43,7 @@ import java.util.Map;
  * important to recalculate the adjacency of the cells if the geometry of the map changes
  * (new cells added, or the size of the cells changes).
  *
- * @author Adrián González Sieira <<a href="mailto:adrian.gonzalez@usc.es">adrian.gonzalez@usc.es</a>>
+ * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  * @since 09/03/2016
  */
 public class AdjacencyMap implements Serializable{
@@ -138,6 +138,8 @@ public class AdjacencyMap implements Serializable{
     /**
      * This fills the structures of the adjacency map using full-native
      * implementation method for efficiency.
+     *
+     * @param octree octree to calculate the adjacency map from
      */
     private native void initializeJNI(JOctree octree);
 
@@ -145,16 +147,22 @@ public class AdjacencyMap implements Serializable{
      * Retrieves the adjacencies for a current key.
      *
      * @param key instance of {@link JOctreeKey}
-     * @return
+     * @return list of adjacent {@link JOctreeKey} of a given one
      */
     public List<JOctreeKey> adjacency(JOctreeKey key){
         return adjacencies.get(key);
     }
 
+    /**
+     * @return map with the keys and adjacencies contained in the map
+     */
     public Map<JOctreeKey, List<JOctreeKey>> getAdjacencies(){
         return adjacencies;
     }
 
+    /**
+     * @return map with the information of the octree cells (key, size and coordinate)
+     */
     public Map<JOctreeKey, Pair<Float, Point3D>> getNodesInfo() {
         return nodesInfo;
     }

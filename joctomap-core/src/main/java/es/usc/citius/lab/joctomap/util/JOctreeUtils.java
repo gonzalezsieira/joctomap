@@ -25,7 +25,7 @@ import java.util.List;
  * Contains utilities implemented for the {@link JOctree}, but not included
  * in the C/C++ implementation of Octomap.
  *
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  */
 public class JOctreeUtils {
     

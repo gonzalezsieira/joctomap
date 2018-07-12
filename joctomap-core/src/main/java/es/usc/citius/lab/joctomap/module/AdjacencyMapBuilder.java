@@ -30,7 +30,7 @@ import org.apache.commons.cli.Options;
  * 		<li>Obtain a new {@link JOctree} from a PPM image</li>
  * </ul>
  * 
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  */
 public class AdjacencyMapBuilder extends Module{
 

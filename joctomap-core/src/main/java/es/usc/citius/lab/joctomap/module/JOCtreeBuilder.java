@@ -35,7 +35,7 @@ import org.apache.commons.cli.Options;
  * 		<li>Obtain a new {@link JOctree} from a PPM image</li>
  * </ul>
  * 
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  */
 public class JOCtreeBuilder extends Module{
 
@@ -63,7 +63,7 @@ public class JOCtreeBuilder extends Module{
      * @param resolution min size of the cells
      * @param sizeX max. size of the X dimension of the map
      * @param maxDepthCell number of levels which a cell is allowed to compact
-     * @return
+     * @return new {@link JOctree} with the information of the PPM file
      */
     public static JOctree octreeFromPPM(String input, float resolution, float sizeX, int maxDepthCell){
         //read the ppm file 

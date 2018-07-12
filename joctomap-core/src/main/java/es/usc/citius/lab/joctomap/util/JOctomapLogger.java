@@ -32,7 +32,7 @@ import java.util.logging.Logger;
  * This class enables an interface to call logger features without using the {@link Logger#getLogger(String)}
  * method in all calls.
  * 
- * @author Adrián González Sieira <adrian.gonzalez@usc.es>
+ * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  */
 public enum JOctomapLogger {
 	INSTANCE;
@@ -95,7 +95,8 @@ public enum JOctomapLogger {
 	
 	/**
 	 * Sets the output stream of the logger in a file.
-	 * @param path
+	 *
+	 * @param path route to the output logging file
 	 */
 	public static void output(String path){
 		try{
@@ -113,7 +114,7 @@ public enum JOctomapLogger {
 	/**
 	 * Prints a message at "info" {@link Level} of this logger.
 	 * 
-	 * @param msg
+	 * @param msg message of the log
 	 */
 	public static void info(String msg){
 		INSTANCE.logger.info(msg);
@@ -122,7 +123,7 @@ public enum JOctomapLogger {
 	/**
 	 * Prints a message at "severe" {@link Level} of this logger.
 	 * 
-	 * @param msg
+	 * @param msg message of the log
 	 */
 	public static void severe(String msg){
 		INSTANCE.logger.severe(msg);
@@ -131,7 +132,7 @@ public enum JOctomapLogger {
 	/**
 	 * Prints a message at "warning" {@link Level} of this logger.
 	 * 
-	 * @param msg
+	 * @param msg message of the log
 	 */
 	public static void warning(String msg){
 		INSTANCE.logger.warning(msg);
@@ -140,7 +141,7 @@ public enum JOctomapLogger {
 	/**
 	 * Prints a message at "fine" {@link Level} of this logger.
 	 * 
-	 * @param msg
+	 * @param msg message of the log
 	 */
 	public static void fine(String msg){
 		INSTANCE.logger.fine(msg);
@@ -149,7 +150,7 @@ public enum JOctomapLogger {
 	/**
 	 * Prints a message at "finer" {@link Level} of this logger.
 	 * 
-	 * @param msg
+	 * @param msg message of the log
 	 */
 	public static void finer(String msg){
 		INSTANCE.logger.finer(msg);
@@ -158,7 +159,7 @@ public enum JOctomapLogger {
 	/**
 	 * Prints a message at "finest" {@link Level} of this logger.
 	 * 
-	 * @param msg
+	 * @param msg message of the log
 	 */
 	public static void finest(String msg){
 		INSTANCE.logger.finest(msg);
