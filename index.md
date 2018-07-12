@@ -11,3 +11,5 @@ It **allows using the main features of Octomap in Java**, but it also has **seve
 # Read more
  - [Compilation & Usage](usage)
  - [ROS/Rosjava integration](ros)
+ - [Javadoc: joctomap-core](api/core/index.html)
+ - [Javadoc: joctomap-ros](api/ros/index.html)
