@@ -65,3 +65,7 @@ For **gradle**, it would be:
 ```
 compile 'es.usc.citius.lab:joctomap'
 ```
+
+# Documentation
+- [joctomap-core API](https://gonzalezsieira.github.io/joctomap/api/core/index.html)
+- [joctomap-ros API](https://gonzalezsieira.github.io/joctomap/api/ros/index.html)
