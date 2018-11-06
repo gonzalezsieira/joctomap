@@ -73,9 +73,9 @@ public class JOCtreeBuilder extends Module{
             JOctomapLogger.fine("Reading file " + input + "...");
             reader = new PPMFileReader(input);
         } catch (FileNotFoundException ex) {
-            JOctomapLogger.severe("Could not open the file specified: " + ex);
+            JOctomapLogger.throwable(ex, "Could not find the file specified");
         } catch (IOException ex) {
-            JOctomapLogger.severe("An I/O error occured processing the file: " + ex);
+            JOctomapLogger.throwable(ex, "An I/O error occured processing the file");
         }
         //instantiate new octree
         JOctree octree = JOctree.create(resolution);
