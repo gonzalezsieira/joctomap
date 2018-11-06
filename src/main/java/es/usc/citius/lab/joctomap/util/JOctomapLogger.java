@@ -15,8 +15,9 @@
  */
 package es.usc.citius.lab.joctomap.util;
 
-import java.io.Console;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.ConsoleHandler;
@@ -81,6 +82,13 @@ public enum JOctomapLogger {
                 buf.append("[" + format.format(new Date(lr.getMillis())) + "] ");
                 buf.append(lr.getLevel() + ": ");
                 buf.append(formatMessage(lr));
+                if(lr.getThrown() != null) {
+					StringWriter sw = new StringWriter();
+					PrintWriter pw = new PrintWriter(sw);
+					lr.getThrown().printStackTrace(pw);
+					String sStackTrace = sw.toString(); // stack trace as a string
+					buf.append("\n" + sStackTrace);
+				}
                 buf.append('\n');
                 return buf.toString();
             }
@@ -126,6 +134,10 @@ public enum JOctomapLogger {
 	 */
 	public static void severe(String msg){
 		INSTANCE.logger.severe(msg);
+	}
+
+	public static void throwable(Throwable throwable, String msg){
+		INSTANCE.logger.log(Level.SEVERE, msg, throwable);
 	}
 	
 	/**
