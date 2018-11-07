@@ -23,7 +23,7 @@ import org.apache.commons.cli.CommandLine;
 import es.usc.citius.lab.joctomap.octree.JOctree;
 import es.usc.citius.lab.joctomap.octree.JOctreeNode;
 import es.usc.citius.lab.joctomap.util.JOctomapLogger;
-import es.usc.citius.lab.joctomap.util.PPMFileReader;
+import es.usc.citius.lab.joctomap.util.MapFileReader;
 import java.text.DecimalFormat;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
@@ -58,7 +58,7 @@ public class JOCtreeBuilder extends Module{
     }
 
     /**
-     * Instantiates a new {@link JOctree} and puts the information contained in a {@link PPMFileReader}.
+     * Instantiates a new {@link JOctree} and puts the information contained in a {@link MapFileReader}.
      * @param input where the PPM file is located
      * @param resolution min size of the cells
      * @param sizeX max. size of the X dimension of the map
@@ -67,11 +67,11 @@ public class JOCtreeBuilder extends Module{
      */
     public static JOctree octreeFromPPM(String input, float resolution, float sizeX, int maxDepthCell){
         //read the ppm file 
-        PPMFileReader reader = null;
+        MapFileReader reader = null;
         //open file and read data from
         try {
             JOctomapLogger.fine("Reading file " + input + "...");
-            reader = new PPMFileReader(input);
+            reader = new MapFileReader(input);
         } catch (FileNotFoundException ex) {
             JOctomapLogger.throwable(ex, "Could not find the file specified");
         } catch (IOException ex) {
