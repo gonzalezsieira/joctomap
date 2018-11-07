@@ -9,6 +9,7 @@ bin/
 .settings/
 .classpath
 .project
+*.dylib*
 *.so*
 target/
 build/
