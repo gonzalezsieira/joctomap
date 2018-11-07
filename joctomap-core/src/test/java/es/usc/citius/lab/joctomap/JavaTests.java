@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import es.usc.citius.lab.joctomap.util.PPMFileReaderTest;
+import es.usc.citius.lab.joctomap.util.MapFileReaderTest;
 
 /**
  * Order the execution of all java tests in the library.
@@ -29,7 +29,7 @@ import es.usc.citius.lab.joctomap.util.PPMFileReaderTest;
  */
 @RunWith(Suite.class)
 @SuiteClasses({ 
-	PPMFileReaderTest.class,
+	MapFileReaderTest.class,
         AdjacencyMapTest.class
 })
 public class JavaTests {

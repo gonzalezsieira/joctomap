@@ -18,7 +18,7 @@ package es.usc.citius.lab.joctomap.util;
 import java.io.*;
 import java.util.Scanner;
 
-public class PPMFileReader {
+public class MapFileReader {
 
 	private String format;
 	private int[][][] pixels;
@@ -34,7 +34,7 @@ public class PPMFileReader {
 	 * @throws {@link FileNotFoundException} when the specified path does not exist
 	 * @throws {@link IOException} when an I/O error occurs
 	 */
-	public PPMFileReader(String path) throws FileNotFoundException, IOException{
+	public MapFileReader(String path) throws FileNotFoundException, IOException{
 		//instantiate new reader to fill the information of the file
 		FileInputStream inputStream = new FileInputStream(path);
 		Scanner scanner = new Scanner(inputStream);

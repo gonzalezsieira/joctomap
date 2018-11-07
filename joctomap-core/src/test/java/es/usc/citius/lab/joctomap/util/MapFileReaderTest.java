@@ -22,7 +22,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -31,19 +30,19 @@ import org.junit.Test;
  * 
  * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  */
-public class PPMFileReaderTest {
+public class MapFileReaderTest {
 
-	private PPMFileReader reader;
-	
-        /**
+	private MapFileReader reader;
+
+	/**
 	 * Constructor which loads a resource
 	 * 
 	 * @throws FileNotFoundException if file not found
 	 * @throws IOException if I/O error occurs
          * @throws URISyntaxException if URI bad formatted
 	 */
-        public PPMFileReaderTest() throws IOException, URISyntaxException{
-            this.reader = new PPMFileReader(new File(PPMFileReaderTest.class.getClassLoader().getResource("ecmr.ppm").toURI()).getAbsolutePath());
+        public MapFileReaderTest() throws IOException, URISyntaxException{
+            this.reader = new MapFileReader(new File(MapFileReaderTest.class.getClassLoader().getResource("ecmr_ascii.ppm").toURI()).getAbsolutePath());
         }
 	
 	/**
