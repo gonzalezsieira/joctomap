@@ -37,18 +37,21 @@ import org.apache.commons.cli.Options;
  * 
  * @author Adrián González Sieira {@literal <adrian.gonzalez@usc.es>}
  */
-public class JOCtreeBuilder extends Module{
+public class JOctreeBuilder extends Module{
 
     @Override
     public void execute(CommandLine args) {
         //retrieve input args
         String[] inputArgs = args.getOptionValues("i");
+        String levelString = args.getOptionValue("g", "10");
+        int level = Integer.parseInt(levelString);
         //process the ppm to generate an octree
         JOctree octree = octreeFromPPM(
                 inputArgs[0], 
                 Float.parseFloat(inputArgs[1]),
                 Float.parseFloat(inputArgs[2]),
-                Integer.parseInt(inputArgs[3])
+                Integer.parseInt(inputArgs[3]),
+                level
         );
         //write octree to file (.ot extension mandatory)
         String outputPath = args.getOptionValue("o");
@@ -65,7 +68,7 @@ public class JOCtreeBuilder extends Module{
      * @param maxDepthCell number of levels which a cell is allowed to compact
      * @return new {@link JOctree} with the information of the PPM file
      */
-    public static JOctree octreeFromPPM(String input, float resolution, float sizeX, int maxDepthCell){
+    public static JOctree octreeFromPPM(String input, float resolution, float sizeX, int maxDepthCell, int levelGrayObstacle){
         //read the ppm file 
         MapFileReader reader = null;
         //open file and read data from
@@ -95,7 +98,7 @@ public class JOCtreeBuilder extends Module{
                 for (float y = 0; y < sizeY; y += octree.getResolution() / 2f) {
                     int[] rgb = reader.getPixels()[Math.round(x / resolutionPPM)][Math.round(y / resolutionPPM)];
                     //occupied case: one of the color components reaches the maximum value of the file
-                    boolean occupied = rgb[0] < 10 && rgb[1] < 10 && rgb[2] < 10;
+                    boolean occupied = rgb[0] < levelGrayObstacle && rgb[1] < levelGrayObstacle && rgb[2] < levelGrayObstacle;
                     //update occupancy information until we get an absolute value for the occupancy (1 or 0)
                     Double previousOccupancy = null;
                     do {
@@ -136,6 +139,15 @@ public class JOCtreeBuilder extends Module{
                 .hasArg()
                 .longOpt("output")
                 .argName("ot")
+                .build()
+        );
+        op.addOption(
+                Option.builder("g")
+                .optionalArg(true)
+                .desc("Level of gray which defines occupied space")
+                .hasArg()
+                .longOpt("gray")
+                .argName("gray")
                 .build()
         );
         return op;
