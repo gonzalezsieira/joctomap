@@ -22,5 +22,13 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: maven
+    - name: Clone spatial-utils
+      run: git clone https://github.com/gonzalezsieira/spatial-utils
+    - name: cd spatial-utils
+      run: cd spatial-utils
+    - name: Install spatial-utils
+      run: mvn install
+    - name: cd ..
+      run: cd ..
     - name: Build with Maven
       run: mvn -B package --file pom.xml -DreleaseType=Release -Djdk="$JAVA_HOME"
