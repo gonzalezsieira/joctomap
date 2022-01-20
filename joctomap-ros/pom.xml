@@ -18,7 +18,7 @@
         </repository>
         <repository>
             <id>jfrog</id>
-            <url>http://repo.jfrog.org/artifactory/libs-releases/</url>
+            <url>https://repo.jfrog.org/artifactory/libs-releases/</url>
         </repository>
     </repositories>
 
