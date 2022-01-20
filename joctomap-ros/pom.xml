@@ -17,9 +17,9 @@
             <url>https://github.com/rosjava/rosjava_mvn_repo/raw/master/</url>
         </repository>
         <repository>
-            <id>spring</id>
-            <url>https://repo.spring.io/plugins-release/</url>
-        </repository>
+             <id>nuxeo</id>
+             <url>https://maven-eu.nuxeo.org/nexus/content/repositories/public/</url>
+         </repository>
     </repositories>
 
     <dependencies>
